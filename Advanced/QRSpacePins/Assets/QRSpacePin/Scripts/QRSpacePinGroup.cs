@@ -132,7 +132,7 @@ namespace Microsoft.MixedReality.WorldLocking.Samples
             }
 
             /// <summary>
-            /// Reset package to initial state. If space pin has been commited, it will be rescinded.
+            /// Reset package to initial state. If space pin has been committed, it will be rescinded.
             /// </summary>
             public void Reset()
             {
@@ -140,6 +140,7 @@ namespace Microsoft.MixedReality.WorldLocking.Samples
                 spacePin.Reset();
                 Destroy(highlightProxy);
                 highlightProxy = null;
+                isSet = false;
             }
 
             /// <summary>
@@ -179,7 +180,7 @@ namespace Microsoft.MixedReality.WorldLocking.Samples
                 bool didCommit = false;
                 var wltMgr = WorldLockingManager.GetInstance();
                 Pose lockedPose = wltMgr.LockedFromFrozen.Multiply(frozenPose);
-                if (NeedRefresh(lockedPose))
+                if (NeedCommit(lockedPose))
                 {
                     didCommit = CommitPose(frozenPose, lockedPose);
                 }
@@ -257,25 +258,39 @@ namespace Microsoft.MixedReality.WorldLocking.Samples
                 return offsetFrozenPose;
             }
 
-            private bool NeedRefresh(Pose lockedPose)
+            /// <summary>
+            /// Determine if the new pose should be forwarded to the SpacePin system.
+            /// </summary>
+            /// <param name="lockedPose">The pose to test.</param>
+            /// <returns>True if sending the new pose is indicated.</returns>
+            /// <remarks>
+            /// If the pose hasn't been sent yet, it will always be indicated to send.
+            /// It is unusual that the position of the QR code as measured by the system changes
+            /// significantly enough to be worth resending. It usually only occurs when the first 
+            /// reading was faulty (e.g. during a rapid head move).
+            /// </remarks>
+            private bool NeedCommit(Pose lockedPose)
             {
                 if (!isSet)
                 {
-                    SimpleConsole.AddLine(log, "Need refresh because unset.");
+                    SimpleConsole.AddLine(log, "Need commit because unset.");
                     return true;
                 }
                 float RefreshThreshold = 0.01f; // one cm?
                 float distance = Vector3.Distance(lockedPose.position, lastLockedPose.position);
                 if ( distance > RefreshThreshold)
                 {
-                    SimpleConsole.AddLine(log, $"Need refresh because new distance {distance}");
+                    SimpleConsole.AddLine(log, $"Need commit because new distance {distance}");
                     return true;
                 }
-                SimpleConsole.AddLine(trace, $"No refresh");
+                SimpleConsole.AddLine(trace, $"No commit");
                 return false;
             }
         };
 
+        /// <summary>
+        /// The mini manager will issue qr code events from the main thread.
+        /// </summary>
         private QRCodeMiniManager miniManager;
 
         /// <summary>
@@ -301,6 +316,7 @@ namespace Microsoft.MixedReality.WorldLocking.Samples
             {
                 spacePins[i].Reset();
             }
+            WorldLockingManager.GetInstance().AlignmentManager.SendAlignmentAnchors();
         }
 
         /// <summary>
@@ -441,7 +457,7 @@ namespace Microsoft.MixedReality.WorldLocking.Samples
             SimpleConsole.AddLine(trace, $"OnAdded {qrCode.Data}, enumerated {enumerationFinished}");
             if (enumerationFinished)
             {
-                int idx = ExtractIndexAndCommand(qrCode);
+                int idx = ExtractIndex(qrCode);
                 if (!QRCodeIndexValid(idx))
                 {
                     return;
@@ -459,7 +475,7 @@ namespace Microsoft.MixedReality.WorldLocking.Samples
             SimpleConsole.AddLine(trace, $"OnAdded {qrCode.Data}, enumerated {enumerationFinished}");
             if (enumerationFinished)
             {
-                int idx = ExtractIndexAndCommand(qrCode);
+                int idx = ExtractIndex(qrCode);
                 if (!QRCodeIndexValid(idx))
                 {
                     return;
@@ -475,7 +491,7 @@ namespace Microsoft.MixedReality.WorldLocking.Samples
         private void OnQRCodeRemoved(QRCode qrCode)
         {
             SimpleConsole.AddLine(trace, $"OnQRCodeRemoved {qrCode.Data}");
-            int idx = ExtractIndexAndCommand(qrCode);
+            int idx = ExtractIndex(qrCode);
             if (!QRCodeIndexValid(idx))
             {
                 return;
@@ -495,24 +511,15 @@ namespace Microsoft.MixedReality.WorldLocking.Samples
         }
 
         /// <summary>
-        /// Extract a command and/or space pin index out of the qr code.
+        /// Extract a space pin index out of the qr code.
         /// </summary>
         /// <param name="qrCode"></param>
         /// <returns>Space pin index corresponding to this qr code, or -1 if there isn't one.</returns>
-        /// <remarks>
-        /// Any commands found are processed immediately.
-        /// </remarks>
-        private int ExtractIndexAndCommand(QRCode qrCode)
+        private int ExtractIndex(QRCode qrCode)
         {
             string code = qrCode.Data;
 
             string[] tokens = code.Split(new string[] { "_" }, System.StringSplitOptions.None);
-
-            if (!ProcessCommand(tokens))
-            {
-                /// No error, but no index to find either.
-                return -1;
-            }
 
             int qrIndex = GetQRCodeIndex(tokens);
             if (!QRCodeIndexValid(qrIndex))
@@ -522,16 +529,6 @@ namespace Microsoft.MixedReality.WorldLocking.Samples
             }
 
             return qrIndex;
-        }
-
-        /// <summary>
-        /// Process commands embedded in this qr code's data.
-        /// </summary>
-        /// <param name="tokens">The extracted commands to process.</param>
-        /// <returns>True if an index should also be extracted, false if there is no index, only command(s).</returns>
-        private bool ProcessCommand(string[] tokens)
-        {
-            return tokens.Length > 0;
         }
 
         /// <summary>
