@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,7 +9,7 @@ using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.UI;
 
 
-namespace Microsoft.MixedReality.WorldLocking.Examples
+namespace Microsoft.MixedReality.WorldLocking.Samples
 {
     public class PlantPlacard : InputSystemGlobalHandlerListener, IMixedRealityPointerHandler
     {

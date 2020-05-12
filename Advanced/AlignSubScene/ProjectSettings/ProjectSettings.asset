@@ -138,7 +138,7 @@ PlayerSettings:
       minimumSupportedHeadTracking: 0
       maximumSupportedHeadTracking: 1
     hololens:
-      depthFormat: 1
+      depthFormat: 0
       depthBufferSharingEnabled: 1
     lumin:
       depthFormat: 0
@@ -165,7 +165,7 @@ PlayerSettings:
   applicationIdentifier: {}
   buildNumber: {}
   AndroidBundleVersionCode: 1
-  AndroidMinSdkVersion: 19
+  AndroidMinSdkVersion: 24
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
   aotOptions: 
@@ -180,7 +180,7 @@ PlayerSettings:
   StripUnusedMeshComponents: 1
   VertexChannelCompressionMask: 4054
   iPhoneSdkVersion: 988
-  iOSTargetOSVersionString: 10.0
+  iOSTargetOSVersionString: 11.0
   tvOSSdkVersion: 0
   tvOSRequireExtendedGameController: 0
   tvOSTargetOSVersionString: 10.0
@@ -346,12 +346,16 @@ PlayerSettings:
     m_Enabled: 1
     m_Devices:
     - WindowsMR
+  - m_BuildTarget: Windows Store Apps
+    m_Enabled: 1
+    m_Devices:
+    - WindowsMR
   openGLRequireES31: 0
   openGLRequireES31AEP: 0
   openGLRequireES32: 0
   m_TemplateCustomTags: {}
   mobileMTRendering:
-    Android: 1
+    Android: 0
     iPhone: 1
     tvOS: 1
   m_BuildTargetGroupLightmapEncodingQuality: []
@@ -362,7 +366,7 @@ PlayerSettings:
   enableInternalProfiler: 0
   logObjCUncaughtExceptions: 1
   enableCrashReportAPI: 0
-  cameraUsageDescription: 
+  cameraUsageDescription: Required for augmented reality support.
   locationUsageDescription: 
   microphoneUsageDescription: 
   switchNetLibKey: 
@@ -586,7 +590,8 @@ PlayerSettings:
   webGLWasmStreaming: 0
   scriptingDefineSymbols:
     14: DOTNETWINRT_PRESENT
-  platformArchitecture: {}
+  platformArchitecture:
+    iPhone: 1
   scriptingBackend:
     Metro: 1
     Standalone: 1
@@ -634,7 +639,7 @@ PlayerSettings:
       CodeGeneration: False
       Contacts: False
       EnterpriseAuthentication: False
-      GazeInput: False
+      GazeInput: True
       HumanInterfaceDevice: False
       InputInjectionBrokered: False
       InternetClient: True
