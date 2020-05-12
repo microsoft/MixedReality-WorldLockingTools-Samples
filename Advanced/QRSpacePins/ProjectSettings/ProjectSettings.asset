@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: World Locking Samples
-  productName: QRSpacePins
+  productName: WLT-QRSpacePins
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -601,13 +601,13 @@ PlayerSettings:
     : 6
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: Template3D
+  metroPackageName: WLT-QRSpacePins
   metroPackageVersion: 1.0.0.0
-  metroCertificatePath: Assets\WSATestCertificate.pfx
+  metroCertificatePath: Assets/WSATestCertificate.pfx
   metroCertificatePassword: 
-  metroCertificateSubject: Microsoft
-  metroCertificateIssuer: Microsoft
-  metroCertificateNotAfter: 00af03821d1bd701
+  metroCertificateSubject: World Locking Samples
+  metroCertificateIssuer: World Locking Samples
+  metroCertificateNotAfter: 80028f536147d701
   metroApplicationDescription: Template_3D
   wsaImages: {}
   metroTileShortName: 
