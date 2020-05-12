@@ -1,0 +1,55 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": [ "**/Assets/**/*.cs" ],
+          "exclude": [ "**/bin/**", "**/obj/**", "**/WorldLocking.Plugin/**", "**/WorldLocking.Core/**", "**/WorldLocking.Tools/**", "**/WorldLocking.Examples/**", "**/MRTK/**" ],
+          "src": "Advanced"
+        }
+      ],
+      "dest": "DocGen/Temp/obj/api"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [ "**/*.yml" ],
+        "src": "DocGen/Temp/obj/api",
+        "dest": "DocGen/Temp/api"
+      },
+      {
+        "files": [ "DocGen/Documentation/**/*.md", "*.md", "*.yml", "toc.yml", "DocGen/Documentation/**/*.yml", "DocGen/Documentation/Architecture/**", "DocGen/External/Documentation/*.md", "DocGen/External/HowTo/*.md" ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [ "index.html", "DocGen/web/**" ]
+      },
+      {
+        "files": [ "DocGen/External/ReadMeImages/**" ]
+      },
+      {
+        "files": [ "DocGen/Images/**" ]
+      }
+    ],
+    "template": [
+        "default",
+        "DocGen/templates/worldlockingtools"
+    ],
+    "globalMetadata": {
+      "_appTitle": "World Locking Tools Samples Documentation",
+      "_enableSearch": true,
+      "_disableNavbar": false,
+      "_appLogoPath": "DocGen/Images/Logos/WorldLock64.png",
+      "_appFaviconPath": "DocGen/Images/Logos/favicon.ico",
+      "_gitContribute": {
+        "repo": "https://github.com/Microsoft/MixedReality-WorldLockingTools-Samples.git",
+        "branch": "master"
+      }
+    },
+    "markdownEngineName": "markdig",
+    "dest": "DocGen/Temp/doc",
+    "xrefService": [ "https://xref.docs.microsoft.com/query?uid={uid}" ]
+  }
+}

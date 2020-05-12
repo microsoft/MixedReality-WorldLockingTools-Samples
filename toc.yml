@@ -1,0 +1,7 @@
+- name: Home
+  href: README.md
+- name: Guides to samples
+  href: DocGen/Documentation/
+  homepage: DocGen/Documentation/Introduction.md
+- name: Code documentation
+  href: DocGen/Temp/obj/api/toc.yml
