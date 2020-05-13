@@ -1,53 +1,53 @@
----
-page_type: sample
-languages:
-- csharp
-products:
-- dotnet
-description: "Add 150 character max description"
-urlFragment: "update-this-to-unique-url-stub"
----
+<img src="DocGen/Images/WorldLockingTools.svg">
 
-# Official Microsoft Sample
+# Welcome!
 
-<!-- 
-Guidelines on README format: https://review.docs.microsoft.com/help/onboard/admin/samples/concepts/readme-template?branch=master
+The World Locking Tools - Samples repository hopes to give you isolated independent examples, or even starting points, for anything you might do with the World Locking Tools for Unity.
 
-Guidance on onboarding samples to docs.microsoft.com/samples: https://review.docs.microsoft.com/help/onboard/admin/samples/process/onboarding?branch=master
+## Useful links
 
-Taxonomies for products and languages: https://review.docs.microsoft.com/new-hope/information-architecture/metadata/taxonomies?branch=master
--->
+[World Locking Tools for Unity (WLT) github repo](https://github.com/microsoft/MixedReality-WorldLockingTools-Unity).
 
-Give a short description for your sample here. What does it do and why is it important?
+[World Locking Tools for Unity (WLT) documentation landing page](https://microsoft.github.io/MixedReality-WorldLockingTools-Unity/README.html).
+
+## About the Samples
+
+Each sample is a self-contained Unity project. While that introduces a lot of redundancy between samples, it means that you don't have to wonder if something in a project is necessary. If the sample within that project doesn't use QR code scanning, then the QR code NuGet package won't be installed in that project.
+
+General samples covering many scenarios can be found in the main WLT repo. This sibling repo allows the extension of sample coverage without bloating out the main repository. 
+
+The samples can be thought of as forming two groups.
+
+The first group is for very basic and slimmed down scenarios. The main repo's project can't show what a project looks like without adding the WorldLocking.Tools because the Tools are, of course, included in that project. This limits some of the tutorials we would like to cover.
+
+The second group is for very advanced scenarios. More advanced scenarios often leverage the World Locking Tools capabilities to amplify the value from other, independent software and services. While these services might be only a NuGet feed away, bloating the core WLT repo with every NuGet package that might be useful for a sample is a frightening prospect.
 
 ## Contents
 
-Outline the file contents of the repository. It helps users navigate the codebase, build configuration and any related assets.
+The two groups of samples are distributed in this repository as shown. This table will be updated as new Samples come online.
 
-| File/folder       | Description                                |
-|-------------------|--------------------------------------------|
-| `src`             | Sample source code.                        |
-| `.gitignore`      | Define what to ignore at commit time.      |
-| `CHANGELOG.md`    | List of changes to the sample.             |
-| `CONTRIBUTING.md` | Guidelines for contributing to the sample. |
-| `README.md`       | This README file.                          |
-| `LICENSE`         | The license for the sample.                |
+| Folder     | Project       | Description                                               |
+|------------|---------------|-----------------------------------------------------------|
+| `Tutorials`|               | Projects slimmed down to make a single point.             |
+|            |               |                                                           |
+| `Advanced` |               | Complex projects, often leveraging external dependencies. |
+|            | [AlignSubScene](DocGen/Documentation/Advanced/AlignSubScene/AlignSubScene.md) | Aligning multiple independent spaces.                    |
+|            | [QRSpacePins](DocGen/Documentation/Advanced/QRSpacePins/QRSpacePins.md)   | QR codes as external alignment markers.                  |
 
 ## Prerequisites
 
-Outline the required components and tools that a user might need to have on their machine in order to run the sample. This can be anything from frameworks, SDKs, OS versions or IDE releases.
+The basics of building and deploying a HoloLens application from Unity are assumed. If you aren't familiar with that, [here's a good place to start](https://docs.microsoft.com/en-us/windows/mixed-reality/holograms-101). Or if you want to go straight to HoloLens2, then [here](https://docs.microsoft.com/en-us/windows/mixed-reality/mrlearning-base).
 
-## Setup
+For the Advanced samples, obviously familiarity with the basic World Locking Tools for Unity is assumed. Start [there](https://microsoft.github.io/MixedReality-WorldLockingTools-Unity/DocGen/Documentation/GettingStartedWithWorldLocking.html).
 
-Explain how to prepare the sample once the user clones or downloads the repository. The section should outline every step necessary to install dependencies and set up any settings (for example, API keys and output folders).
+The Tutorials are most useful as auxiliary information for the documentation. Start with the documentation, and jump to the Tutorials when the documentation directs you there for illustration.
 
-## Running the sample
+## Further documentation on the samples
 
-Outline step-by-step instructions to execute the sample and see its output. Include steps for executing the sample from the IDE, starting specific services in the Azure portal or anything related to the overall launch of the code.
+Each sample contains enough documentation to run it, along with enough conceptual background to understand what it is doing, and enough motivational background to understand why one might be inclined to do so. 
 
-## Key concepts
-
-Provide users with more context on the tools and services used in the sample. Explain some of the code that is being used and how services interact with each other.
+  * [AlignSubScene](DocGen/Documentation/Advanced/AlignSubScene/AlignSubScene.md) 
+  * [QRSpacePins](DocGen/Documentation/Advanced/QRSpacePins/QRSpacePins.md)
 
 ## Contributing
 
