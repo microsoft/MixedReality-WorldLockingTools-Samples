@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-namespace Microsoft.MixedReality.WorldLocking.Samples
+namespace Microsoft.MixedReality.WorldLocking.Examples
 {
     /// <summary>
     /// Script to use an independent AlignmentManager to align a specific subtree, independent of the rest of the scene.
