@@ -1,31 +1,37 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
 using Microsoft.MixedReality.Toolkit;
 using Microsoft.MixedReality.Toolkit.Input;
-using Microsoft.MixedReality.Toolkit.UI;
 
 
 namespace Microsoft.MixedReality.WorldLocking.Samples
 {
+    /// <summary>
+    /// Simple script to instantiate and place a prefab in the scene where tapped.
+    /// If the air tap hits a previously placed object, it will be deleted.
+    /// </summary>
+    /// <remarks>
+    /// This script assumes the prefab is of the layer "Pillared". Anything of
+    /// layer "Pillared" will be considered to have been added by this script, 
+    /// and hence removed if tapped.
+    /// </remarks>
     public class PlantPlacard : InputSystemGlobalHandlerListener, IMixedRealityPointerHandler
     {
+        /// <summary>
+        /// The prefab to instantiate and place in the scene.
+        /// </summary>
         public GameObject placardPrefab = null;
 
-        // Start is called before the first frame update
+        /// <summary>
+        /// Cache our layers at start.
+        /// </summary>
         protected override void Start()
         {
             uiLayer = LayerMask.GetMask("UI");
             pillarLayer = LayerMask.GetMask("Pillared");
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
         }
 
         #region InputSystemGlobalHandlerListener Implementation
@@ -88,6 +94,13 @@ namespace Microsoft.MixedReality.WorldLocking.Samples
 
         #region Handle hits
 
+        /// <summary>
+        /// Delete anything tapped, but only if its layer indicates it was placed there by this script.
+        /// </summary>
+        /// <param name="rayHit">The hit ray pointing at the tapped object.</param>
+        /// <remarks>
+        /// The subtree of the hit object is climbed to find the topmost parent with the "Pillared" layer.
+        /// </remarks>
         private void HandleDelete(RayHit rayHit)
         {
             /// Climb to the sub-root of the pillar. That will be the parent-most object
@@ -101,6 +114,10 @@ namespace Microsoft.MixedReality.WorldLocking.Samples
             GameObject.Destroy(trans.gameObject);
         }
 
+        /// <summary>
+        /// Instantiate and add a prefab where tapped.
+        /// </summary>
+        /// <param name="rayHit">The hit ray indicating where to add the object.</param>
         private void HandleAdd(RayHit rayHit)
         {
             var position = rayHit.hitPosition;
