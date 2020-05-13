@@ -229,33 +229,17 @@ namespace Microsoft.MixedReality.WorldLocking.Samples
                 }
                 if (highlightPrefab != null)
                 {
-                    highlightProxy = Instantiate(highlightPrefab);
-                }
-                if (highlightProxy != null)
-                {
-                    Pose offsetFrozenPose = SizeProxyToMatchQRCode(spacePin.transform.GetGlobalPose());
-                    highlightProxy.transform.SetGlobalPose(offsetFrozenPose);
-                    highlightProxy.SetActive(true);
+                    /// Note the assumption that the QR proxy is a box that needs to be
+                    /// sized and offset to fit the read QR data.
+                    Vector3 scale = new Vector3(sizeMeters, sizeMeters, sizeMeters * 0.1f);
+                    Vector3 offset = scale * 0.5f;
+                    highlightProxy = Instantiate(highlightPrefab, spacePin.transform);
+                    highlightProxy.transform.localScale = scale;
+                    highlightProxy.transform.localPosition = offset;
+                    highlightProxy.transform.localRotation = Quaternion.identity;
                 }
 
                 return highlightProxy != null;
-            }
-
-            /// <summary>
-            /// Apply a local scale to the highlight marker, to match the reported size of the QR code.
-            /// </summary>
-            /// <param name="frozenPose">Pose of the upper left corner of the QR code.</param>
-            /// <returns>The frozen pose offset so the -x,-y corner of the highlight marker is at QR code position.</returns>
-            /// <remarks>
-            /// This implementation assumes the highlight marker is a Unity cube or equivalent.
-            /// </remarks>
-            private Pose SizeProxyToMatchQRCode(Pose frozenPose)
-            {
-                Vector3 scale = new Vector3(sizeMeters, sizeMeters, sizeMeters * 0.1f); ;
-                highlightProxy.transform.localScale = scale;
-                Vector3 offset = scale * 0.5f;
-                Pose offsetFrozenPose = frozenPose.Multiply(new Pose(offset, Quaternion.identity));
-                return offsetFrozenPose;
             }
 
             /// <summary>

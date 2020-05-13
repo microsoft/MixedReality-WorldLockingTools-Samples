@@ -610,9 +610,9 @@ PlayerSettings:
   metroPackageVersion: 1.0.0.0
   metroCertificatePath: Assets/WSATestCertificate.pfx
   metroCertificatePassword: 
-  metroCertificateSubject: Microsoft
-  metroCertificateIssuer: Microsoft
-  metroCertificateNotAfter: 0009b681b346d701
+  metroCertificateSubject: World Locking Tools
+  metroCertificateIssuer: World Locking Tools
+  metroCertificateNotAfter: 00dedf022348d701
   metroApplicationDescription: Template_3D
   wsaImages: {}
   metroTileShortName: FrozenWorldDemo
