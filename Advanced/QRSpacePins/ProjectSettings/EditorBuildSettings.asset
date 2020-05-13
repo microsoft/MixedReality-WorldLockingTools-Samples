@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/QRSpacePin/Scenes/QRSpacePins.unity
     guid: d23ad6dcc3b28ba4ca825182d105a297
+  - enabled: 0
+    path: Assets/QRSpacePin/Scenes/QRSubScene.unity
+    guid: 5cdd4ae3742ea8e448310727f7d17051
   m_configObjects: {}
