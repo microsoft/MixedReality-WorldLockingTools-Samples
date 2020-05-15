@@ -1,40 +1,16 @@
-<img src="DocGen/Images/WorldLockingTools.svg">
+<img src="DocGen/Images/WorldLockingSamples.svg">
 
-# Welcome!
+# Céad míle fáilte!
 
 The **World Locking Tools - Samples** repository hopes to give you isolated independent examples, or even starting points, for anything you might do with the World Locking Tools for Unity.
 
 ## Useful links
 
+[Getting started with Samples](DocGen/Documentation/Introduction.md).
+
 [World Locking Tools for Unity (WLT) github repo](https://github.com/microsoft/MixedReality-WorldLockingTools-Unity).
 
 [World Locking Tools for Unity (WLT) documentation landing page](https://microsoft.github.io/MixedReality-WorldLockingTools-Unity/README.html).
-
-## About the Samples
-
-Each sample is a self-contained Unity project. While that introduces a lot of redundancy between samples, it means that you don't have to wonder if something in a project is necessary. If the sample within that project doesn't use QR code scanning, then the QR code NuGet package won't be installed in that project.
-
-General samples covering many scenarios can be found in the main WLT repo. This sibling repo allows the extension of sample coverage without bloating out the main repository. 
-
-The samples can be thought of as forming two groups.
-
-The first group is for very basic and slimmed down scenarios. The main repo's project can't show what a project looks like without adding the WorldLocking.Tools because the Tools are, of course, included in that project. This limits some of the tutorials we would like to cover.
-
-The second group is for very advanced scenarios. More advanced scenarios often leverage the World Locking Tools capabilities to amplify the value from other, independent software and services. While these services might be only a NuGet feed away, bloating the core WLT repo with every NuGet package that might be useful for a sample is a frightening prospect.
-
-## Contents
-
-The two groups of samples are distributed in this repository as shown. This table will be updated as new Samples come online. Links to documentation for each is included in the table.
-
-Each sample contains enough documentation to run it, along with enough conceptual background to understand what it is doing, and enough motivational background to understand why one might be inclined to do so. 
-
-| Folder     | Project       | Description                                               |
-|------------|---------------|-----------------------------------------------------------|
-| `Tutorials`|               | Projects slimmed down to make a single point.             |
-|            |               |                                                           |
-| `Advanced` |               | Complex projects, often leveraging external dependencies. |
-|            | [AlignSubScene](DocGen/Documentation/Advanced/AlignSubScene/AlignSubScene.md) | Aligning multiple independent spaces.                    |
-|            | [QRSpacePins](DocGen/Documentation/Advanced/QRSpacePins/QRSpacePins.md)   | QR codes as external alignment markers.                  |
 
 ## Prerequisites
 
@@ -46,9 +22,7 @@ The Tutorials are most useful as auxiliary information for the documentation. St
 
 ## Contributing in non-legal terms.
 
-If you have an idea for a sample you would like to see, add it and any motivation you can conjure to a [github issue](https://github.com/issues). 
-
-If you have a sample that you have created and want to share, and it satisfies all the legal requirements (see below), then we would love to have it. For your own protection, it is best to submit [a proposal](https://github.com/issues) first, and check for any reasons we might not be able to host it here. For example, if it doesn't involve World Locking Tools for Unity. Or uses intellectual property that you don't have the rights to confer. But if you feel confident that it does satisfy all requirements (always best to check ahead of time), then build it in a fork of this repo and submit a pull request. We'll be happy to have a look in a timely fashion.   
+Some simple talk about [contributing to this project](CONTRIBUTING.md).
 
 ## Contributing
 
