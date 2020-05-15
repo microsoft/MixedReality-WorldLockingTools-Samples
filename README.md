@@ -2,7 +2,7 @@
 
 # Welcome!
 
-The World Locking Tools - Samples repository hopes to give you isolated independent examples, or even starting points, for anything you might do with the World Locking Tools for Unity.
+The **World Locking Tools - Samples** repository hopes to give you isolated independent examples, or even starting points, for anything you might do with the World Locking Tools for Unity.
 
 ## Useful links
 
@@ -24,7 +24,9 @@ The second group is for very advanced scenarios. More advanced scenarios often l
 
 ## Contents
 
-The two groups of samples are distributed in this repository as shown. This table will be updated as new Samples come online.
+The two groups of samples are distributed in this repository as shown. This table will be updated as new Samples come online. Links to documentation for each is included in the table.
+
+Each sample contains enough documentation to run it, along with enough conceptual background to understand what it is doing, and enough motivational background to understand why one might be inclined to do so. 
 
 | Folder     | Project       | Description                                               |
 |------------|---------------|-----------------------------------------------------------|
@@ -38,16 +40,15 @@ The two groups of samples are distributed in this repository as shown. This tabl
 
 The basics of building and deploying a HoloLens application from Unity are assumed. If you aren't familiar with that, [here's a good place to start](https://docs.microsoft.com/en-us/windows/mixed-reality/holograms-101). Or if you want to go straight to HoloLens2, then [here](https://docs.microsoft.com/en-us/windows/mixed-reality/mrlearning-base).
 
-For the Advanced samples, obviously familiarity with the basic World Locking Tools for Unity is assumed. Start [there](https://microsoft.github.io/MixedReality-WorldLockingTools-Unity/DocGen/Documentation/GettingStartedWithWorldLocking.html).
+For the Advanced samples, obviously familiarity with the basic World Locking Tools for Unity is assumed. Start [here](https://microsoft.github.io/MixedReality-WorldLockingTools-Unity/DocGen/Documentation/GettingStartedWithWorldLocking.html).
 
 The Tutorials are most useful as auxiliary information for the documentation. Start with the documentation, and jump to the Tutorials when the documentation directs you there for illustration.
 
-## Further documentation on the samples
+## Contributing in non-legal terms.
 
-Each sample contains enough documentation to run it, along with enough conceptual background to understand what it is doing, and enough motivational background to understand why one might be inclined to do so. 
+If you have an idea for a sample you would like to see, add it and any motivation you can conjure to a [github issue](https://github.com/issues). 
 
-  * [AlignSubScene](DocGen/Documentation/Advanced/AlignSubScene/AlignSubScene.md) 
-  * [QRSpacePins](DocGen/Documentation/Advanced/QRSpacePins/QRSpacePins.md)
+If you have a sample that you have created and want to share, and it satisfies all the legal requirements (see below), then we would love to have it. For your own protection, it is best to submit [a proposal](https://github.com/issues) first, and check for any reasons we might not be able to host it here. For example, if it doesn't involve World Locking Tools for Unity. Or uses intellectual property that you don't have the rights to confer. But if you feel confident that it does satisfy all requirements (always best to check ahead of time), then build it in a fork of this repo and submit a pull request. We'll be happy to have a look in a timely fashion.   
 
 ## Contributing
 

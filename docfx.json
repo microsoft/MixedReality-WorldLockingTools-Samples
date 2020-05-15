@@ -4,7 +4,7 @@
       "src": [
         {
           "files": [ "**/Assets/**/*.cs" ],
-          "exclude": [ "**/bin/**", "**/obj/**", "**/WorldLocking.Plugin/**", "**/WorldLocking.Core/**", "**/WorldLocking.Tools/**", "**/WorldLocking.Examples/**", "**/MRTK/**" ],
+          "exclude": [ "**/bin/**", "**/obj/**", "**/*WorldLocking.Engine/**", "**/*WorldLocking.Core/**", "**/*WorldLocking.Tools/**", "**/*WorldLocking.Examples/**", "**/MRTK/**", "**/Packages/**", "**/NuGet/**" ],
           "src": "Advanced"
         }
       ],
@@ -19,7 +19,7 @@
         "dest": "DocGen/Temp/api"
       },
       {
-        "files": [ "DocGen/Documentation/**/*.md", "*.md", "*.yml", "toc.yml", "DocGen/Documentation/**/*.yml", "DocGen/Documentation/Architecture/**", "DocGen/External/Documentation/*.md", "DocGen/External/HowTo/*.md" ]
+        "files": [ "DocGen/Documentation/**/*.md", "DocGen/SourceDoc/**", "*.md", "*.yml", "toc.yml", "DocGen/Documentation/**/*.yml", "DocGen/Documentation/Architecture/**", "DocGen/External/Documentation/*.md", "DocGen/External/HowTo/*.md" ]
       }
     ],
     "resource": [
