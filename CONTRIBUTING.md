@@ -1,5 +1,19 @@
 # Contributing
 
+## Contributing ideas
+
+Suggestions for further samples, fixes for the current samples, clarification of documentation, or extension of the samples included are all very welcome. You are, of course, free and encouraged to develop your own samples as well. Be aware that there are restrictions on what samples can be hosted as part of this site, so if your sole intention is to put a sample here, it's best to check (by issuing a [proposal](https://github.com/microsoft/MixedReality-WorldLockingTools-Samples/issues)) first before investing a lot of time.
+
+## Contributing samples
+
+The most stringent requirement on samples is that they are well documented. Any scripts should be clear, with [docfx](https://dotnet.github.io/docfx/index.html) compliant comments. This generally just means following [C#'s XML code documentation practices](https://docs.microsoft.com/en-us/dotnet/csharp/codedoc), which many would say you should be doing anyway. 
+
+Further, a detailed writeup should accompany the sample, as a markdown file in the corresponding folder within DocGen. For example, if your sample is in Advanced/NicelyDone, then you should have accompanying documentation in DocGen/Documentation/Advanced/NicelyDone/NicelyDone.md. Other supporting documentation you wish to include can be placed in the same folder as the markdown file.
+
+At a minimum, the documentation markdown file should include all of the information in [this template](DocGen/Documentation/SampleDocTemplate.md).
+
+## Additional notes
+
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
 Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
 the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
