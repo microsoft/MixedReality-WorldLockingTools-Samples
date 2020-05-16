@@ -24,7 +24,7 @@ Each sample contains enough documentation to run it, along with enough conceptua
 |------------|---------------|-----------------------------------------------------------|
 | `Tutorials`|               | Projects slimmed down to make a single point.             |
 |            |               |                                                           |
-| [Advanced](Advanced/Advanced.md) |               | Complex projects, often leveraging external dependencies. |
-|            | [AlignSubScene](Advanced/AlignSubScene/AlignSubScene.md) | Aligning multiple independent spaces.                    |
-|            | [QRSpacePins](Advanced/QRSpacePins/QRSpacePins.md)   | QR codes as external alignment markers.                  |
+| [Advanced](../../Advanced/Advanced.md) |               | Complex projects, often leveraging external dependencies. |
+|            | [AlignSubScene](../../Advanced/AlignSubScene/AlignSubScene.md) | Aligning multiple independent spaces.                    |
+|            | [QRSpacePins](../../Advanced/QRSpacePins/QRSpacePins.md)   | QR codes as external alignment markers.                  |
 
