@@ -6,6 +6,11 @@
           "files": [ "**/Assets/**/*.cs" ],
           "exclude": [ "**/bin/**", "**/obj/**", "**/*WorldLocking.Engine/**", "**/*WorldLocking.Core/**", "**/*WorldLocking.Tools/**", "**/*WorldLocking.Examples/**", "**/MRTK/**", "**/Packages/**", "**/NuGet/**" ],
           "src": "Advanced"
+        },
+        {
+          "files": [ "**/Assets/**/*.cs" ],
+          "exclude": [ "**/bin/**", "**/obj/**", "**/*WorldLocking.Engine/**", "**/*WorldLocking.Core/**", "**/*WorldLocking.Tools/**", "**/*WorldLocking.Examples/**", "**/MRTK/**", "**/Packages/**", "**/NuGet/**" ],
+          "src": "Tutorials"
         }
       ],
       "dest": "DocGen/Temp/obj/api"
@@ -20,6 +25,10 @@
       },
       {
         "files": [ "DocGen/Documentation/**/*.md", "DocGen/SourceDoc/**", "*.md", "*.yml", "toc.yml", "DocGen/Documentation/**/*.yml", "DocGen/Documentation/Architecture/**", "DocGen/External/Documentation/*.md", "DocGen/External/HowTo/*.md" ]
+      },
+      {
+        "files": [ "Advanced/**/*.md", "Tutorials/**/*.md" ],
+        "exclude": [ "**/MRTK/**", "**/WorldLocking.Engine/**", "**/*WorldLocking.Core/**", "**/*WorldLocking.Examples/**", "**/*WorldLocking.Tools/**" ]
       }
     ],
     "resource": [
@@ -41,7 +50,7 @@
       "_appTitle": "World Locking Tools Samples Documentation",
       "_enableSearch": true,
       "_disableNavbar": false,
-      "_appLogoPath": "DocGen/Images/Logos/WorldLock64.png",
+      "_appLogoPath": "DocGen/Images/Logos/WLS64.png",
       "_appFaviconPath": "DocGen/Images/Logos/favicon.ico",
       "_gitContribute": {
         "repo": "https://github.com/Microsoft/MixedReality-WorldLockingTools-Samples.git",

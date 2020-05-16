@@ -1,6 +1,6 @@
 <img src="DocGen/Images/WorldLockingSamples.svg">
 
-# Céad míle fáilte!
+# WLT Samples
 
 The **World Locking Tools - Samples** repository hopes to give you isolated independent examples, or even starting points, for anything you might do with the World Locking Tools for Unity.
 
