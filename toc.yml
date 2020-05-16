@@ -1,0 +1,8 @@
+- name: Home
+  href: README.md
+- name: Samples
+  href: DocGen/Documentation/
+  homepage: DocGen/Documentation/Introduction.md
+- name: Source reference
+  href: DocGen/SourceDoc/
+  homepage: DocGen/SourceDoc/SourceReference.md
