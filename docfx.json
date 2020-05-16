@@ -4,7 +4,7 @@
       "src": [
         {
           "files": [ "**/Assets/**/*.cs" ],
-          "exclude": [ "**/bin/**", "**/obj/**", "**/*WorldLocking.Engine/**", "**/*WorldLocking.Core/**", "**/*WorldLocking.Tools/**", "**/*WorldLocking.Examples/**", "**/MRTK/**", "**/Packages/**", "**/NuGet/**" ],
+          "exclude": [ "**/bin/**", "**/obj/**", "**/Library/**", "**/*WorldLocking.Engine/**", "**/*WorldLocking.Core/**", "**/*WorldLocking.Tools/**", "**/*WorldLocking.Examples/**", "**/MRTK/**", "**/Packages/**", "**/NuGet/**" ],
           "src": "Advanced"
         },
         {
@@ -28,7 +28,7 @@
       },
       {
         "files": [ "Advanced/**/*.md", "Tutorials/**/*.md" ],
-        "exclude": [ "**/MRTK/**", "**/WorldLocking.Engine/**", "**/*WorldLocking.Core/**", "**/*WorldLocking.Examples/**", "**/*WorldLocking.Tools/**" ]
+        "exclude": [ "**/Library/**", "**/MRTK/**", "**/WorldLocking.Engine/**", "**/*WorldLocking.Core/**", "**/*WorldLocking.Examples/**", "**/*WorldLocking.Tools/**" ]
       }
     ],
     "resource": [

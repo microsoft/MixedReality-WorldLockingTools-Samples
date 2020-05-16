@@ -133,7 +133,8 @@ namespace Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
         /// </summary>
         private static readonly int trace = 0;
         private static readonly int log = 5;
-        private static readonly int error = 10;
+        // Error level logs currently unused.
+        //private static readonly int error = 10;
 
         /// <summary>
         /// Check existence of watcher and attempt to create if needed and appropriate.
