@@ -457,8 +457,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b54ea26464070b499d1c6f072d7c6a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  orienter: {fileID: 0}
-  prefab_FeelerRay: {fileID: 0}
+  orienter: {fileID: 186072217}
+  prefab_FeelerRay: {fileID: 1335525745713039694, guid: 498c830c5e5604e44b3788a7f47a4392,
+    type: 3}
   allowRotation: 1
 --- !u!135 &164177683
 SphereCollider:

@@ -8,7 +8,7 @@ using UnityEngine;
 using Microsoft.MixedReality.WorldLocking.Core;
 using Microsoft.MixedReality.QR;
 
-namespace Microsoft.MixedReality.WorldLocking.Samples
+namespace Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
 {
     /// <summary>
     /// A group of space pins with locations fed by reading QR codes placed in the physical environment.
