@@ -4,7 +4,7 @@ using UnityEngine;
 
 using Microsoft.MixedReality.QR;
 
-namespace Microsoft.MixedReality.WorldLocking.Samples
+namespace Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
 {
     /// <summary>
     /// The QRCodeMiniManager is a simple wrapper around the Microsoft.MixedReality.QR.QRCodeWatcher,

@@ -4,45 +4,48 @@
 using System;
 using UnityEngine;
 
-public class SimpleTagalong : MonoBehaviour
+namespace Microsoft.MixedReality.WorldLocking.Samples
 {
-
-    public float maxAngle = 20.0f;
-    public float lerpTime = 0.1f;
-
-    Vector3 originalPosition;
-    Quaternion originalRotation;
-
-    Quaternion currentRotation;
-
-    void Start()
+    public class SimpleTagalong : MonoBehaviour
     {
-        originalPosition = transform.localPosition;
-        originalRotation = transform.localRotation;
-        currentRotation = Quaternion.identity;
-    }
 
-    void Update()
-    {
-        Vector3 camPosition = Camera.main.transform.position; 
-        Quaternion camRotation = Camera.main.transform.rotation; 
+        public float maxAngle = 20.0f;
+        public float lerpTime = 0.1f;
 
-        float cameraAngle = camRotation.eulerAngles.y;
-        float currentAngle = currentRotation.eulerAngles.y;
+        Vector3 originalPosition;
+        Quaternion originalRotation;
 
-        float diffAngle = currentAngle - cameraAngle;
-        while (diffAngle > 180) diffAngle -= 360;
-        while (diffAngle < -180) diffAngle += 360;
+        Quaternion currentRotation;
 
-        diffAngle = Math.Min(diffAngle, maxAngle);
-        diffAngle = Math.Max(diffAngle, -maxAngle);
+        void Start()
+        {
+            originalPosition = transform.localPosition;
+            originalRotation = transform.localRotation;
+            currentRotation = Quaternion.identity;
+        }
 
-        float targetAngle = cameraAngle + diffAngle;
-        Quaternion targetRotation = Quaternion.Euler(0, targetAngle, 0);
+        void Update()
+        {
+            Vector3 camPosition = Camera.main.transform.position;
+            Quaternion camRotation = Camera.main.transform.rotation;
 
-        currentRotation = Quaternion.Slerp(currentRotation, targetRotation, Time.unscaledDeltaTime / lerpTime);
+            float cameraAngle = camRotation.eulerAngles.y;
+            float currentAngle = currentRotation.eulerAngles.y;
 
-        transform.position = camPosition + currentRotation * originalPosition;
-        transform.rotation = currentRotation * originalRotation;
+            float diffAngle = currentAngle - cameraAngle;
+            while (diffAngle > 180) diffAngle -= 360;
+            while (diffAngle < -180) diffAngle += 360;
+
+            diffAngle = Math.Min(diffAngle, maxAngle);
+            diffAngle = Math.Max(diffAngle, -maxAngle);
+
+            float targetAngle = cameraAngle + diffAngle;
+            Quaternion targetRotation = Quaternion.Euler(0, targetAngle, 0);
+
+            currentRotation = Quaternion.Slerp(currentRotation, targetRotation, Time.unscaledDeltaTime / lerpTime);
+
+            transform.position = camPosition + currentRotation * originalPosition;
+            transform.rotation = currentRotation * originalRotation;
+        }
     }
 }

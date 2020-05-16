@@ -7,7 +7,7 @@ using Microsoft.MixedReality.Toolkit;
 using Microsoft.MixedReality.Toolkit.Input;
 
 
-namespace Microsoft.MixedReality.WorldLocking.Samples
+namespace Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
 {
     /// <summary>
     /// Simple script to instantiate and place a prefab in the scene where tapped.

@@ -13,7 +13,7 @@ using UnityEngine;
 using global::Windows.Perception.Spatial;
 #endif // WINDOWS_UWP
 
-namespace Microsoft.MixedReality.WorldLocking.Samples
+namespace Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
 {
     /// <summary>
     /// Wrapper class for SpatialCoordinateSystem.

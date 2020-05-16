@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Microsoft.MixedReality.WorldLocking.Samples
+namespace Microsoft.MixedReality.WorldLocking.Samples.Advanced
 {
     /// <summary>
     /// A simple runtime console to help in debugging on device.
