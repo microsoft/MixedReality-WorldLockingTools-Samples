@@ -51,7 +51,8 @@ namespace Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
 
         private static readonly int trace = 0;
         private static readonly int log = 5;
-        private static readonly int error = 10;
+        // Error level log currently unused.
+        //private static readonly int error = 10;
 
         /// <summary>
         /// A collection of everything needed to set a space pin from a detected QR code.

@@ -63,8 +63,9 @@ namespace Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
         /// SimpleConsole verbosity levels.
         /// </summary>
         private static readonly int trace = 0;
-        private static readonly int log = 5;
-        private static readonly int error = 10;
+        // These two are currently unused. All logs here are trace level (most trivial).
+        //private static readonly int log = 5;
+        //private static readonly int error = 10;
 
         /// <summary>
         /// The last computed pose.
