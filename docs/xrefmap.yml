@@ -85,365 +85,456 @@ references:
   commentId: N:Microsoft.MixedReality.WorldLocking.Samples
   fullName: Microsoft.MixedReality.WorldLocking.Samples
   nameWithType: Microsoft.MixedReality.WorldLocking.Samples
-- uid: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced
+  name: Microsoft.MixedReality.WorldLocking.Samples.Advanced
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.html
+  commentId: N:Microsoft.MixedReality.WorldLocking.Samples.Advanced
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced
+  nameWithType: Microsoft.MixedReality.WorldLocking.Samples.Advanced
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+  name: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.html
+  commentId: N:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+  nameWithType: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard
   name: PlantPlacard
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.html
-  commentId: T:Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.html
+  commentId: T:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard
   nameWithType: PlantPlacard
-- uid: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.OnPointerClicked(MixedRealityPointerEventData)
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerClicked(MixedRealityPointerEventData)
   name: OnPointerClicked(MixedRealityPointerEventData)
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_PlantPlacard_OnPointerClicked_MixedRealityPointerEventData_
-  commentId: M:Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.OnPointerClicked(MixedRealityPointerEventData)
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.OnPointerClicked(MixedRealityPointerEventData)
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_AlignSubScene_PlantPlacard_OnPointerClicked_MixedRealityPointerEventData_
+  commentId: M:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerClicked(MixedRealityPointerEventData)
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerClicked(MixedRealityPointerEventData)
   nameWithType: PlantPlacard.OnPointerClicked(MixedRealityPointerEventData)
-- uid: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.OnPointerClicked*
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerClicked*
   name: OnPointerClicked
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_PlantPlacard_OnPointerClicked_
-  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.OnPointerClicked
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_AlignSubScene_PlantPlacard_OnPointerClicked_
+  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerClicked
   isSpec: "True"
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.OnPointerClicked
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerClicked
   nameWithType: PlantPlacard.OnPointerClicked
-- uid: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.OnPointerDown(MixedRealityPointerEventData)
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDown(MixedRealityPointerEventData)
   name: OnPointerDown(MixedRealityPointerEventData)
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_PlantPlacard_OnPointerDown_MixedRealityPointerEventData_
-  commentId: M:Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.OnPointerDown(MixedRealityPointerEventData)
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.OnPointerDown(MixedRealityPointerEventData)
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_AlignSubScene_PlantPlacard_OnPointerDown_MixedRealityPointerEventData_
+  commentId: M:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDown(MixedRealityPointerEventData)
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDown(MixedRealityPointerEventData)
   nameWithType: PlantPlacard.OnPointerDown(MixedRealityPointerEventData)
-- uid: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.OnPointerDown*
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDown*
   name: OnPointerDown
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_PlantPlacard_OnPointerDown_
-  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.OnPointerDown
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_AlignSubScene_PlantPlacard_OnPointerDown_
+  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDown
   isSpec: "True"
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.OnPointerDown
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDown
   nameWithType: PlantPlacard.OnPointerDown
-- uid: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.OnPointerDragged(MixedRealityPointerEventData)
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDragged(MixedRealityPointerEventData)
   name: OnPointerDragged(MixedRealityPointerEventData)
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_PlantPlacard_OnPointerDragged_MixedRealityPointerEventData_
-  commentId: M:Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.OnPointerDragged(MixedRealityPointerEventData)
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.OnPointerDragged(MixedRealityPointerEventData)
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_AlignSubScene_PlantPlacard_OnPointerDragged_MixedRealityPointerEventData_
+  commentId: M:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDragged(MixedRealityPointerEventData)
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDragged(MixedRealityPointerEventData)
   nameWithType: PlantPlacard.OnPointerDragged(MixedRealityPointerEventData)
-- uid: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.OnPointerDragged*
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDragged*
   name: OnPointerDragged
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_PlantPlacard_OnPointerDragged_
-  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.OnPointerDragged
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_AlignSubScene_PlantPlacard_OnPointerDragged_
+  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDragged
   isSpec: "True"
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.OnPointerDragged
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDragged
   nameWithType: PlantPlacard.OnPointerDragged
-- uid: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.OnPointerUp(MixedRealityPointerEventData)
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerUp(MixedRealityPointerEventData)
   name: OnPointerUp(MixedRealityPointerEventData)
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_PlantPlacard_OnPointerUp_MixedRealityPointerEventData_
-  commentId: M:Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.OnPointerUp(MixedRealityPointerEventData)
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.OnPointerUp(MixedRealityPointerEventData)
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_AlignSubScene_PlantPlacard_OnPointerUp_MixedRealityPointerEventData_
+  commentId: M:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerUp(MixedRealityPointerEventData)
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerUp(MixedRealityPointerEventData)
   nameWithType: PlantPlacard.OnPointerUp(MixedRealityPointerEventData)
-- uid: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.OnPointerUp*
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerUp*
   name: OnPointerUp
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_PlantPlacard_OnPointerUp_
-  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.OnPointerUp
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_AlignSubScene_PlantPlacard_OnPointerUp_
+  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerUp
   isSpec: "True"
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.OnPointerUp
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerUp
   nameWithType: PlantPlacard.OnPointerUp
-- uid: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.placardPrefab
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.placardPrefab
   name: placardPrefab
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_PlantPlacard_placardPrefab
-  commentId: F:Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.placardPrefab
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.placardPrefab
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_AlignSubScene_PlantPlacard_placardPrefab
+  commentId: F:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.placardPrefab
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.placardPrefab
   nameWithType: PlantPlacard.placardPrefab
-- uid: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.RegisterHandlers
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.RegisterHandlers
   name: RegisterHandlers()
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_PlantPlacard_RegisterHandlers
-  commentId: M:Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.RegisterHandlers
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.RegisterHandlers()
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_AlignSubScene_PlantPlacard_RegisterHandlers
+  commentId: M:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.RegisterHandlers
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.RegisterHandlers()
   nameWithType: PlantPlacard.RegisterHandlers()
-- uid: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.RegisterHandlers*
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.RegisterHandlers*
   name: RegisterHandlers
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_PlantPlacard_RegisterHandlers_
-  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.RegisterHandlers
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_AlignSubScene_PlantPlacard_RegisterHandlers_
+  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.RegisterHandlers
   isSpec: "True"
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.RegisterHandlers
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.RegisterHandlers
   nameWithType: PlantPlacard.RegisterHandlers
-- uid: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.Start
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.Start
   name: Start()
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_PlantPlacard_Start
-  commentId: M:Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.Start
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.Start()
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_AlignSubScene_PlantPlacard_Start
+  commentId: M:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.Start
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.Start()
   nameWithType: PlantPlacard.Start()
-- uid: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.Start*
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.Start*
   name: Start
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_PlantPlacard_Start_
-  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.Start
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_AlignSubScene_PlantPlacard_Start_
+  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.Start
   isSpec: "True"
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.Start
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.Start
   nameWithType: PlantPlacard.Start
-- uid: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.TestLayer(GameObject,System.Int32)
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.TestLayer(GameObject,System.Int32)
   name: TestLayer(GameObject, Int32)
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_PlantPlacard_TestLayer_GameObject_System_Int32_
-  commentId: M:Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.TestLayer(GameObject,System.Int32)
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.TestLayer(GameObject, System.Int32)
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_AlignSubScene_PlantPlacard_TestLayer_GameObject_System_Int32_
+  commentId: M:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.TestLayer(GameObject,System.Int32)
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.TestLayer(GameObject, System.Int32)
   nameWithType: PlantPlacard.TestLayer(GameObject, Int32)
-- uid: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.TestLayer*
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.TestLayer*
   name: TestLayer
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_PlantPlacard_TestLayer_
-  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.TestLayer
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_AlignSubScene_PlantPlacard_TestLayer_
+  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.TestLayer
   isSpec: "True"
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.TestLayer
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.TestLayer
   nameWithType: PlantPlacard.TestLayer
-- uid: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.UnregisterHandlers
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.UnregisterHandlers
   name: UnregisterHandlers()
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_PlantPlacard_UnregisterHandlers
-  commentId: M:Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.UnregisterHandlers
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.UnregisterHandlers()
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_AlignSubScene_PlantPlacard_UnregisterHandlers
+  commentId: M:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.UnregisterHandlers
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.UnregisterHandlers()
   nameWithType: PlantPlacard.UnregisterHandlers()
-- uid: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.UnregisterHandlers*
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.UnregisterHandlers*
   name: UnregisterHandlers
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_PlantPlacard_UnregisterHandlers_
-  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.UnregisterHandlers
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_AlignSubScene_PlantPlacard_UnregisterHandlers_
+  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.UnregisterHandlers
   isSpec: "True"
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.PlantPlacard.UnregisterHandlers
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.UnregisterHandlers
   nameWithType: PlantPlacard.UnregisterHandlers
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+  name: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.html
+  commentId: N:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+  nameWithType: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager
   name: QRCodeMiniManager
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.html
-  commentId: T:Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.html
+  commentId: T:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager
   nameWithType: QRCodeMiniManager
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.IsSupported
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.IsSupported
   name: IsSupported
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.html#Microsoft_MixedReality_WorldLocking_Samples_QRCodeMiniManager_IsSupported
-  commentId: P:Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.IsSupported
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.IsSupported
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_QRSpacePins_QRCodeMiniManager_IsSupported
+  commentId: P:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.IsSupported
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.IsSupported
   nameWithType: QRCodeMiniManager.IsSupported
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.IsSupported*
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.IsSupported*
   name: IsSupported
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.html#Microsoft_MixedReality_WorldLocking_Samples_QRCodeMiniManager_IsSupported_
-  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.IsSupported
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_QRSpacePins_QRCodeMiniManager_IsSupported_
+  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.IsSupported
   isSpec: "True"
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.IsSupported
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.IsSupported
   nameWithType: QRCodeMiniManager.IsSupported
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.OnQRAdded
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRAdded
   name: OnQRAdded
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.html#Microsoft_MixedReality_WorldLocking_Samples_QRCodeMiniManager_OnQRAdded
-  commentId: P:Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.OnQRAdded
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.OnQRAdded
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_QRSpacePins_QRCodeMiniManager_OnQRAdded
+  commentId: P:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRAdded
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRAdded
   nameWithType: QRCodeMiniManager.OnQRAdded
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.OnQRAdded*
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRAdded*
   name: OnQRAdded
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.html#Microsoft_MixedReality_WorldLocking_Samples_QRCodeMiniManager_OnQRAdded_
-  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.OnQRAdded
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_QRSpacePins_QRCodeMiniManager_OnQRAdded_
+  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRAdded
   isSpec: "True"
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.OnQRAdded
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRAdded
   nameWithType: QRCodeMiniManager.OnQRAdded
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.OnQREnumerated
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQREnumerated
   name: OnQREnumerated
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.html#Microsoft_MixedReality_WorldLocking_Samples_QRCodeMiniManager_OnQREnumerated
-  commentId: P:Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.OnQREnumerated
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.OnQREnumerated
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_QRSpacePins_QRCodeMiniManager_OnQREnumerated
+  commentId: P:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQREnumerated
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQREnumerated
   nameWithType: QRCodeMiniManager.OnQREnumerated
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.OnQREnumerated*
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQREnumerated*
   name: OnQREnumerated
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.html#Microsoft_MixedReality_WorldLocking_Samples_QRCodeMiniManager_OnQREnumerated_
-  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.OnQREnumerated
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_QRSpacePins_QRCodeMiniManager_OnQREnumerated_
+  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQREnumerated
   isSpec: "True"
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.OnQREnumerated
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQREnumerated
   nameWithType: QRCodeMiniManager.OnQREnumerated
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.OnQRRemoved
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRRemoved
   name: OnQRRemoved
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.html#Microsoft_MixedReality_WorldLocking_Samples_QRCodeMiniManager_OnQRRemoved
-  commentId: P:Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.OnQRRemoved
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.OnQRRemoved
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_QRSpacePins_QRCodeMiniManager_OnQRRemoved
+  commentId: P:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRRemoved
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRRemoved
   nameWithType: QRCodeMiniManager.OnQRRemoved
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.OnQRRemoved*
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRRemoved*
   name: OnQRRemoved
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.html#Microsoft_MixedReality_WorldLocking_Samples_QRCodeMiniManager_OnQRRemoved_
-  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.OnQRRemoved
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_QRSpacePins_QRCodeMiniManager_OnQRRemoved_
+  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRRemoved
   isSpec: "True"
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.OnQRRemoved
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRRemoved
   nameWithType: QRCodeMiniManager.OnQRRemoved
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.OnQRUpdated
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRUpdated
   name: OnQRUpdated
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.html#Microsoft_MixedReality_WorldLocking_Samples_QRCodeMiniManager_OnQRUpdated
-  commentId: P:Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.OnQRUpdated
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.OnQRUpdated
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_QRSpacePins_QRCodeMiniManager_OnQRUpdated
+  commentId: P:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRUpdated
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRUpdated
   nameWithType: QRCodeMiniManager.OnQRUpdated
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.OnQRUpdated*
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRUpdated*
   name: OnQRUpdated
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.html#Microsoft_MixedReality_WorldLocking_Samples_QRCodeMiniManager_OnQRUpdated_
-  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.OnQRUpdated
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_QRSpacePins_QRCodeMiniManager_OnQRUpdated_
+  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRUpdated
   isSpec: "True"
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.OnQRUpdated
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRUpdated
   nameWithType: QRCodeMiniManager.OnQRUpdated
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.QRCodeFunction
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.QRCodeFunction
   name: QRCodeMiniManager.QRCodeFunction
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.QRCodeFunction.html
-  commentId: T:Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.QRCodeFunction
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRCodeMiniManager.QRCodeFunction
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.QRCodeFunction.html
+  commentId: T:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.QRCodeFunction
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.QRCodeFunction
   nameWithType: QRCodeMiniManager.QRCodeFunction
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup
   name: QRSpacePinGroup
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.html
-  commentId: T:Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.html
+  commentId: T:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup
   nameWithType: QRSpacePinGroup
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.MarkerHighlightPrefab
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.MarkerHighlightPrefab
   name: MarkerHighlightPrefab
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.html#Microsoft_MixedReality_WorldLocking_Samples_QRSpacePinGroup_MarkerHighlightPrefab
-  commentId: P:Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.MarkerHighlightPrefab
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.MarkerHighlightPrefab
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_QRSpacePins_QRSpacePinGroup_MarkerHighlightPrefab
+  commentId: P:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.MarkerHighlightPrefab
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.MarkerHighlightPrefab
   nameWithType: QRSpacePinGroup.MarkerHighlightPrefab
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.MarkerHighlightPrefab*
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.MarkerHighlightPrefab*
   name: MarkerHighlightPrefab
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.html#Microsoft_MixedReality_WorldLocking_Samples_QRSpacePinGroup_MarkerHighlightPrefab_
-  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.MarkerHighlightPrefab
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_QRSpacePins_QRSpacePinGroup_MarkerHighlightPrefab_
+  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.MarkerHighlightPrefab
   isSpec: "True"
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.MarkerHighlightPrefab
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.MarkerHighlightPrefab
   nameWithType: QRSpacePinGroup.MarkerHighlightPrefab
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.Reset
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.Reset
   name: Reset()
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.html#Microsoft_MixedReality_WorldLocking_Samples_QRSpacePinGroup_Reset
-  commentId: M:Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.Reset
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.Reset()
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_QRSpacePins_QRSpacePinGroup_Reset
+  commentId: M:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.Reset
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.Reset()
   nameWithType: QRSpacePinGroup.Reset()
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.Reset*
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.Reset*
   name: Reset
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.html#Microsoft_MixedReality_WorldLocking_Samples_QRSpacePinGroup_Reset_
-  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.Reset
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_QRSpacePins_QRSpacePinGroup_Reset_
+  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.Reset
   isSpec: "True"
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.Reset
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.Reset
   nameWithType: QRSpacePinGroup.Reset
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.SharedOrienter
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.SharedOrienter
   name: SharedOrienter
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.html#Microsoft_MixedReality_WorldLocking_Samples_QRSpacePinGroup_SharedOrienter
-  commentId: P:Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.SharedOrienter
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.SharedOrienter
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_QRSpacePins_QRSpacePinGroup_SharedOrienter
+  commentId: P:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.SharedOrienter
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.SharedOrienter
   nameWithType: QRSpacePinGroup.SharedOrienter
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.SharedOrienter*
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.SharedOrienter*
   name: SharedOrienter
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.html#Microsoft_MixedReality_WorldLocking_Samples_QRSpacePinGroup_SharedOrienter_
-  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.SharedOrienter
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_QRSpacePins_QRSpacePinGroup_SharedOrienter_
+  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.SharedOrienter
   isSpec: "True"
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.SharedOrienter
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.SharedOrienter
   nameWithType: QRSpacePinGroup.SharedOrienter
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.VirtualMarkers
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.VirtualMarkers
   name: VirtualMarkers
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.html#Microsoft_MixedReality_WorldLocking_Samples_QRSpacePinGroup_VirtualMarkers
-  commentId: P:Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.VirtualMarkers
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.VirtualMarkers
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_QRSpacePins_QRSpacePinGroup_VirtualMarkers
+  commentId: P:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.VirtualMarkers
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.VirtualMarkers
   nameWithType: QRSpacePinGroup.VirtualMarkers
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.VirtualMarkers*
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.VirtualMarkers*
   name: VirtualMarkers
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.html#Microsoft_MixedReality_WorldLocking_Samples_QRSpacePinGroup_VirtualMarkers_
-  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.VirtualMarkers
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_QRSpacePins_QRSpacePinGroup_VirtualMarkers_
+  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.VirtualMarkers
   isSpec: "True"
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRSpacePinGroup.VirtualMarkers
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.VirtualMarkers
   nameWithType: QRSpacePinGroup.VirtualMarkers
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord
   name: QRSpatialCoord
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord.html
-  commentId: T:Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.html
+  commentId: T:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord
   nameWithType: QRSpatialCoord
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord.ComputePose(Pose@)
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.ComputePose(Pose@)
   name: ComputePose(out Pose)
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord.html#Microsoft_MixedReality_WorldLocking_Samples_QRSpatialCoord_ComputePose_Pose__
-  commentId: M:Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord.ComputePose(Pose@)
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_QRSpacePins_QRSpatialCoord_ComputePose_Pose__
+  commentId: M:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.ComputePose(Pose@)
   name.vb: ComputePose(ByRef Pose)
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord.ComputePose(out Pose)
-  fullName.vb: Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord.ComputePose(ByRef Pose)
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.ComputePose(out Pose)
+  fullName.vb: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.ComputePose(ByRef Pose)
   nameWithType: QRSpatialCoord.ComputePose(out Pose)
   nameWithType.vb: QRSpatialCoord.ComputePose(ByRef Pose)
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord.ComputePose*
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.ComputePose*
   name: ComputePose
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord.html#Microsoft_MixedReality_WorldLocking_Samples_QRSpatialCoord_ComputePose_
-  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord.ComputePose
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_QRSpacePins_QRSpatialCoord_ComputePose_
+  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.ComputePose
   isSpec: "True"
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord.ComputePose
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.ComputePose
   nameWithType: QRSpatialCoord.ComputePose
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord.CurrentPose
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.CurrentPose
   name: CurrentPose
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord.html#Microsoft_MixedReality_WorldLocking_Samples_QRSpatialCoord_CurrentPose
-  commentId: P:Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord.CurrentPose
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord.CurrentPose
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_QRSpacePins_QRSpatialCoord_CurrentPose
+  commentId: P:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.CurrentPose
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.CurrentPose
   nameWithType: QRSpatialCoord.CurrentPose
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord.CurrentPose*
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.CurrentPose*
   name: CurrentPose
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord.html#Microsoft_MixedReality_WorldLocking_Samples_QRSpatialCoord_CurrentPose_
-  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord.CurrentPose
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_QRSpacePins_QRSpatialCoord_CurrentPose_
+  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.CurrentPose
   isSpec: "True"
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord.CurrentPose
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.CurrentPose
   nameWithType: QRSpatialCoord.CurrentPose
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord.SpatialNodeId
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.SpatialNodeId
   name: SpatialNodeId
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord.html#Microsoft_MixedReality_WorldLocking_Samples_QRSpatialCoord_SpatialNodeId
-  commentId: P:Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord.SpatialNodeId
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord.SpatialNodeId
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_QRSpacePins_QRSpatialCoord_SpatialNodeId
+  commentId: P:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.SpatialNodeId
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.SpatialNodeId
   nameWithType: QRSpatialCoord.SpatialNodeId
-- uid: Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord.SpatialNodeId*
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.SpatialNodeId*
   name: SpatialNodeId
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord.html#Microsoft_MixedReality_WorldLocking_Samples_QRSpatialCoord_SpatialNodeId_
-  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord.SpatialNodeId
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_QRSpacePins_QRSpatialCoord_SpatialNodeId_
+  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.SpatialNodeId
   isSpec: "True"
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.QRSpatialCoord.SpatialNodeId
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.SpatialNodeId
   nameWithType: QRSpatialCoord.SpatialNodeId
-- uid: Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker
+  name: ShowMarker
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.html
+  commentId: T:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker
+  nameWithType: ShowMarker
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.maxSize
+  name: maxSize
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_QRSpacePins_ShowMarker_maxSize
+  commentId: F:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.maxSize
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.maxSize
+  nameWithType: ShowMarker.maxSize
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.rampDown
+  name: rampDown
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_QRSpacePins_ShowMarker_rampDown
+  commentId: F:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.rampDown
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.rampDown
+  nameWithType: ShowMarker.rampDown
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.rampUp
+  name: rampUp
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_QRSpacePins_ShowMarker_rampUp
+  commentId: F:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.rampUp
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.rampUp
+  nameWithType: ShowMarker.rampUp
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole
   name: SimpleConsole
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.html
-  commentId: T:Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.html
+  commentId: T:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole
   nameWithType: SimpleConsole
-- uid: Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.Active
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.Active
   name: Active
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.html#Microsoft_MixedReality_WorldLocking_Samples_SimpleConsole_Active
-  commentId: P:Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.Active
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.Active
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_SimpleConsole_Active
+  commentId: P:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.Active
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.Active
   nameWithType: SimpleConsole.Active
-- uid: Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.Active*
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.Active*
   name: Active
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.html#Microsoft_MixedReality_WorldLocking_Samples_SimpleConsole_Active_
-  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.Active
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_SimpleConsole_Active_
+  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.Active
   isSpec: "True"
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.Active
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.Active
   nameWithType: SimpleConsole.Active
-- uid: Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.AddLine(System.Int32,System.String)
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.AddLine(System.Int32,System.String)
   name: AddLine(Int32, String)
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.html#Microsoft_MixedReality_WorldLocking_Samples_SimpleConsole_AddLine_System_Int32_System_String_
-  commentId: M:Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.AddLine(System.Int32,System.String)
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.AddLine(System.Int32, System.String)
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_SimpleConsole_AddLine_System_Int32_System_String_
+  commentId: M:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.AddLine(System.Int32,System.String)
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.AddLine(System.Int32, System.String)
   nameWithType: SimpleConsole.AddLine(Int32, String)
-- uid: Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.AddLine*
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.AddLine*
   name: AddLine
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.html#Microsoft_MixedReality_WorldLocking_Samples_SimpleConsole_AddLine_
-  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.AddLine
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_SimpleConsole_AddLine_
+  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.AddLine
   isSpec: "True"
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.AddLine
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.AddLine
   nameWithType: SimpleConsole.AddLine
-- uid: Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.console
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.console
   name: console
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.html#Microsoft_MixedReality_WorldLocking_Samples_SimpleConsole_console
-  commentId: F:Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.console
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.console
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_SimpleConsole_console
+  commentId: F:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.console
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.console
   nameWithType: SimpleConsole.console
-- uid: Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.LineCount
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.LineCount
   name: LineCount
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.html#Microsoft_MixedReality_WorldLocking_Samples_SimpleConsole_LineCount
-  commentId: P:Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.LineCount
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.LineCount
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_SimpleConsole_LineCount
+  commentId: P:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.LineCount
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.LineCount
   nameWithType: SimpleConsole.LineCount
-- uid: Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.LineCount*
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.LineCount*
   name: LineCount
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.html#Microsoft_MixedReality_WorldLocking_Samples_SimpleConsole_LineCount_
-  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.LineCount
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_SimpleConsole_LineCount_
+  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.LineCount
   isSpec: "True"
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.LineCount
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.LineCount
   nameWithType: SimpleConsole.LineCount
-- uid: Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.logVerbosity
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.logVerbosity
   name: logVerbosity
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.html#Microsoft_MixedReality_WorldLocking_Samples_SimpleConsole_logVerbosity
-  commentId: F:Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.logVerbosity
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.logVerbosity
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_SimpleConsole_logVerbosity
+  commentId: F:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.logVerbosity
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.logVerbosity
   nameWithType: SimpleConsole.logVerbosity
-- uid: Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.screenVerbosity
+- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.screenVerbosity
   name: screenVerbosity
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.html#Microsoft_MixedReality_WorldLocking_Samples_SimpleConsole_screenVerbosity
-  commentId: F:Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.screenVerbosity
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.SimpleConsole.screenVerbosity
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_SimpleConsole_screenVerbosity
+  commentId: F:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.screenVerbosity
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.screenVerbosity
   nameWithType: SimpleConsole.screenVerbosity
+- uid: Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong
+  name: SimpleTagalong
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong.html
+  commentId: T:Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong
+  nameWithType: SimpleTagalong
+- uid: Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong.lerpTime
+  name: lerpTime
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong.html#Microsoft_MixedReality_WorldLocking_Samples_SimpleTagalong_lerpTime
+  commentId: F:Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong.lerpTime
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong.lerpTime
+  nameWithType: SimpleTagalong.lerpTime
+- uid: Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong.maxAngle
+  name: maxAngle
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong.html#Microsoft_MixedReality_WorldLocking_Samples_SimpleTagalong_maxAngle
+  commentId: F:Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong.maxAngle
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong.maxAngle
+  nameWithType: SimpleTagalong.maxAngle
+- uid: Microsoft.MixedReality.WorldLocking.Samples.UX
+  name: UX
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.UX.html
+  commentId: T:Microsoft.MixedReality.WorldLocking.Samples.UX
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.UX
+  nameWithType: UX
+- uid: Microsoft.MixedReality.WorldLocking.Samples.UX.OnToggleManager
+  name: OnToggleManager()
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.UX.html#Microsoft_MixedReality_WorldLocking_Samples_UX_OnToggleManager
+  commentId: M:Microsoft.MixedReality.WorldLocking.Samples.UX.OnToggleManager
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.UX.OnToggleManager()
+  nameWithType: UX.OnToggleManager()
+- uid: Microsoft.MixedReality.WorldLocking.Samples.UX.OnToggleManager*
+  name: OnToggleManager
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.UX.html#Microsoft_MixedReality_WorldLocking_Samples_UX_OnToggleManager_
+  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.UX.OnToggleManager
+  isSpec: "True"
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.UX.OnToggleManager
+  nameWithType: UX.OnToggleManager
+- uid: Microsoft.MixedReality.WorldLocking.Samples.UX.statusText
+  name: statusText
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.UX.html#Microsoft_MixedReality_WorldLocking_Samples_UX_statusText
+  commentId: F:Microsoft.MixedReality.WorldLocking.Samples.UX.statusText
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.UX.statusText
+  nameWithType: UX.statusText
+- uid: Microsoft.MixedReality.WorldLocking.Samples.UX.targets
+  name: targets
+  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.UX.html#Microsoft_MixedReality_WorldLocking_Samples_UX_targets
+  commentId: F:Microsoft.MixedReality.WorldLocking.Samples.UX.targets
+  fullName: Microsoft.MixedReality.WorldLocking.Samples.UX.targets
+  nameWithType: UX.targets

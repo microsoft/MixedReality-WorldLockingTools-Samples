@@ -29,11 +29,17 @@ The Unity scene will appear with the origin at your feet, and the positive X axi
 
 ## Running the sample:
 
-Deploy and start the application. Scan your printed QR codes by walking to them. The smaller the printed QR code the closer you'll need to get to it to scan it. A 5x5cm printed code will need to be within about 20 cm to scan.
+Deploy the scene QRSpacePins.unity and start the application. Scan your printed QR codes by walking to them. The smaller the printed QR code the closer you'll need to get to it to scan it. A 5x5cm printed code will need to be within about 20 cm to scan.
 
 The codes can be scanned in any order.
 
 The scanned codes can be cleared at any time with the voice command "Clear Space Pins". You can then start over scanning.
+
+### The 2nd scene
+
+QRSubScene is identical to QRSpacePins, with one significant exception. Whereas QRSpacePins aligns the entire Unity coordinate space to put the virtual QR codes at the physical QR markers, QRSubScene applies that transformation only to the root of the Household subtree of the scene graph.
+
+It accomplishes this using the AlignSubtree script placed on the Household node. See the [AlignSubScene sample](../AlignSubScene/AlignSubScene.md), which explores alignment of independent coordinate spaces with the physical world in greater detail. For further details on the AlignSubtree script, consult the [World Locking Tools for Unity documentaton](https://microsoft.github.io/MixedReality-WorldLockingTools-Unity/DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Examples.AlignSubtree.html?q=alignsubtree).
 
 ## Special controls:
 
