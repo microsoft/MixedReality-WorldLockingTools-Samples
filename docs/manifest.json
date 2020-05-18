@@ -102,7 +102,7 @@
       "output": {
         ".html": {
           "relative_path": "DocGen/Documentation/Introduction.html",
-          "hash": "+BeuY47y95Je6krlmPgO9A=="
+          "hash": "LbVjKimuKkLTQSmNJ2yKMQ=="
         }
       },
       "is_incremental": false,
@@ -434,66 +434,6 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "DocGen/Temp/obj/api/Microsoft.MixedReality.FrozenWorld.Engine.Engine.FrozenWorld_AnchorId_1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "DocGen/Temp/api/Microsoft.MixedReality.FrozenWorld.Engine.Engine.FrozenWorld_AnchorId_1.html",
-          "hash": "C4O5uJHSQ0GCEkLtJXDcqA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "DocGen/Temp/obj/api/Microsoft.MixedReality.FrozenWorld.Engine.Engine.FrozenWorld_FragmentId_1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "DocGen/Temp/api/Microsoft.MixedReality.FrozenWorld.Engine.Engine.FrozenWorld_FragmentId_1.html",
-          "hash": "OSx6EOXZnTknatCicrp55A=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "DocGen/Temp/obj/api/Microsoft.MixedReality.FrozenWorld.Engine.Engine.FrozenWorld_Snapshot_1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "DocGen/Temp/api/Microsoft.MixedReality.FrozenWorld.Engine.Engine.FrozenWorld_Snapshot_1.html",
-          "hash": "+GuCPjt+IdPuYcjApo9Rkw=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "DocGen/Temp/obj/api/Microsoft.MixedReality.WorldLocking.Core.AnchorId_1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Core.AnchorId_1.html",
-          "hash": "8wf33uHgnqbQA4ciQgXfAw=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "DocGen/Temp/obj/api/Microsoft.MixedReality.WorldLocking.Core.FragmentId_1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Core.FragmentId_1.html",
-          "hash": "AEpCZf34cQv7ywffLEVbSA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "DocGen/Temp/obj/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.yml",
       "output": {
         ".html": {
@@ -727,6 +667,13 @@
         "skipped_file_count": 0
       },
       "processors": {
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        },
         "ResourceDocumentProcessor": {
           "can_incremental": false,
           "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
@@ -734,24 +681,17 @@
           "total_file_count": 0,
           "skipped_file_count": 0
         },
-        "ManagedReferenceDocumentProcessor": {
-          "can_incremental": true,
-          "incrementalPhase": "build",
-          "total_file_count": 18,
-          "skipped_file_count": 18
-        },
         "ConceptualDocumentProcessor": {
           "can_incremental": true,
           "incrementalPhase": "build",
           "total_file_count": 13,
           "skipped_file_count": 13
         },
-        "TocDocumentProcessor": {
-          "can_incremental": false,
-          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": true,
           "incrementalPhase": "build",
-          "total_file_count": 0,
-          "skipped_file_count": 0
+          "total_file_count": 13,
+          "skipped_file_count": 13
         }
       }
     },
