@@ -63,8 +63,11 @@ namespace Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
         /// SimpleConsole verbosity levels.
         /// </summary>
         private static readonly int trace = 0;
-        // These two are currently unused. All logs here are trace level (most trivial).
-        //private static readonly int log = 5;
+        // log level only used in UWP
+#if WINDOWS_UWP
+        private static readonly int log = 5;
+#endif // WINDOWS_UWP
+        // No error level logs currently used.
         //private static readonly int error = 10;
 
         /// <summary>
