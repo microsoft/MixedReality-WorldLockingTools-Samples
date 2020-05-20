@@ -301,7 +301,6 @@ namespace Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
             {
                 spacePins[i].Reset();
             }
-            WorldLockingManager.GetInstance().AlignmentManager.SendAlignmentAnchors();
         }
 
         /// <summary>
