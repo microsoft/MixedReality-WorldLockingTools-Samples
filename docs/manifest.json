@@ -66,7 +66,7 @@
       "output": {
         ".html": {
           "relative_path": "Advanced/QRSpacePins/QRSpacePins.html",
-          "hash": "O6MFMojTm6EHTZM6c+uRmg=="
+          "hash": "0J1Wf1BX48la3ujqZTmmQA=="
         }
       },
       "is_incremental": false,
@@ -562,7 +562,7 @@
       "output": {
         ".html": {
           "relative_path": "DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.html",
-          "hash": "qskYv2MODQDCdNHVZ8w/dw=="
+          "hash": "5pdgO16QcO8f7WASZhJUpA=="
         }
       },
       "is_incremental": false,
@@ -610,7 +610,7 @@
       "output": {
         ".html": {
           "relative_path": "DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.html",
-          "hash": "5DTTVGDL4GHPZMsbRFWzNA=="
+          "hash": "LRlfh5Flarr1vveQSxy3wA=="
         }
       },
       "is_incremental": false,
@@ -801,7 +801,7 @@
           "can_incremental": true,
           "incrementalPhase": "build",
           "total_file_count": 13,
-          "skipped_file_count": 13
+          "skipped_file_count": 12
         },
         "ResourceDocumentProcessor": {
           "can_incremental": false,
