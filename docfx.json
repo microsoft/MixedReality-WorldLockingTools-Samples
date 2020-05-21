@@ -10,7 +10,7 @@
         {
           "files": [ "**/Assets/**/*.cs" ],
           "exclude": [ "**/bin/**", "**/obj/**", "**/*WorldLocking.Engine/**", "**/*WorldLocking.Core/**", "**/*WorldLocking.Tools/**", "**/*WorldLocking.Examples/**", "**/MRTK/**", "**/Packages/**", "**/NuGet/**" ],
-          "src": "Tutorials"
+          "src": "Tutorial"
         }
       ],
       "dest": "DocGen/Temp/obj/api"
@@ -27,8 +27,8 @@
         "files": [ "DocGen/Documentation/**/*.md", "DocGen/SourceDoc/**", "*.md", "*.yml", "toc.yml", "DocGen/Documentation/**/*.yml", "DocGen/Documentation/Architecture/**", "DocGen/External/Documentation/*.md", "DocGen/External/HowTo/*.md" ]
       },
       {
-        "files": [ "Advanced/**/*.md", "Tutorials/**/*.md" ],
-        "exclude": [ "**/Library/**", "**/MRTK/**", "**/WorldLocking.Engine/**", "**/*WorldLocking.Core/**", "**/*WorldLocking.Examples/**", "**/*WorldLocking.Tools/**" ]
+        "files": [ "Advanced/**/*.md", "Tutorial/**/*.md" ],
+        "exclude": [ "**/Il2CppOutputProject/**", "**/Library/**", "**/MRTK/**", "**/WorldLocking.Engine/**", "**/*WorldLocking.Core/**", "**/*WorldLocking.Examples/**", "**/*WorldLocking.Tools/**" ]
       }
     ],
     "resource": [

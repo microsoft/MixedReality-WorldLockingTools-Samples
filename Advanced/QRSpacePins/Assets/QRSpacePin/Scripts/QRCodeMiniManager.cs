@@ -8,7 +8,7 @@ namespace Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
 {
     /// <summary>
     /// The QRCodeMiniManager is a simple wrapper around the Microsoft.MixedReality.QR.QRCodeWatcher,
-    /// which reissues qr code events on the main thread.
+    /// to reissue qr code events on the main thread, where they can be acted on safely.
     /// </summary>
     /// <remarks>
     /// The events are slightly simplified to the uniform pattern of the void QRCodeFunction(qrCode) defined here.

@@ -22,7 +22,8 @@ Each sample contains enough documentation to run it, along with enough conceptua
 
 | Folder     | Project       | Description                                               |
 |------------|---------------|-----------------------------------------------------------|
-| `Tutorials`|               | Projects slimmed down to make a single point.             |
+| [Tutorials](~/Tutorial/Tutorial.md)|               | Projects slimmed down to make a single point.             |
+|            | [Minimal](~/Tutorial/01_Minimal/01_Minimal.md) | The minimal setup of WLT to world-lock an application. |
 |            |               |                                                           |
 | [Advanced](../../Advanced/Advanced.md) |               | Complex projects, often leveraging external dependencies. |
 |            | [AlignSubScene](../../Advanced/AlignSubScene/AlignSubScene.md) | Aligning multiple independent spaces.                    |
