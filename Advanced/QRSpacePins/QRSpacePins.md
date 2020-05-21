@@ -50,3 +50,12 @@ It accomplishes this using the AlignSubtree script placed on the Household node.
 | Clear Space Pins     | Resets all QR codes and pins to startup
 | Toggle World Lock    | Toggles whether the World Locking Tools are active
 
+## Known issues
+
+### No QR codes scanned on first run
+
+The first time running the application after initial deployment, the enumeration of the QR watcher never completes. This means no QR codes are ever scanned.
+
+Closing the application and running a second time fixes the problem, and the 2nd run and thereafter QR codes scan fine.
+
+This is probably an issue with the permissions setup on the first run, but since it is a QR scanning issue, and not related to world-locking, it hasn't been a priority to track down. Tracked as [issue #20](https://github.com/microsoft/MixedReality-WorldLockingTools-Samples/issues/20).
