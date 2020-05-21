@@ -1,0 +1,211 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Minimal World Locking Tools (WLT) setup for a world-locked application | World Locking Tools Samples Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Minimal World Locking Tools (WLT) setup for a world-locked application | World Locking Tools Samples Documentation ">
+    <meta name="generator" content="docfx 2.53.1.0">
+    
+    <link rel="shortcut icon" href="../../DocGen/Images/Logos/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../../DocGen/Documentation/toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../DocGen/Images/Logos/WLS64.png" alt="">
+              </a>
+            </div>
+          
+          <div class="version-dropdown" id="versionDropdown">
+           </div>
+         
+          <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="minimal-world-locking-tools-wlt-setup-for-a-world-locked-application">Minimal World Locking Tools (WLT) setup for a world-locked application</h1>
+
+<p>This Tutorial will walk you through adding the minimum required subset of the WLT to a project, in order to get world-locked behavior out of all the content in that application, without the need for application maintained WorldAnchors, or any other special behavior.</p>
+<p>This tutorial refers to the <a href="https://github.com/microsoft/MixedReality-WorldLockingTools-Samples/tree/master/Tutorial/01_Minimal">01_Minimal</a> sample for reference, but the same steps would apply when adding to any existing project.</p>
+<p>The simple application being world-locked here is the simplest possible Unity AR application. Note that the setup is even simpler for MRTK applications. Any differences between adding to a bare versus MRTK app are noted in the steps.</p>
+<p>For tips on getting started with HoloLens development, see the <a href="#assumed-hololens-deployment-background">final section</a> of this article.</p>
+<h2 id="world-locking-tools-specific-setup">World Locking Tools specific setup</h2>
+<ol>
+<li>Add an Adjustment node, and attach the Main Camera object to it.</li>
+</ol>
+<ul>
+<li>It should look like this:</li>
+</ul>
+<p><img src="../../DocGen/Images/Minimal/Adjustment.png" alt=""></p>
+<ul>
+<li>Or, if using MRTK, like this:</li>
+</ul>
+<p><img src="../../DocGen/Images/Minimal/AdjustMRTK.png" alt=""></p>
+<ol start="2">
+<li><p>Install <a href="https://github.com/GlitchEnzo/NuGetForUnity/releases">NuGet for Unity</a>. It's really a phenomenal piece of technology, you should have it anyway.</p>
+</li>
+<li><p>With NuGet for Unity installed, in Unity, go to</p>
+</li>
+</ol>
+<p><code>NuGet &gt; Manage NuGet Packages</code></p>
+<ul>
+<li>Search for FrozenWorld.Engine, and install the latest version of Microsoft.MixedReality.Unity.FrozenWorld.Engine.</li>
+</ul>
+<p><img src="../../DocGen/Images/Minimal/NuGetFWE.png" alt=""></p>
+<ol start="4">
+<li>Download and import the latest version of the Microsoft.MixedReality.Unity.WorldLockingTools.CoreEngine unity package from <a href="https://github.com/microsoft/MixedReality-WorldLockingTools-Unity/releases">releases</a>.</li>
+</ol>
+<p><img src="../../DocGen/Images/Minimal/WLTReleases.png" alt=""></p>
+<ol start="5">
+<li>In your Unity Project, go to</li>
+</ol>
+<p><code>Assets &gt; WorldLocking.Core &gt; Prefabs</code></p>
+<ul>
+<li>Drag the WorldLockingManager prefab into your scene.</li>
+</ul>
+<p><img src="../../DocGen/Images/Minimal/WLTPrefab.png" alt=""></p>
+<p>At this point your project should look a lot like <code>01_Minimal</code>. A few visual reference points (colored capsules) have been added to the MinimalScene in <code>01_Minimal</code>, just so you can see that it is working (the capsules remain fixed relative to real world features around them during the session, and even persisting across sessions).</p>
+<h2 id="bonus-round---adding-anchor-graph-visualization">Bonus round - adding anchor graph visualization</h2>
+<p>The application as-is will now do basic world locking. Any objects you add to the scene will be placed in the physical world relative to the head position on first running the application. They will then remain in fixed pose relative to the physical world through the session, and even across sessions. That's all your application requires for basic world-locking.</p>
+<p>It can be useful to visualize the world anchor graph which the World Locking Tools creates and maintains as the underlying stabilization structure. Doing so is quite easy.</p>
+<ul>
+<li><p>Download and import the  version of Microsoft.MixedReality.Unity.WorldLockingTools.Tools which corresponds with the CoreEngine package you previously imported.</p>
+</li>
+<li><p>In your Unity Project, go to</p>
+</li>
+</ul>
+<p><code>Assets &gt; WorldLocking.Tools &gt; Prefabs</code></p>
+<ul>
+<li>Drag the AnchorGraphVisual prefab into your scene. At this point it can be helpful to create a WorldLocking empty object in your scene and attach your WorldLockingManager and your AnchorGraphVisual objects to it. There is no functional impact, but it helps avoid cluttering up your scene.</li>
+</ul>
+<p>That's it. Now when you deploy, you will see the graph of WorldAnchor nodes created under the hood, along with some other helpful visualizations. More description is available in the <a href="https://microsoft.github.io/MixedReality-WorldLockingTools-Unity/DocGen/Documentation/HowTos/Tools.html#anchor-graph-visualization">Tools documentation</a>.</p>
+<p>When you decide you don't need the visualizations anymore, you can either disable the AnchorGraphVisual in the scene or delete it.</p>
+<h2 id="assumed-hololens-deployment-background">Assumed HoloLens deployment background</h2>
+<p>If unfamiliar with building, deploying, and running applications on the HoloLens family of devices, a good place to start is with <a href="https://docs.microsoft.com/en-us/windows/mixed-reality/holograms-100">HoloLens</a> and <a href="https://docs.microsoft.com/en-us/windows/mixed-reality/mrlearning-base">HoloLens 2</a> tutorials.</p>
+<p>In addition, here are some emphasized tips common to all HoloLens development. Note that these are handled automatically by MRTK.</p>
+<ul>
+<li>Check the camera clear color. The <code>Clear Flags</code> should be &quot;Solid Color&quot;, and the color should be transparent black (0,0,0,0).</li>
+</ul>
+<p><img src="../../DocGen/Images/Minimal/CameraClearColor.png" alt=""></p>
+<ul>
+<li>Check permissions.
+<code>Project Settings &gt; Player &gt; Publishing Settings &gt; Capabilities</code>
+You generally want the following enabled:
+<ul>
+<li>InternetClient</li>
+<li>InternetClientServer</li>
+<li>PrivateNetworkClientServer</li>
+<li>WebCam</li>
+<li>Microphone</li>
+<li>GazeInput</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../DocGen/Images/Minimal/Permissions.png" alt=""></p>
+<ul>
+<li>Make it a MR app. Go to
+<code>Project Settings &gt; Player &gt; XR Settings</code> (make sure you're on the UWP tab).
+<ul>
+<li>Click <code>Virtual Reality Supported</code></li>
+<li>Add <code>Windows Mixed Reality</code> to <code>Virtual Reality SDKs</code></li>
+<li>Optionally set <code>Depth Format</code> to 16-bit.</li>
+</ul>
+</li>
+</ul>
+<p><img src="../../DocGen/Images/Minimal/XRSettings.png" alt=""></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Microsoft/MixedReality-WorldLockingTools-Samples/blob/master/Tutorial/01_Minimal/01_Minimal.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
