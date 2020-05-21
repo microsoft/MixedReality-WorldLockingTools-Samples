@@ -1,12 +1,17 @@
 ﻿- name: World Locking Samples
   href: Introduction.md
   items:
+  - name: Tutorials
+    href: ~/Tutorial/Tutorial.md
+    items:
+    - name: Minimal World Locking
+      href: ~/Tutorial/01_Minimal/01_Minimal.md
   - name: Advanced samples
     href: ~/Advanced/Advanced.md
     items: 
     - name: Align Sub-scene
-      href: ../../Advanced/AlignSubScene/AlignSubScene.md
+      href: ~/Advanced/AlignSubScene/AlignSubScene.md
     - name: QR Space Pins
-      href: ../../Advanced/QRSpacePins/QRSpacePins.md
+      href: ~/Advanced/QRSpacePins/QRSpacePins.md
 - name: Notice
   href: NOTICE.md
