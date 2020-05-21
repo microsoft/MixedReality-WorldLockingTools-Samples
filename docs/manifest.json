@@ -526,7 +526,7 @@
       "output": {
         ".html": {
           "relative_path": "DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.html",
-          "hash": "KKPOY9ozaEXAzGXhzX9qTA=="
+          "hash": "NK7az64vi93IhPRhlNncpA=="
         }
       },
       "is_incremental": false,
@@ -574,7 +574,7 @@
       "output": {
         ".html": {
           "relative_path": "DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.html",
-          "hash": "kVbMQnLu+v0m6MGCqdSsOA=="
+          "hash": "HMjJUX+sK41bEwBkW9Mf/A=="
         }
       },
       "is_incremental": false,
@@ -586,7 +586,7 @@
       "output": {
         ".html": {
           "relative_path": "DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.html",
-          "hash": "vsSK2aAcaALYovpkmN5RUQ=="
+          "hash": "7i9myJLSeRWtJL+3vYenKQ=="
         }
       },
       "is_incremental": false,
@@ -598,7 +598,7 @@
       "output": {
         ".html": {
           "relative_path": "DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.html",
-          "hash": "93w5BRjcpR8r5TiKbWKP5g=="
+          "hash": "WLYnVZoqaSfFu6VHw3Ce3g=="
         }
       },
       "is_incremental": false,
@@ -622,7 +622,7 @@
       "output": {
         ".html": {
           "relative_path": "DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.html",
-          "hash": "AShFklCIjTBioZrfbs+iJw=="
+          "hash": "mlBIp4/2IZ8sRFwoWrfs3Q=="
         }
       },
       "is_incremental": false,
@@ -646,7 +646,7 @@
       "output": {
         ".html": {
           "relative_path": "DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong.html",
-          "hash": "RUPKiheWRofXXAloOCaPtw=="
+          "hash": "yrYm5UZCM3Cw+mY3dxQG+A=="
         }
       },
       "is_incremental": false,
@@ -658,7 +658,7 @@
       "output": {
         ".html": {
           "relative_path": "DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.UX.html",
-          "hash": "qLJMe48WIuDGwKLwnLUd1A=="
+          "hash": "nJvfGnTHBAF2IshJkAHaoQ=="
         }
       },
       "is_incremental": false,
@@ -785,23 +785,25 @@
   "incremental_info": [
     {
       "status": {
-        "can_incremental": true,
+        "can_incremental": false,
+        "details": "Disable incremental build by force rebuild option.",
         "incrementalPhase": "build",
         "total_file_count": 0,
-        "skipped_file_count": 0
+        "skipped_file_count": 0,
+        "full_build_reason_code": "ForceRebuild"
       },
       "processors": {
         "ConceptualDocumentProcessor": {
-          "can_incremental": true,
+          "can_incremental": false,
           "incrementalPhase": "build",
           "total_file_count": 16,
-          "skipped_file_count": 15
+          "skipped_file_count": 0
         },
         "ManagedReferenceDocumentProcessor": {
-          "can_incremental": true,
+          "can_incremental": false,
           "incrementalPhase": "build",
           "total_file_count": 13,
-          "skipped_file_count": 12
+          "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {
           "can_incremental": false,
