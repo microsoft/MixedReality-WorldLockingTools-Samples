@@ -1,0 +1,2771 @@
+id: cs.temp.dll
+language: CSharp
+name:
+  Default: cs.temp.dll
+qualifiedName:
+  Default: cs.temp.dll
+type: Assembly
+modifiers: {}
+items:
+- id: Microsoft.MixedReality.WorldLocking.Samples
+  commentId: N:Microsoft.MixedReality.WorldLocking.Samples
+  language: CSharp
+  name:
+    CSharp: Microsoft.MixedReality.WorldLocking.Samples
+    VB: Microsoft.MixedReality.WorldLocking.Samples
+  nameWithType:
+    CSharp: Microsoft.MixedReality.WorldLocking.Samples
+    VB: Microsoft.MixedReality.WorldLocking.Samples
+  qualifiedName:
+    CSharp: Microsoft.MixedReality.WorldLocking.Samples
+    VB: Microsoft.MixedReality.WorldLocking.Samples
+  type: Namespace
+  assemblies:
+  - cs.temp.dll
+  modifiers: {}
+  items:
+  - id: Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong
+    commentId: T:Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong
+    language: CSharp
+    name:
+      CSharp: SimpleTagalong
+      VB: SimpleTagalong
+    nameWithType:
+      CSharp: SimpleTagalong
+      VB: SimpleTagalong
+    qualifiedName:
+      CSharp: Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong
+      VB: Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong
+    type: Class
+    assemblies:
+    - cs.temp.dll
+    namespace: Microsoft.MixedReality.WorldLocking.Samples
+    source:
+      id: SimpleTagalong
+      path: ''
+      startLine: 1744
+    syntax:
+      content:
+        CSharp: 'public class SimpleTagalong : MonoBehaviour'
+        VB: >-
+          Public Class SimpleTagalong
+
+              Inherits MonoBehaviour
+    inheritance:
+    - System.Object
+    modifiers:
+      CSharp:
+      - public
+      - class
+      VB:
+      - Public
+      - Class
+    items:
+    - id: Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong.maxAngle
+      commentId: F:Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong.maxAngle
+      language: CSharp
+      name:
+        CSharp: maxAngle
+        VB: maxAngle
+      nameWithType:
+        CSharp: SimpleTagalong.maxAngle
+        VB: SimpleTagalong.maxAngle
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong.maxAngle
+        VB: Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong.maxAngle
+      type: Field
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples
+      source:
+        id: maxAngle
+        path: ''
+        startLine: 1747
+      syntax:
+        content:
+          CSharp: public float maxAngle
+          VB: Public maxAngle As Single
+        return:
+          type: System.Single
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong.lerpTime
+      commentId: F:Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong.lerpTime
+      language: CSharp
+      name:
+        CSharp: lerpTime
+        VB: lerpTime
+      nameWithType:
+        CSharp: SimpleTagalong.lerpTime
+        VB: SimpleTagalong.lerpTime
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong.lerpTime
+        VB: Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong.lerpTime
+      type: Field
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples
+      source:
+        id: lerpTime
+        path: ''
+        startLine: 1748
+      syntax:
+        content:
+          CSharp: public float lerpTime
+          VB: Public lerpTime As Single
+        return:
+          type: System.Single
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+  - id: Microsoft.MixedReality.WorldLocking.Samples.UX
+    commentId: T:Microsoft.MixedReality.WorldLocking.Samples.UX
+    language: CSharp
+    name:
+      CSharp: UX
+      VB: UX
+    nameWithType:
+      CSharp: UX
+      VB: UX
+    qualifiedName:
+      CSharp: Microsoft.MixedReality.WorldLocking.Samples.UX
+      VB: Microsoft.MixedReality.WorldLocking.Samples.UX
+    type: Class
+    assemblies:
+    - cs.temp.dll
+    namespace: Microsoft.MixedReality.WorldLocking.Samples
+    source:
+      id: UX
+      path: ''
+      startLine: 1801
+    summary: "\nSimple bit of UX to toggle and display the status of the WorldLockingManager.\n"
+    example: []
+    syntax:
+      content:
+        CSharp: 'public class UX : MonoBehaviour'
+        VB: >-
+          Public Class UX
+
+              Inherits MonoBehaviour
+    inheritance:
+    - System.Object
+    modifiers:
+      CSharp:
+      - public
+      - class
+      VB:
+      - Public
+      - Class
+    items:
+    - id: Microsoft.MixedReality.WorldLocking.Samples.UX.targets
+      commentId: F:Microsoft.MixedReality.WorldLocking.Samples.UX.targets
+      language: CSharp
+      name:
+        CSharp: targets
+        VB: targets
+      nameWithType:
+        CSharp: UX.targets
+        VB: UX.targets
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.UX.targets
+        VB: Microsoft.MixedReality.WorldLocking.Samples.UX.targets
+      type: Field
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples
+      source:
+        id: targets
+        path: ''
+        startLine: 1803
+      syntax:
+        content:
+          CSharp: public List<GameObject> targets
+          VB: Public targets As List(Of GameObject)
+        return:
+          type: List{GameObject}
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: Microsoft.MixedReality.WorldLocking.Samples.UX.statusText
+      commentId: F:Microsoft.MixedReality.WorldLocking.Samples.UX.statusText
+      language: CSharp
+      name:
+        CSharp: statusText
+        VB: statusText
+      nameWithType:
+        CSharp: UX.statusText
+        VB: UX.statusText
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.UX.statusText
+        VB: Microsoft.MixedReality.WorldLocking.Samples.UX.statusText
+      type: Field
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples
+      source:
+        id: statusText
+        path: ''
+        startLine: 1805
+      syntax:
+        content:
+          CSharp: public TextMesh statusText
+          VB: Public statusText As TextMesh
+        return:
+          type: TextMesh
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: Microsoft.MixedReality.WorldLocking.Samples.UX.OnToggleManager
+      commentId: M:Microsoft.MixedReality.WorldLocking.Samples.UX.OnToggleManager
+      language: CSharp
+      name:
+        CSharp: OnToggleManager()
+        VB: OnToggleManager()
+      nameWithType:
+        CSharp: UX.OnToggleManager()
+        VB: UX.OnToggleManager()
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.UX.OnToggleManager()
+        VB: Microsoft.MixedReality.WorldLocking.Samples.UX.OnToggleManager()
+      type: Method
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples
+      source:
+        id: OnToggleManager
+        path: ''
+        startLine: 1826
+      syntax:
+        content:
+          CSharp: public void OnToggleManager()
+          VB: Public Sub OnToggleManager
+      overload: Microsoft.MixedReality.WorldLocking.Samples.UX.OnToggleManager*
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+- id: Microsoft.MixedReality.WorldLocking.Samples.Advanced
+  commentId: N:Microsoft.MixedReality.WorldLocking.Samples.Advanced
+  language: CSharp
+  name:
+    CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced
+    VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced
+  nameWithType:
+    CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced
+    VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced
+  qualifiedName:
+    CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced
+    VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced
+  type: Namespace
+  assemblies:
+  - cs.temp.dll
+  modifiers: {}
+  items:
+  - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole
+    commentId: T:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole
+    language: CSharp
+    name:
+      CSharp: SimpleConsole
+      VB: SimpleConsole
+    nameWithType:
+      CSharp: SimpleConsole
+      VB: SimpleConsole
+    qualifiedName:
+      CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole
+      VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole
+    type: Class
+    assemblies:
+    - cs.temp.dll
+    namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced
+    source:
+      id: SimpleConsole
+      path: ''
+      startLine: 1556
+    summary: "\nA simple runtime console to help in debugging on device.\n"
+    remarks: "\nThe system accepts a verbosity level along with each line of text.\nIf the system is enabled, \nIf the verbosity level is >= the logVerbosity\n    the line is written to the Unity log file via Debug.Log().\nIf the verbosity level is >= the screenVerbosity\n    the line will be displayed on screen.\nIf the system is NOT enabled\nIf the verbosity level is >= 5\n    the line is written to the Unity log file.\nTo enable the system:\n1) Add a SimpleConsole component to any game object in the scene.\n2) Fill in the SimpleConsole&apos;s TextMesh console field with a valid TextMesh.\nIdeally, place the console TextMesh where it can be seen.\nIf enabled, then every frame the last lineCount lines added are displayed on the console TextMesh,\nwhere lineCount is an inspector accessible property below.\nUse if thread safe, and from threads besides the main thread.\n"
+    example: []
+    syntax:
+      content:
+        CSharp: 'public class SimpleConsole : MonoBehaviour'
+        VB: >-
+          Public Class SimpleConsole
+
+              Inherits MonoBehaviour
+    inheritance:
+    - System.Object
+    modifiers:
+      CSharp:
+      - public
+      - class
+      VB:
+      - Public
+      - Class
+    items:
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.console
+      commentId: F:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.console
+      language: CSharp
+      name:
+        CSharp: console
+        VB: console
+      nameWithType:
+        CSharp: SimpleConsole.console
+        VB: SimpleConsole.console
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.console
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.console
+      type: Field
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced
+      source:
+        id: console
+        path: ''
+        startLine: 1559
+      syntax:
+        content:
+          CSharp: public TextMesh console
+          VB: Public console As TextMesh
+        return:
+          type: TextMesh
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.LineCount
+      commentId: P:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.LineCount
+      language: CSharp
+      name:
+        CSharp: LineCount
+        VB: LineCount
+      nameWithType:
+        CSharp: SimpleConsole.LineCount
+        VB: SimpleConsole.LineCount
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.LineCount
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.LineCount
+      type: Property
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced
+      source:
+        id: LineCount
+        path: ''
+        startLine: 1568
+      summary: "\nThe maximum number of lines to display.\n"
+      example: []
+      syntax:
+        content:
+          CSharp: public int LineCount { get; set; }
+          VB: Public Property LineCount As Integer
+        parameters: []
+        return:
+          type: System.Int32
+      overload: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.LineCount*
+      modifiers:
+        CSharp:
+        - public
+        - get
+        - set
+        VB:
+        - Public
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.screenVerbosity
+      commentId: F:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.screenVerbosity
+      language: CSharp
+      name:
+        CSharp: screenVerbosity
+        VB: screenVerbosity
+      nameWithType:
+        CSharp: SimpleConsole.screenVerbosity
+        VB: SimpleConsole.screenVerbosity
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.screenVerbosity
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.screenVerbosity
+      type: Field
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced
+      source:
+        id: screenVerbosity
+        path: ''
+        startLine: 1576
+      syntax:
+        content:
+          CSharp: public int screenVerbosity
+          VB: Public screenVerbosity As Integer
+        return:
+          type: System.Int32
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.logVerbosity
+      commentId: F:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.logVerbosity
+      language: CSharp
+      name:
+        CSharp: logVerbosity
+        VB: logVerbosity
+      nameWithType:
+        CSharp: SimpleConsole.logVerbosity
+        VB: SimpleConsole.logVerbosity
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.logVerbosity
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.logVerbosity
+      type: Field
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced
+      source:
+        id: logVerbosity
+        path: ''
+        startLine: 1580
+      syntax:
+        content:
+          CSharp: public int logVerbosity
+          VB: Public logVerbosity As Integer
+        return:
+          type: System.Int32
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.Active
+      commentId: P:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.Active
+      language: CSharp
+      name:
+        CSharp: Active
+        VB: Active
+      nameWithType:
+        CSharp: SimpleConsole.Active
+        VB: SimpleConsole.Active
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.Active
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.Active
+      type: Property
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced
+      source:
+        id: Active
+        path: ''
+        startLine: 1605
+      summary: "\nWhether the onscreen component is active.\n"
+      example: []
+      syntax:
+        content:
+          CSharp: public static bool Active { get; }
+          VB: Public Shared ReadOnly Property Active As Boolean
+        parameters: []
+        return:
+          type: System.Boolean
+      overload: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.Active*
+      modifiers:
+        CSharp:
+        - public
+        - static
+        - get
+        VB:
+        - Public
+        - Shared
+        - ReadOnly
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.AddLine(System.Int32,System.String)
+      commentId: M:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.AddLine(System.Int32,System.String)
+      language: CSharp
+      name:
+        CSharp: AddLine(Int32, String)
+        VB: AddLine(Int32, String)
+      nameWithType:
+        CSharp: SimpleConsole.AddLine(Int32, String)
+        VB: SimpleConsole.AddLine(Int32, String)
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.AddLine(System.Int32, System.String)
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.AddLine(System.Int32, System.String)
+      type: Method
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced
+      source:
+        id: AddLine
+        path: ''
+        startLine: 1613
+      summary: "\nStatic helper for adding a line of text for output.\n"
+      example: []
+      syntax:
+        content:
+          CSharp: public static int AddLine(int level, string line)
+          VB: Public Shared Function AddLine(level As Integer, line As String) As Integer
+        parameters:
+        - id: level
+          type: System.Int32
+          description: The verbosity level of this line.
+        - id: line
+          type: System.String
+          description: The text to display and/or write.
+        return:
+          type: System.Int32
+          description: The number of lines added.
+      overload: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.AddLine*
+      modifiers:
+        CSharp:
+        - public
+        - static
+        VB:
+        - Public
+        - Shared
+- id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+  commentId: N:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+  language: CSharp
+  name:
+    CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+    VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+  nameWithType:
+    CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+    VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+  qualifiedName:
+    CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+    VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+  type: Namespace
+  assemblies:
+  - cs.temp.dll
+  modifiers: {}
+  items:
+  - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard
+    commentId: T:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard
+    language: CSharp
+    name:
+      CSharp: PlantPlacard
+      VB: PlantPlacard
+    nameWithType:
+      CSharp: PlantPlacard
+      VB: PlantPlacard
+    qualifiedName:
+      CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard
+      VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard
+    type: Class
+    assemblies:
+    - cs.temp.dll
+    namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+    source:
+      id: PlantPlacard
+      path: ''
+      startLine: 20
+    summary: "\nSimple script to instantiate and place a prefab in the scene where tapped.\nIf the air tap hits a previously placed object, it will be deleted.\n"
+    remarks: "\nThis script assumes the prefab is of the layer &quot;Pillared&quot;. Anything of\nlayer &quot;Pillared&quot; will be considered to have been added by this script, \nand hence removed if tapped.\n"
+    example: []
+    syntax:
+      content:
+        CSharp: 'public class PlantPlacard : InputSystemGlobalHandlerListener, IMixedRealityPointerHandler'
+        VB: >-
+          Public Class PlantPlacard
+
+              Inherits InputSystemGlobalHandlerListener
+
+              Implements IMixedRealityPointerHandler
+    inheritance:
+    - System.Object
+    implements:
+    - IMixedRealityPointerHandler
+    modifiers:
+      CSharp:
+      - public
+      - class
+      VB:
+      - Public
+      - Class
+    items:
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.placardPrefab
+      commentId: F:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.placardPrefab
+      language: CSharp
+      name:
+        CSharp: placardPrefab
+        VB: placardPrefab
+      nameWithType:
+        CSharp: PlantPlacard.placardPrefab
+        VB: PlantPlacard.placardPrefab
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.placardPrefab
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.placardPrefab
+      type: Field
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+      source:
+        id: placardPrefab
+        path: ''
+        startLine: 25
+      summary: "\nThe prefab to instantiate and place in the scene.\n"
+      example: []
+      syntax:
+        content:
+          CSharp: public GameObject placardPrefab
+          VB: Public placardPrefab As GameObject
+        return:
+          type: GameObject
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.Start
+      commentId: M:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.Start
+      language: CSharp
+      name:
+        CSharp: Start()
+        VB: Start()
+      nameWithType:
+        CSharp: PlantPlacard.Start()
+        VB: PlantPlacard.Start()
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.Start()
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.Start()
+      type: Method
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+      source:
+        id: Start
+        path: ''
+        startLine: 30
+      summary: "\nCache our layers at start.\n"
+      example: []
+      syntax:
+        content:
+          CSharp: protected override void Start()
+          VB: Protected Overrides Sub Start
+      overload: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.Start*
+      modifiers:
+        CSharp:
+        - protected
+        - override
+        VB:
+        - Protected
+        - Overrides
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.RegisterHandlers
+      commentId: M:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.RegisterHandlers
+      language: CSharp
+      name:
+        CSharp: RegisterHandlers()
+        VB: RegisterHandlers()
+      nameWithType:
+        CSharp: PlantPlacard.RegisterHandlers()
+        VB: PlantPlacard.RegisterHandlers()
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.RegisterHandlers()
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.RegisterHandlers()
+      type: Method
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+      source:
+        id: RegisterHandlers
+        path: ''
+        startLine: 39
+      example: []
+      syntax:
+        content:
+          CSharp: protected override void RegisterHandlers()
+          VB: Protected Overrides Sub RegisterHandlers
+      overload: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.RegisterHandlers*
+      modifiers:
+        CSharp:
+        - protected
+        - override
+        VB:
+        - Protected
+        - Overrides
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.UnregisterHandlers
+      commentId: M:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.UnregisterHandlers
+      language: CSharp
+      name:
+        CSharp: UnregisterHandlers()
+        VB: UnregisterHandlers()
+      nameWithType:
+        CSharp: PlantPlacard.UnregisterHandlers()
+        VB: PlantPlacard.UnregisterHandlers()
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.UnregisterHandlers()
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.UnregisterHandlers()
+      type: Method
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+      source:
+        id: UnregisterHandlers
+        path: ''
+        startLine: 45
+      example: []
+      syntax:
+        content:
+          CSharp: protected override void UnregisterHandlers()
+          VB: Protected Overrides Sub UnregisterHandlers
+      overload: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.UnregisterHandlers*
+      modifiers:
+        CSharp:
+        - protected
+        - override
+        VB:
+        - Protected
+        - Overrides
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.TestLayer(GameObject,System.Int32)
+      commentId: M:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.TestLayer(GameObject,System.Int32)
+      language: CSharp
+      name:
+        CSharp: TestLayer(GameObject, Int32)
+        VB: TestLayer(GameObject, Int32)
+      nameWithType:
+        CSharp: PlantPlacard.TestLayer(GameObject, Int32)
+        VB: PlantPlacard.TestLayer(GameObject, Int32)
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.TestLayer(GameObject, System.Int32)
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.TestLayer(GameObject, System.Int32)
+      type: Method
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+      source:
+        id: TestLayer
+        path: ''
+        startLine: 82
+      syntax:
+        content:
+          CSharp: public static bool TestLayer(GameObject go, int layerTest)
+          VB: Public Shared Function TestLayer(go As GameObject, layerTest As Integer) As Boolean
+        parameters:
+        - id: go
+          type: GameObject
+        - id: layerTest
+          type: System.Int32
+        return:
+          type: System.Boolean
+      overload: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.TestLayer*
+      modifiers:
+        CSharp:
+        - public
+        - static
+        VB:
+        - Public
+        - Shared
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerClicked(MixedRealityPointerEventData)
+      commentId: M:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerClicked(MixedRealityPointerEventData)
+      language: CSharp
+      name:
+        CSharp: OnPointerClicked(MixedRealityPointerEventData)
+        VB: OnPointerClicked(MixedRealityPointerEventData)
+      nameWithType:
+        CSharp: PlantPlacard.OnPointerClicked(MixedRealityPointerEventData)
+        VB: PlantPlacard.OnPointerClicked(MixedRealityPointerEventData)
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerClicked(MixedRealityPointerEventData)
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerClicked(MixedRealityPointerEventData)
+      type: Method
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+      source:
+        id: OnPointerClicked
+        path: ''
+        startLine: 140
+      summary: "\nProcess pointer clicked event if ray cast has result.\n"
+      example: []
+      syntax:
+        content:
+          CSharp: public void OnPointerClicked(MixedRealityPointerEventData eventData)
+          VB: Public Sub OnPointerClicked(eventData As MixedRealityPointerEventData)
+        parameters:
+        - id: eventData
+          type: MixedRealityPointerEventData
+          description: ''
+      overload: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerClicked*
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerUp(MixedRealityPointerEventData)
+      commentId: M:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerUp(MixedRealityPointerEventData)
+      language: CSharp
+      name:
+        CSharp: OnPointerUp(MixedRealityPointerEventData)
+        VB: OnPointerUp(MixedRealityPointerEventData)
+      nameWithType:
+        CSharp: PlantPlacard.OnPointerUp(MixedRealityPointerEventData)
+        VB: PlantPlacard.OnPointerUp(MixedRealityPointerEventData)
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerUp(MixedRealityPointerEventData)
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerUp(MixedRealityPointerEventData)
+      type: Method
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+      source:
+        id: OnPointerUp
+        path: ''
+        startLine: 163
+      summary: "\nNo-op on pointer up.\n"
+      example: []
+      syntax:
+        content:
+          CSharp: public void OnPointerUp(MixedRealityPointerEventData eventData)
+          VB: Public Sub OnPointerUp(eventData As MixedRealityPointerEventData)
+        parameters:
+        - id: eventData
+          type: MixedRealityPointerEventData
+          description: ''
+      overload: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerUp*
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDown(MixedRealityPointerEventData)
+      commentId: M:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDown(MixedRealityPointerEventData)
+      language: CSharp
+      name:
+        CSharp: OnPointerDown(MixedRealityPointerEventData)
+        VB: OnPointerDown(MixedRealityPointerEventData)
+      nameWithType:
+        CSharp: PlantPlacard.OnPointerDown(MixedRealityPointerEventData)
+        VB: PlantPlacard.OnPointerDown(MixedRealityPointerEventData)
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDown(MixedRealityPointerEventData)
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDown(MixedRealityPointerEventData)
+      type: Method
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+      source:
+        id: OnPointerDown
+        path: ''
+        startLine: 172
+      summary: "\nNo-op on pointer down.\n"
+      example: []
+      syntax:
+        content:
+          CSharp: public void OnPointerDown(MixedRealityPointerEventData eventData)
+          VB: Public Sub OnPointerDown(eventData As MixedRealityPointerEventData)
+        parameters:
+        - id: eventData
+          type: MixedRealityPointerEventData
+          description: ''
+      overload: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDown*
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDragged(MixedRealityPointerEventData)
+      commentId: M:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDragged(MixedRealityPointerEventData)
+      language: CSharp
+      name:
+        CSharp: OnPointerDragged(MixedRealityPointerEventData)
+        VB: OnPointerDragged(MixedRealityPointerEventData)
+      nameWithType:
+        CSharp: PlantPlacard.OnPointerDragged(MixedRealityPointerEventData)
+        VB: PlantPlacard.OnPointerDragged(MixedRealityPointerEventData)
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDragged(MixedRealityPointerEventData)
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDragged(MixedRealityPointerEventData)
+      type: Method
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+      source:
+        id: OnPointerDragged
+        path: ''
+        startLine: 181
+      summary: "\nNo-op on pointer drag.\n"
+      example: []
+      syntax:
+        content:
+          CSharp: public void OnPointerDragged(MixedRealityPointerEventData eventData)
+          VB: Public Sub OnPointerDragged(eventData As MixedRealityPointerEventData)
+        parameters:
+        - id: eventData
+          type: MixedRealityPointerEventData
+          description: ''
+      overload: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDragged*
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+- id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+  commentId: N:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+  language: CSharp
+  name:
+    CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+    VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+  nameWithType:
+    CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+    VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+  qualifiedName:
+    CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+    VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+  type: Namespace
+  assemblies:
+  - cs.temp.dll
+  modifiers: {}
+  items:
+  - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager
+    commentId: T:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager
+    language: CSharp
+    name:
+      CSharp: QRCodeMiniManager
+      VB: QRCodeMiniManager
+    nameWithType:
+      CSharp: QRCodeMiniManager
+      VB: QRCodeMiniManager
+    qualifiedName:
+      CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager
+      VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager
+    type: Class
+    assemblies:
+    - cs.temp.dll
+    namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+    source:
+      id: QRCodeMiniManager
+      path: ''
+      startLine: 210
+    summary: "\nThe QRCodeMiniManager is a simple wrapper around the Microsoft.MixedReality.QR.QRCodeWatcher,\nto reissue qr code events on the main thread, where they can be acted on safely.\n"
+    remarks: "\nThe events are slightly simplified to the uniform pattern of the void QRCodeFunction(qrCode) defined here.\nNo other interpretation or processing of the events is done. Events are received (on another thread) from\nthe QRCodeWatcher, then reissued on the main thread in the next Update loop.\nNote that since they are received asynchronously, no exact guarantees can be made about the order in which\nthey are called on the main thread. But in general (and in best effort) they will be called in the order\nin which the asynchronous events are dispatched, and on the next Update after the events are originally invoked.\n"
+    example: []
+    syntax:
+      content:
+        CSharp: 'public class QRCodeMiniManager : MonoBehaviour'
+        VB: >-
+          Public Class QRCodeMiniManager
+
+              Inherits MonoBehaviour
+    inheritance:
+    - System.Object
+    modifiers:
+      CSharp:
+      - public
+      - class
+      VB:
+      - Public
+      - Class
+    items:
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.IsSupported
+      commentId: P:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.IsSupported
+      language: CSharp
+      name:
+        CSharp: IsSupported
+        VB: IsSupported
+      nameWithType:
+        CSharp: QRCodeMiniManager.IsSupported
+        VB: QRCodeMiniManager.IsSupported
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.IsSupported
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.IsSupported
+      type: Property
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+      source:
+        id: IsSupported
+        path: ''
+        startLine: 230
+      summary: "\nGet accessor for whether QRCodeWatcher reports as supported.\n"
+      example: []
+      syntax:
+        content:
+          CSharp: public bool IsSupported { get; }
+          VB: Public ReadOnly Property IsSupported As Boolean
+        parameters: []
+        return:
+          type: System.Boolean
+      overload: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.IsSupported*
+      modifiers:
+        CSharp:
+        - public
+        - get
+        VB:
+        - Public
+        - ReadOnly
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRAdded
+      commentId: P:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRAdded
+      language: CSharp
+      name:
+        CSharp: OnQRAdded
+        VB: OnQRAdded
+      nameWithType:
+        CSharp: QRCodeMiniManager.OnQRAdded
+        VB: QRCodeMiniManager.OnQRAdded
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRAdded
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRAdded
+      type: Property
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+      source:
+        id: OnQRAdded
+        path: ''
+        startLine: 246
+      summary: "\nCallback when a new QR code is added.\n"
+      example: []
+      syntax:
+        content:
+          CSharp: public QRCodeMiniManager.QRCodeFunction OnQRAdded { get; set; }
+          VB: Public Property OnQRAdded As QRCodeMiniManager.QRCodeFunction
+        parameters: []
+        return:
+          type: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.QRCodeFunction
+      overload: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRAdded*
+      modifiers:
+        CSharp:
+        - public
+        - get
+        - set
+        VB:
+        - Public
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRUpdated
+      commentId: P:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRUpdated
+      language: CSharp
+      name:
+        CSharp: OnQRUpdated
+        VB: OnQRUpdated
+      nameWithType:
+        CSharp: QRCodeMiniManager.OnQRUpdated
+        VB: QRCodeMiniManager.OnQRUpdated
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRUpdated
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRUpdated
+      type: Property
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+      source:
+        id: OnQRUpdated
+        path: ''
+        startLine: 253
+      summary: "\nCallback when a previously added QR code is updated.\n"
+      example: []
+      syntax:
+        content:
+          CSharp: public QRCodeMiniManager.QRCodeFunction OnQRUpdated { get; set; }
+          VB: Public Property OnQRUpdated As QRCodeMiniManager.QRCodeFunction
+        parameters: []
+        return:
+          type: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.QRCodeFunction
+      overload: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRUpdated*
+      modifiers:
+        CSharp:
+        - public
+        - get
+        - set
+        VB:
+        - Public
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRRemoved
+      commentId: P:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRRemoved
+      language: CSharp
+      name:
+        CSharp: OnQRRemoved
+        VB: OnQRRemoved
+      nameWithType:
+        CSharp: QRCodeMiniManager.OnQRRemoved
+        VB: QRCodeMiniManager.OnQRRemoved
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRRemoved
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRRemoved
+      type: Property
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+      source:
+        id: OnQRRemoved
+        path: ''
+        startLine: 260
+      summary: "\nCallback when a previously added QR code is removed.\n"
+      example: []
+      syntax:
+        content:
+          CSharp: public QRCodeMiniManager.QRCodeFunction OnQRRemoved { get; set; }
+          VB: Public Property OnQRRemoved As QRCodeMiniManager.QRCodeFunction
+        parameters: []
+        return:
+          type: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.QRCodeFunction
+      overload: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRRemoved*
+      modifiers:
+        CSharp:
+        - public
+        - get
+        - set
+        VB:
+        - Public
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQREnumerated
+      commentId: P:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQREnumerated
+      language: CSharp
+      name:
+        CSharp: OnQREnumerated
+        VB: OnQREnumerated
+      nameWithType:
+        CSharp: QRCodeMiniManager.OnQREnumerated
+        VB: QRCodeMiniManager.OnQREnumerated
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQREnumerated
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQREnumerated
+      type: Property
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+      source:
+        id: OnQREnumerated
+        path: ''
+        startLine: 272
+      summary: "\nCallback when the enumeration is complete.\n"
+      remarks: "\nCached QR codes will have Added and Updated events BEFORE the enumeration complete.\nNewly seen QR codes will only start to appear after the enumeration complete event.\n<a href=\"https://github.com/chgatla-microsoft/QRTracking/issues/2\">https://github.com/chgatla-microsoft/QRTracking/issues/2</a>\n"
+      example: []
+      syntax:
+        content:
+          CSharp: public QRCodeMiniManager.QRCodeFunction OnQREnumerated { get; set; }
+          VB: Public Property OnQREnumerated As QRCodeMiniManager.QRCodeFunction
+        parameters: []
+        return:
+          type: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.QRCodeFunction
+      overload: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQREnumerated*
+      modifiers:
+        CSharp:
+        - public
+        - get
+        - set
+        VB:
+        - Public
+  - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.QRCodeFunction
+    commentId: T:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.QRCodeFunction
+    language: CSharp
+    name:
+      CSharp: QRCodeMiniManager.QRCodeFunction
+      VB: QRCodeMiniManager.QRCodeFunction
+    nameWithType:
+      CSharp: QRCodeMiniManager.QRCodeFunction
+      VB: QRCodeMiniManager.QRCodeFunction
+    qualifiedName:
+      CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.QRCodeFunction
+      VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.QRCodeFunction
+    type: Delegate
+    assemblies:
+    - cs.temp.dll
+    namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+    source:
+      id: QRCodeFunction
+      path: ''
+      startLine: 239
+    summary: "\nNotification callback for a QRCode event.\n"
+    remarks: "\nNote that for the enumeration complete event, qrCode parameter is always null.\n"
+    example: []
+    syntax:
+      content:
+        CSharp: public delegate void QRCodeFunction(QRCode qrCode);
+        VB: Public Delegate Sub QRCodeFunction(qrCode As QRCode)
+      parameters:
+      - id: qrCode
+        type: QRCode
+        description: The code generating the event.
+    modifiers:
+      CSharp:
+      - public
+      - delegate
+      VB:
+      - Public
+      - Delegate
+    items: []
+  - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup
+    commentId: T:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup
+    language: CSharp
+    name:
+      CSharp: QRSpacePinGroup
+      VB: QRSpacePinGroup
+    nameWithType:
+      CSharp: QRSpacePinGroup
+      VB: QRSpacePinGroup
+    qualifiedName:
+      CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup
+      VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup
+    type: Class
+    assemblies:
+    - cs.temp.dll
+    namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+    source:
+      id: QRSpacePinGroup
+      path: ''
+      startLine: 562
+    summary: "\nA group of space pins with locations fed by reading QR codes placed in the physical environment.\n"
+    example: []
+    syntax:
+      content:
+        CSharp: 'public class QRSpacePinGroup : MonoBehaviour'
+        VB: >-
+          Public Class QRSpacePinGroup
+
+              Inherits MonoBehaviour
+    inheritance:
+    - System.Object
+    modifiers:
+      CSharp:
+      - public
+      - class
+      VB:
+      - Public
+      - Class
+    items:
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.SharedOrienter
+      commentId: P:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.SharedOrienter
+      language: CSharp
+      name:
+        CSharp: SharedOrienter
+        VB: SharedOrienter
+      nameWithType:
+        CSharp: QRSpacePinGroup.SharedOrienter
+        VB: QRSpacePinGroup.SharedOrienter
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.SharedOrienter
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.SharedOrienter
+      type: Property
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+      source:
+        id: SharedOrienter
+        path: ''
+        startLine: 577
+      summary: "\nAn orienter instance in the scene. If unset, one will be created.\n"
+      example: []
+      syntax:
+        content:
+          CSharp: public Orienter SharedOrienter { get; set; }
+          VB: Public Property SharedOrienter As Orienter
+        parameters: []
+        return:
+          type: Orienter
+      overload: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.SharedOrienter*
+      modifiers:
+        CSharp:
+        - public
+        - get
+        - set
+        VB:
+        - Public
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.MarkerHighlightPrefab
+      commentId: P:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.MarkerHighlightPrefab
+      language: CSharp
+      name:
+        CSharp: MarkerHighlightPrefab
+        VB: MarkerHighlightPrefab
+      nameWithType:
+        CSharp: QRSpacePinGroup.MarkerHighlightPrefab
+        VB: QRSpacePinGroup.MarkerHighlightPrefab
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.MarkerHighlightPrefab
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.MarkerHighlightPrefab
+      type: Property
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+      source:
+        id: MarkerHighlightPrefab
+        path: ''
+        startLine: 586
+      summary: "\nOptional visual to draw at QR code position when detected.\n"
+      example: []
+      syntax:
+        content:
+          CSharp: public GameObject MarkerHighlightPrefab { get; set; }
+          VB: Public Property MarkerHighlightPrefab As GameObject
+        parameters: []
+        return:
+          type: GameObject
+      overload: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.MarkerHighlightPrefab*
+      modifiers:
+        CSharp:
+        - public
+        - get
+        - set
+        VB:
+        - Public
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.VirtualMarkers
+      commentId: P:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.VirtualMarkers
+      language: CSharp
+      name:
+        CSharp: VirtualMarkers
+        VB: VirtualMarkers
+      nameWithType:
+        CSharp: QRSpacePinGroup.VirtualMarkers
+        VB: QRSpacePinGroup.VirtualMarkers
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.VirtualMarkers
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.VirtualMarkers
+      type: Property
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+      source:
+        id: VirtualMarkers
+        path: ''
+        startLine: 839
+      summary: "\nThe virtual poses in the scene to be matched with the poses of the QR codes in the physical world.\n"
+      example: []
+      syntax:
+        content:
+          CSharp: public List<Transform> VirtualMarkers { get; set; }
+          VB: Public Property VirtualMarkers As List(Of Transform)
+        parameters: []
+        return:
+          type: List{Transform}
+      overload: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.VirtualMarkers*
+      modifiers:
+        CSharp:
+        - public
+        - get
+        - set
+        VB:
+        - Public
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.Reset
+      commentId: M:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.Reset
+      language: CSharp
+      name:
+        CSharp: Reset()
+        VB: Reset()
+      nameWithType:
+        CSharp: QRSpacePinGroup.Reset()
+        VB: QRSpacePinGroup.Reset()
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.Reset()
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.Reset()
+      type: Method
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+      source:
+        id: Reset
+        path: ''
+        startLine: 844
+      summary: "\nClear back to the state before any QR codes had been detected.\n"
+      example: []
+      syntax:
+        content:
+          CSharp: public void Reset()
+          VB: Public Sub Reset
+      overload: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.Reset*
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+  - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord
+    commentId: T:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord
+    language: CSharp
+    name:
+      CSharp: QRSpatialCoord
+      VB: QRSpatialCoord
+    nameWithType:
+      CSharp: QRSpatialCoord
+      VB: QRSpatialCoord
+    qualifiedName:
+      CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord
+      VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord
+    type: Class
+    assemblies:
+    - cs.temp.dll
+    namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+    source:
+      id: QRSpatialCoord
+      path: ''
+      startLine: 1110
+    summary: "\nWrapper class for SpatialCoordinateSystem.\n"
+    remarks: "\nProvides a transform of the QR code&apos;s pose into Spongy space.\n"
+    example: []
+    syntax:
+      content:
+        CSharp: public class QRSpatialCoord
+        VB: Public Class QRSpatialCoord
+    inheritance:
+    - System.Object
+    inheritedMembers:
+    - System.Object.ToString
+    - System.Object.Equals(System.Object)
+    - System.Object.Equals(System.Object,System.Object)
+    - System.Object.ReferenceEquals(System.Object,System.Object)
+    - System.Object.GetHashCode
+    - System.Object.GetType
+    - System.Object.MemberwiseClone
+    modifiers:
+      CSharp:
+      - public
+      - class
+      VB:
+      - Public
+      - Class
+    items:
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.SpatialNodeId
+      commentId: P:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.SpatialNodeId
+      language: CSharp
+      name:
+        CSharp: SpatialNodeId
+        VB: SpatialNodeId
+      nameWithType:
+        CSharp: QRSpatialCoord.SpatialNodeId
+        VB: QRSpatialCoord.SpatialNodeId
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.SpatialNodeId
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.SpatialNodeId
+      type: Property
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+      source:
+        id: SpatialNodeId
+        path: ''
+        startLine: 1133
+      summary: "\nAccessor for spatial node id.\n"
+      example: []
+      syntax:
+        content:
+          CSharp: public Guid SpatialNodeId { get; set; }
+          VB: Public Property SpatialNodeId As Guid
+        parameters: []
+        return:
+          type: System.Guid
+      overload: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.SpatialNodeId*
+      modifiers:
+        CSharp:
+        - public
+        - get
+        - set
+        VB:
+        - Public
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.CurrentPose
+      commentId: P:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.CurrentPose
+      language: CSharp
+      name:
+        CSharp: CurrentPose
+        VB: CurrentPose
+      nameWithType:
+        CSharp: QRSpatialCoord.CurrentPose
+        VB: QRSpatialCoord.CurrentPose
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.CurrentPose
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.CurrentPose
+      type: Property
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+      source:
+        id: CurrentPose
+        path: ''
+        startLine: 1162
+      summary: "\nThe last computed pose.\n"
+      example: []
+      syntax:
+        content:
+          CSharp: public Pose CurrentPose { get; }
+          VB: Public ReadOnly Property CurrentPose As Pose
+        parameters: []
+        return:
+          type: Pose
+      overload: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.CurrentPose*
+      modifiers:
+        CSharp:
+        - public
+        - get
+        VB:
+        - Public
+        - ReadOnly
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.ComputePose(Pose@)
+      commentId: M:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.ComputePose(Pose@)
+      language: CSharp
+      name:
+        CSharp: ComputePose(out Pose)
+        VB: ComputePose(ByRef Pose)
+      nameWithType:
+        CSharp: QRSpatialCoord.ComputePose(out Pose)
+        VB: QRSpatialCoord.ComputePose(ByRef Pose)
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.ComputePose(out Pose)
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.ComputePose(ByRef Pose)
+      type: Method
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+      source:
+        id: ComputePose
+        path: ''
+        startLine: 1175
+      summary: "\nCompute the head relative pose for the spatial node id.\n"
+      remarks: "\nThis ultimately relies on SpatialCoordinateSystem.TryGetTransformTo.\nTryGetTransformTo seems to fail for a while after the QR code is created. \nOr maybe just spurious failure. Haven&apos;t found any documentation on behavior so far.\nMain thing is to be prepared for failure, and just try back until success.\n"
+      example: []
+      syntax:
+        content:
+          CSharp: public bool ComputePose(out Pose pose)
+          VB: Public Function ComputePose(ByRef pose As Pose) As Boolean
+        parameters:
+        - id: pose
+          type: Pose
+          description: If return value is true, the newly computed pose, else the last pose computed.
+        return:
+          type: System.Boolean
+          description: True if a new pose was successfully computed.
+      overload: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.ComputePose*
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+  - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker
+    commentId: T:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker
+    language: CSharp
+    name:
+      CSharp: ShowMarker
+      VB: ShowMarker
+    nameWithType:
+      CSharp: ShowMarker
+      VB: ShowMarker
+    qualifiedName:
+      CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker
+      VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker
+    type: Class
+    assemblies:
+    - cs.temp.dll
+    namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+    source:
+      id: ShowMarker
+      path: ''
+      startLine: 1315
+    summary: "\nSimple animation to highlight where a QR code has been scanned.\n"
+    example: []
+    syntax:
+      content:
+        CSharp: 'public class ShowMarker : MonoBehaviour'
+        VB: >-
+          Public Class ShowMarker
+
+              Inherits MonoBehaviour
+    inheritance:
+    - System.Object
+    modifiers:
+      CSharp:
+      - public
+      - class
+      VB:
+      - Public
+      - Class
+    items:
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.rampUp
+      commentId: F:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.rampUp
+      language: CSharp
+      name:
+        CSharp: rampUp
+        VB: rampUp
+      nameWithType:
+        CSharp: ShowMarker.rampUp
+        VB: ShowMarker.rampUp
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.rampUp
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.rampUp
+      type: Field
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+      source:
+        id: rampUp
+        path: ''
+        startLine: 1318
+      syntax:
+        content:
+          CSharp: public float rampUp
+          VB: Public rampUp As Single
+        return:
+          type: System.Single
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.rampDown
+      commentId: F:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.rampDown
+      language: CSharp
+      name:
+        CSharp: rampDown
+        VB: rampDown
+      nameWithType:
+        CSharp: ShowMarker.rampDown
+        VB: ShowMarker.rampDown
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.rampDown
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.rampDown
+      type: Field
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+      source:
+        id: rampDown
+        path: ''
+        startLine: 1321
+      syntax:
+        content:
+          CSharp: public float rampDown
+          VB: Public rampDown As Single
+        return:
+          type: System.Single
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.maxSize
+      commentId: F:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.maxSize
+      language: CSharp
+      name:
+        CSharp: maxSize
+        VB: maxSize
+      nameWithType:
+        CSharp: ShowMarker.maxSize
+        VB: ShowMarker.maxSize
+      qualifiedName:
+        CSharp: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.maxSize
+        VB: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.maxSize
+      type: Field
+      assemblies:
+      - cs.temp.dll
+      namespace: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+      source:
+        id: maxSize
+        path: ''
+        startLine: 1326
+      summary: "\nMaximum scale factor to apply, i.e. scale at end of ramp up and beginning of ramp down.\n"
+      example: []
+      syntax:
+        content:
+          CSharp: public float maxSize
+          VB: Public maxSize As Single
+        return:
+          type: System.Single
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+references:
+  System:
+    name:
+      CSharp:
+      - name: System
+        nameWithType: System
+        qualifiedName: System
+        isExternal: true
+      VB:
+      - name: System
+        nameWithType: System
+        qualifiedName: System
+    isDefinition: true
+    commentId: N:System
+  System.Single:
+    name:
+      CSharp:
+      - id: System.Single
+        name: Single
+        nameWithType: Single
+        qualifiedName: System.Single
+        isExternal: true
+      VB:
+      - id: System.Single
+        name: Single
+        nameWithType: Single
+        qualifiedName: System.Single
+        isExternal: true
+    isDefinition: true
+    parent: System
+    commentId: T:System.Single
+  Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong
+        name: SimpleTagalong
+        nameWithType: SimpleTagalong
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong
+        name: SimpleTagalong
+        nameWithType: SimpleTagalong
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong
+    isDefinition: true
+    commentId: T:Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong
+  List`1:
+    name:
+      CSharp:
+      - id: List`1
+        name: List
+        nameWithType: List
+        qualifiedName: List
+        isExternal: true
+      - name: <
+        nameWithType: <
+        qualifiedName: <
+      - name: ''
+        nameWithType: ''
+        qualifiedName: ''
+      - name: '>'
+        nameWithType: '>'
+        qualifiedName: '>'
+      VB:
+      - id: List`1
+        name: List
+        nameWithType: List
+        qualifiedName: List
+        isExternal: true
+      - name: '(Of '
+        nameWithType: '(Of '
+        qualifiedName: '(Of '
+      - name: ''
+        nameWithType: ''
+        qualifiedName: ''
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: true
+  List{GameObject}:
+    name:
+      CSharp:
+      - id: List`1
+        name: List
+        nameWithType: List
+        qualifiedName: List
+        isExternal: true
+      - name: <
+        nameWithType: <
+        qualifiedName: <
+      - id: GameObject
+        name: GameObject
+        nameWithType: GameObject
+        qualifiedName: GameObject
+        isExternal: true
+      - name: '>'
+        nameWithType: '>'
+        qualifiedName: '>'
+      VB:
+      - id: List`1
+        name: List
+        nameWithType: List
+        qualifiedName: List
+        isExternal: true
+      - name: '(Of '
+        nameWithType: '(Of '
+        qualifiedName: '(Of '
+      - id: GameObject
+        name: GameObject
+        nameWithType: GameObject
+        qualifiedName: GameObject
+        isExternal: true
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: false
+    definition: List`1
+    commentId: '!:List{GameObject}'
+  TextMesh:
+    name:
+      CSharp:
+      - id: TextMesh
+        name: TextMesh
+        nameWithType: TextMesh
+        qualifiedName: TextMesh
+        isExternal: true
+      VB:
+      - id: TextMesh
+        name: TextMesh
+        nameWithType: TextMesh
+        qualifiedName: TextMesh
+        isExternal: true
+    isDefinition: true
+  Microsoft.MixedReality.WorldLocking.Samples.UX.OnToggleManager*:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.UX.OnToggleManager*
+        name: OnToggleManager
+        nameWithType: UX.OnToggleManager
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.UX.OnToggleManager
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.UX.OnToggleManager*
+        name: OnToggleManager
+        nameWithType: UX.OnToggleManager
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.UX.OnToggleManager
+    isDefinition: true
+    commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.UX.OnToggleManager
+  Microsoft.MixedReality.WorldLocking.Samples.UX:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.UX
+        name: UX
+        nameWithType: UX
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.UX
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.UX
+        name: UX
+        nameWithType: UX
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.UX
+    isDefinition: true
+    commentId: T:Microsoft.MixedReality.WorldLocking.Samples.UX
+  Microsoft.MixedReality.WorldLocking.Samples:
+    name:
+      CSharp:
+      - name: Microsoft.MixedReality.WorldLocking.Samples
+        nameWithType: Microsoft.MixedReality.WorldLocking.Samples
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples
+      VB:
+      - name: Microsoft.MixedReality.WorldLocking.Samples
+        nameWithType: Microsoft.MixedReality.WorldLocking.Samples
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples
+    isDefinition: true
+    commentId: N:Microsoft.MixedReality.WorldLocking.Samples
+  System.Int32:
+    name:
+      CSharp:
+      - id: System.Int32
+        name: Int32
+        nameWithType: Int32
+        qualifiedName: System.Int32
+        isExternal: true
+      VB:
+      - id: System.Int32
+        name: Int32
+        nameWithType: Int32
+        qualifiedName: System.Int32
+        isExternal: true
+    isDefinition: true
+    parent: System
+    commentId: T:System.Int32
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.LineCount*:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.LineCount*
+        name: LineCount
+        nameWithType: SimpleConsole.LineCount
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.LineCount
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.LineCount*
+        name: LineCount
+        nameWithType: SimpleConsole.LineCount
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.LineCount
+    isDefinition: true
+    commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.LineCount
+  System.Boolean:
+    name:
+      CSharp:
+      - id: System.Boolean
+        name: Boolean
+        nameWithType: Boolean
+        qualifiedName: System.Boolean
+        isExternal: true
+      VB:
+      - id: System.Boolean
+        name: Boolean
+        nameWithType: Boolean
+        qualifiedName: System.Boolean
+        isExternal: true
+    isDefinition: true
+    parent: System
+    commentId: T:System.Boolean
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.Active*:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.Active*
+        name: Active
+        nameWithType: SimpleConsole.Active
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.Active
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.Active*
+        name: Active
+        nameWithType: SimpleConsole.Active
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.Active
+    isDefinition: true
+    commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.Active
+  System.String:
+    name:
+      CSharp:
+      - id: System.String
+        name: String
+        nameWithType: String
+        qualifiedName: System.String
+        isExternal: true
+      VB:
+      - id: System.String
+        name: String
+        nameWithType: String
+        qualifiedName: System.String
+        isExternal: true
+    isDefinition: true
+    parent: System
+    commentId: T:System.String
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.AddLine*:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.AddLine*
+        name: AddLine
+        nameWithType: SimpleConsole.AddLine
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.AddLine
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.AddLine*
+        name: AddLine
+        nameWithType: SimpleConsole.AddLine
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.AddLine
+    isDefinition: true
+    commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.AddLine
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole
+        name: SimpleConsole
+        nameWithType: SimpleConsole
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole
+        name: SimpleConsole
+        nameWithType: SimpleConsole
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole
+    isDefinition: true
+    commentId: T:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced:
+    name:
+      CSharp:
+      - name: Microsoft.MixedReality.WorldLocking.Samples.Advanced
+        nameWithType: Microsoft.MixedReality.WorldLocking.Samples.Advanced
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced
+      VB:
+      - name: Microsoft.MixedReality.WorldLocking.Samples.Advanced
+        nameWithType: Microsoft.MixedReality.WorldLocking.Samples.Advanced
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced
+    isDefinition: true
+    commentId: N:Microsoft.MixedReality.WorldLocking.Samples.Advanced
+  IMixedRealityPointerHandler:
+    name:
+      CSharp:
+      - id: IMixedRealityPointerHandler
+        name: IMixedRealityPointerHandler
+        nameWithType: IMixedRealityPointerHandler
+        qualifiedName: IMixedRealityPointerHandler
+        isExternal: true
+      VB:
+      - id: IMixedRealityPointerHandler
+        name: IMixedRealityPointerHandler
+        nameWithType: IMixedRealityPointerHandler
+        qualifiedName: IMixedRealityPointerHandler
+        isExternal: true
+    isDefinition: true
+    commentId: '!:IMixedRealityPointerHandler'
+  GameObject:
+    name:
+      CSharp:
+      - id: GameObject
+        name: GameObject
+        nameWithType: GameObject
+        qualifiedName: GameObject
+        isExternal: true
+      VB:
+      - id: GameObject
+        name: GameObject
+        nameWithType: GameObject
+        qualifiedName: GameObject
+        isExternal: true
+    isDefinition: true
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.Start*:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.Start*
+        name: Start
+        nameWithType: PlantPlacard.Start
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.Start
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.Start*
+        name: Start
+        nameWithType: PlantPlacard.Start
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.Start
+    isDefinition: true
+    commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.Start
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.RegisterHandlers*:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.RegisterHandlers*
+        name: RegisterHandlers
+        nameWithType: PlantPlacard.RegisterHandlers
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.RegisterHandlers
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.RegisterHandlers*
+        name: RegisterHandlers
+        nameWithType: PlantPlacard.RegisterHandlers
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.RegisterHandlers
+    isDefinition: true
+    commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.RegisterHandlers
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.UnregisterHandlers*:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.UnregisterHandlers*
+        name: UnregisterHandlers
+        nameWithType: PlantPlacard.UnregisterHandlers
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.UnregisterHandlers
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.UnregisterHandlers*
+        name: UnregisterHandlers
+        nameWithType: PlantPlacard.UnregisterHandlers
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.UnregisterHandlers
+    isDefinition: true
+    commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.UnregisterHandlers
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.TestLayer*:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.TestLayer*
+        name: TestLayer
+        nameWithType: PlantPlacard.TestLayer
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.TestLayer
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.TestLayer*
+        name: TestLayer
+        nameWithType: PlantPlacard.TestLayer
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.TestLayer
+    isDefinition: true
+    commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.TestLayer
+  MixedRealityPointerEventData:
+    name:
+      CSharp:
+      - id: MixedRealityPointerEventData
+        name: MixedRealityPointerEventData
+        nameWithType: MixedRealityPointerEventData
+        qualifiedName: MixedRealityPointerEventData
+        isExternal: true
+      VB:
+      - id: MixedRealityPointerEventData
+        name: MixedRealityPointerEventData
+        nameWithType: MixedRealityPointerEventData
+        qualifiedName: MixedRealityPointerEventData
+        isExternal: true
+    isDefinition: true
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerClicked*:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerClicked*
+        name: OnPointerClicked
+        nameWithType: PlantPlacard.OnPointerClicked
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerClicked
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerClicked*
+        name: OnPointerClicked
+        nameWithType: PlantPlacard.OnPointerClicked
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerClicked
+    isDefinition: true
+    commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerClicked
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerUp*:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerUp*
+        name: OnPointerUp
+        nameWithType: PlantPlacard.OnPointerUp
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerUp
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerUp*
+        name: OnPointerUp
+        nameWithType: PlantPlacard.OnPointerUp
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerUp
+    isDefinition: true
+    commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerUp
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDown*:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDown*
+        name: OnPointerDown
+        nameWithType: PlantPlacard.OnPointerDown
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDown
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDown*
+        name: OnPointerDown
+        nameWithType: PlantPlacard.OnPointerDown
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDown
+    isDefinition: true
+    commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDown
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDragged*:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDragged*
+        name: OnPointerDragged
+        nameWithType: PlantPlacard.OnPointerDragged
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDragged
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDragged*
+        name: OnPointerDragged
+        nameWithType: PlantPlacard.OnPointerDragged
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDragged
+    isDefinition: true
+    commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard.OnPointerDragged
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard
+        name: PlantPlacard
+        nameWithType: PlantPlacard
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard
+        name: PlantPlacard
+        nameWithType: PlantPlacard
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard
+    isDefinition: true
+    commentId: T:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.PlantPlacard
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene:
+    name:
+      CSharp:
+      - name: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+        nameWithType: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+      VB:
+      - name: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+        nameWithType: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+    isDefinition: true
+    commentId: N:Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.IsSupported*:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.IsSupported*
+        name: IsSupported
+        nameWithType: QRCodeMiniManager.IsSupported
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.IsSupported
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.IsSupported*
+        name: IsSupported
+        nameWithType: QRCodeMiniManager.IsSupported
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.IsSupported
+    isDefinition: true
+    commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.IsSupported
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins:
+    name:
+      CSharp:
+      - name: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+        nameWithType: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+      VB:
+      - name: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+        nameWithType: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+    isDefinition: true
+    commentId: N:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.QRCodeFunction:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.QRCodeFunction
+        name: QRCodeMiniManager.QRCodeFunction
+        nameWithType: QRCodeMiniManager.QRCodeFunction
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.QRCodeFunction
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.QRCodeFunction
+        name: QRCodeMiniManager.QRCodeFunction
+        nameWithType: QRCodeMiniManager.QRCodeFunction
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.QRCodeFunction
+    isDefinition: true
+    parent: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
+    commentId: T:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.QRCodeFunction
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRAdded*:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRAdded*
+        name: OnQRAdded
+        nameWithType: QRCodeMiniManager.OnQRAdded
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRAdded
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRAdded*
+        name: OnQRAdded
+        nameWithType: QRCodeMiniManager.OnQRAdded
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRAdded
+    isDefinition: true
+    commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRAdded
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRUpdated*:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRUpdated*
+        name: OnQRUpdated
+        nameWithType: QRCodeMiniManager.OnQRUpdated
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRUpdated
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRUpdated*
+        name: OnQRUpdated
+        nameWithType: QRCodeMiniManager.OnQRUpdated
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRUpdated
+    isDefinition: true
+    commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRUpdated
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRRemoved*:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRRemoved*
+        name: OnQRRemoved
+        nameWithType: QRCodeMiniManager.OnQRRemoved
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRRemoved
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRRemoved*
+        name: OnQRRemoved
+        nameWithType: QRCodeMiniManager.OnQRRemoved
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRRemoved
+    isDefinition: true
+    commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQRRemoved
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQREnumerated*:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQREnumerated*
+        name: OnQREnumerated
+        nameWithType: QRCodeMiniManager.OnQREnumerated
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQREnumerated
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQREnumerated*
+        name: OnQREnumerated
+        nameWithType: QRCodeMiniManager.OnQREnumerated
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQREnumerated
+    isDefinition: true
+    commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager.OnQREnumerated
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager
+        name: QRCodeMiniManager
+        nameWithType: QRCodeMiniManager
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager
+        name: QRCodeMiniManager
+        nameWithType: QRCodeMiniManager
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager
+    isDefinition: true
+    commentId: T:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRCodeMiniManager
+  QRCode:
+    name:
+      CSharp:
+      - id: QRCode
+        name: QRCode
+        nameWithType: QRCode
+        qualifiedName: QRCode
+        isExternal: true
+      VB:
+      - id: QRCode
+        name: QRCode
+        nameWithType: QRCode
+        qualifiedName: QRCode
+        isExternal: true
+    isDefinition: true
+    commentId: '!:QRCode'
+  Orienter:
+    name:
+      CSharp:
+      - id: Orienter
+        name: Orienter
+        nameWithType: Orienter
+        qualifiedName: Orienter
+        isExternal: true
+      VB:
+      - id: Orienter
+        name: Orienter
+        nameWithType: Orienter
+        qualifiedName: Orienter
+        isExternal: true
+    isDefinition: true
+    commentId: '!:Orienter'
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.SharedOrienter*:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.SharedOrienter*
+        name: SharedOrienter
+        nameWithType: QRSpacePinGroup.SharedOrienter
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.SharedOrienter
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.SharedOrienter*
+        name: SharedOrienter
+        nameWithType: QRSpacePinGroup.SharedOrienter
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.SharedOrienter
+    isDefinition: true
+    commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.SharedOrienter
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.MarkerHighlightPrefab*:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.MarkerHighlightPrefab*
+        name: MarkerHighlightPrefab
+        nameWithType: QRSpacePinGroup.MarkerHighlightPrefab
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.MarkerHighlightPrefab
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.MarkerHighlightPrefab*
+        name: MarkerHighlightPrefab
+        nameWithType: QRSpacePinGroup.MarkerHighlightPrefab
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.MarkerHighlightPrefab
+    isDefinition: true
+    commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.MarkerHighlightPrefab
+  List{Transform}:
+    name:
+      CSharp:
+      - id: List`1
+        name: List
+        nameWithType: List
+        qualifiedName: List
+        isExternal: true
+      - name: <
+        nameWithType: <
+        qualifiedName: <
+      - id: Transform
+        name: Transform
+        nameWithType: Transform
+        qualifiedName: Transform
+        isExternal: true
+      - name: '>'
+        nameWithType: '>'
+        qualifiedName: '>'
+      VB:
+      - id: List`1
+        name: List
+        nameWithType: List
+        qualifiedName: List
+        isExternal: true
+      - name: '(Of '
+        nameWithType: '(Of '
+        qualifiedName: '(Of '
+      - id: Transform
+        name: Transform
+        nameWithType: Transform
+        qualifiedName: Transform
+        isExternal: true
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: false
+    definition: List`1
+    commentId: '!:List{Transform}'
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.VirtualMarkers*:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.VirtualMarkers*
+        name: VirtualMarkers
+        nameWithType: QRSpacePinGroup.VirtualMarkers
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.VirtualMarkers
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.VirtualMarkers*
+        name: VirtualMarkers
+        nameWithType: QRSpacePinGroup.VirtualMarkers
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.VirtualMarkers
+    isDefinition: true
+    commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.VirtualMarkers
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.Reset*:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.Reset*
+        name: Reset
+        nameWithType: QRSpacePinGroup.Reset
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.Reset
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.Reset*
+        name: Reset
+        nameWithType: QRSpacePinGroup.Reset
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.Reset
+    isDefinition: true
+    commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup.Reset
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup
+        name: QRSpacePinGroup
+        nameWithType: QRSpacePinGroup
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup
+        name: QRSpacePinGroup
+        nameWithType: QRSpacePinGroup
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup
+    isDefinition: true
+    commentId: T:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpacePinGroup
+  System.Object:
+    name:
+      CSharp:
+      - id: System.Object
+        name: Object
+        nameWithType: Object
+        qualifiedName: System.Object
+        isExternal: true
+      VB:
+      - id: System.Object
+        name: Object
+        nameWithType: Object
+        qualifiedName: System.Object
+        isExternal: true
+    isDefinition: true
+    parent: System
+    commentId: T:System.Object
+  System.Object.ToString:
+    name:
+      CSharp:
+      - id: System.Object.ToString
+        name: ToString
+        nameWithType: Object.ToString
+        qualifiedName: System.Object.ToString
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+      VB:
+      - id: System.Object.ToString
+        name: ToString
+        nameWithType: Object.ToString
+        qualifiedName: System.Object.ToString
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: true
+    parent: System.Object
+    commentId: M:System.Object.ToString
+  System.Object.Equals(System.Object):
+    name:
+      CSharp:
+      - id: System.Object.Equals(System.Object)
+        name: Equals
+        nameWithType: Object.Equals
+        qualifiedName: System.Object.Equals
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: System.Object
+        name: Object
+        nameWithType: Object
+        qualifiedName: System.Object
+        isExternal: true
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+      VB:
+      - id: System.Object.Equals(System.Object)
+        name: Equals
+        nameWithType: Object.Equals
+        qualifiedName: System.Object.Equals
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: System.Object
+        name: Object
+        nameWithType: Object
+        qualifiedName: System.Object
+        isExternal: true
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: true
+    parent: System.Object
+    commentId: M:System.Object.Equals(System.Object)
+  System.Object.Equals(System.Object,System.Object):
+    name:
+      CSharp:
+      - id: System.Object.Equals(System.Object,System.Object)
+        name: Equals
+        nameWithType: Object.Equals
+        qualifiedName: System.Object.Equals
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: System.Object
+        name: Object
+        nameWithType: Object
+        qualifiedName: System.Object
+        isExternal: true
+      - name: ', '
+        nameWithType: ', '
+        qualifiedName: ', '
+      - id: System.Object
+        name: Object
+        nameWithType: Object
+        qualifiedName: System.Object
+        isExternal: true
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+      VB:
+      - id: System.Object.Equals(System.Object,System.Object)
+        name: Equals
+        nameWithType: Object.Equals
+        qualifiedName: System.Object.Equals
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: System.Object
+        name: Object
+        nameWithType: Object
+        qualifiedName: System.Object
+        isExternal: true
+      - name: ', '
+        nameWithType: ', '
+        qualifiedName: ', '
+      - id: System.Object
+        name: Object
+        nameWithType: Object
+        qualifiedName: System.Object
+        isExternal: true
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: true
+    parent: System.Object
+    commentId: M:System.Object.Equals(System.Object,System.Object)
+  System.Object.ReferenceEquals(System.Object,System.Object):
+    name:
+      CSharp:
+      - id: System.Object.ReferenceEquals(System.Object,System.Object)
+        name: ReferenceEquals
+        nameWithType: Object.ReferenceEquals
+        qualifiedName: System.Object.ReferenceEquals
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: System.Object
+        name: Object
+        nameWithType: Object
+        qualifiedName: System.Object
+        isExternal: true
+      - name: ', '
+        nameWithType: ', '
+        qualifiedName: ', '
+      - id: System.Object
+        name: Object
+        nameWithType: Object
+        qualifiedName: System.Object
+        isExternal: true
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+      VB:
+      - id: System.Object.ReferenceEquals(System.Object,System.Object)
+        name: ReferenceEquals
+        nameWithType: Object.ReferenceEquals
+        qualifiedName: System.Object.ReferenceEquals
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: System.Object
+        name: Object
+        nameWithType: Object
+        qualifiedName: System.Object
+        isExternal: true
+      - name: ', '
+        nameWithType: ', '
+        qualifiedName: ', '
+      - id: System.Object
+        name: Object
+        nameWithType: Object
+        qualifiedName: System.Object
+        isExternal: true
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: true
+    parent: System.Object
+    commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  System.Object.GetHashCode:
+    name:
+      CSharp:
+      - id: System.Object.GetHashCode
+        name: GetHashCode
+        nameWithType: Object.GetHashCode
+        qualifiedName: System.Object.GetHashCode
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+      VB:
+      - id: System.Object.GetHashCode
+        name: GetHashCode
+        nameWithType: Object.GetHashCode
+        qualifiedName: System.Object.GetHashCode
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: true
+    parent: System.Object
+    commentId: M:System.Object.GetHashCode
+  System.Object.GetType:
+    name:
+      CSharp:
+      - id: System.Object.GetType
+        name: GetType
+        nameWithType: Object.GetType
+        qualifiedName: System.Object.GetType
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+      VB:
+      - id: System.Object.GetType
+        name: GetType
+        nameWithType: Object.GetType
+        qualifiedName: System.Object.GetType
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: true
+    parent: System.Object
+    commentId: M:System.Object.GetType
+  System.Object.MemberwiseClone:
+    name:
+      CSharp:
+      - id: System.Object.MemberwiseClone
+        name: MemberwiseClone
+        nameWithType: Object.MemberwiseClone
+        qualifiedName: System.Object.MemberwiseClone
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+      VB:
+      - id: System.Object.MemberwiseClone
+        name: MemberwiseClone
+        nameWithType: Object.MemberwiseClone
+        qualifiedName: System.Object.MemberwiseClone
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: true
+    parent: System.Object
+    commentId: M:System.Object.MemberwiseClone
+  System.Guid:
+    name:
+      CSharp:
+      - id: System.Guid
+        name: Guid
+        nameWithType: Guid
+        qualifiedName: System.Guid
+        isExternal: true
+      VB:
+      - id: System.Guid
+        name: Guid
+        nameWithType: Guid
+        qualifiedName: System.Guid
+        isExternal: true
+    isDefinition: true
+    parent: System
+    commentId: T:System.Guid
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.SpatialNodeId*:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.SpatialNodeId*
+        name: SpatialNodeId
+        nameWithType: QRSpatialCoord.SpatialNodeId
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.SpatialNodeId
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.SpatialNodeId*
+        name: SpatialNodeId
+        nameWithType: QRSpatialCoord.SpatialNodeId
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.SpatialNodeId
+    isDefinition: true
+    commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.SpatialNodeId
+  Pose:
+    name:
+      CSharp:
+      - id: Pose
+        name: Pose
+        nameWithType: Pose
+        qualifiedName: Pose
+        isExternal: true
+      VB:
+      - id: Pose
+        name: Pose
+        nameWithType: Pose
+        qualifiedName: Pose
+        isExternal: true
+    isDefinition: true
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.CurrentPose*:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.CurrentPose*
+        name: CurrentPose
+        nameWithType: QRSpatialCoord.CurrentPose
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.CurrentPose
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.CurrentPose*
+        name: CurrentPose
+        nameWithType: QRSpatialCoord.CurrentPose
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.CurrentPose
+    isDefinition: true
+    commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.CurrentPose
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.ComputePose*:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.ComputePose*
+        name: ComputePose
+        nameWithType: QRSpatialCoord.ComputePose
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.ComputePose
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.ComputePose*
+        name: ComputePose
+        nameWithType: QRSpatialCoord.ComputePose
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.ComputePose
+    isDefinition: true
+    commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord.ComputePose
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord
+        name: QRSpatialCoord
+        nameWithType: QRSpatialCoord
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord
+        name: QRSpatialCoord
+        nameWithType: QRSpatialCoord
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord
+    isDefinition: true
+    commentId: T:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.QRSpatialCoord
+  Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker:
+    name:
+      CSharp:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker
+        name: ShowMarker
+        nameWithType: ShowMarker
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker
+      VB:
+      - id: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker
+        name: ShowMarker
+        nameWithType: ShowMarker
+        qualifiedName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker
+    isDefinition: true
+    commentId: T:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker
