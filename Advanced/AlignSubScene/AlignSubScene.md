@@ -4,6 +4,8 @@
 
 An independent AlignmentManager is created and maintained to pin a subset of the scene independently from the alignment of the global Unity coordinate space.
 
+![](~/DocGen/Images/Screens/AlignCraft.jpg)
+
 ### Why that is useful
 
 In its most general and powerful usage, World Locking Tools for Unity (WLT) is used to world-lock and pin the entire Unity coordinate system to a known relationship with the physical world.

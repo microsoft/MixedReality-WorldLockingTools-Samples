@@ -4,6 +4,8 @@
 
 The Space Pins feature of World Locking Tools is combined with QR code scanning to provide automatic snapping of a Unity scene to a physical environment. As the QR codes are physical features, this is an intrinsically shared experience. 
 
+![](~/DocGen/Images/Screens/QRScanCabinet.jpg)
+
 ## Dependencies:
 * Built on WLT v0.8.5.
 * Built with MRTK v2.4.

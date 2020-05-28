@@ -20,7 +20,7 @@ For the Advanced samples, obviously familiarity with the basic World Locking Too
 
 The Tutorials are most useful as auxiliary information for the documentation. Start with the documentation, and jump to the Tutorials when the documentation directs you there for illustration.
 
-## Contributing in non-legal terms.
+## Contributing in plain language.
 
 Some simple talk about [contributing to this project](CONTRIBUTING.md).
 
