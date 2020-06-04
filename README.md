@@ -2,7 +2,7 @@
 
 # WLT Samples
 
-The **World Locking Tools - Samples** repository hopes to give you isolated independent examples, or even starting points, for anything you might do with the World Locking Tools for Unity.
+The **World Locking Tools - Samples** (WLT-S) repository hopes to give you isolated independent examples, or even starting points, for anything you might do with the World Locking Tools for Unity.
 
 ## Useful links
 
