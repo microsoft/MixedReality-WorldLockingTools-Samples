@@ -9,6 +9,10 @@ The simple application being world-locked here is the simplest possible Unity AR
 
 For tips on getting started with HoloLens development, see the [final section](#assumed-hololens-deployment-background) of this article.
 
+## Project source assets
+
+https://github.com/microsoft/MixedReality-WorldLockingTools-Samples/tree/master/Tutorial/01_Minimal
+
 ## World Locking Tools specific setup
 
 1. Add an Adjustment node, and attach the Main Camera object to it.
