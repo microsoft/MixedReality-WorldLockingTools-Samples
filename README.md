@@ -6,6 +6,8 @@ The **World Locking Tools - Samples** (WLT-S) repository hopes to give you isola
 
 ## Useful links
 
+[World Locking Tools Samples github repo](https://github.com/microsoft/MixedReality-WorldLockingTools-Samples).
+
 [Getting started with Samples](DocGen/Documentation/Introduction.md).
 
 [World Locking Tools for Unity (WLT) github repo](https://github.com/microsoft/MixedReality-WorldLockingTools-Unity).
