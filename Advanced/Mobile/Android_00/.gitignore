@@ -1,0 +1,57 @@
+# =============== #
+# Unity generated #
+# =============== #
+/App/
+/Assets/AssetStoreTools*
+/Library/
+/Logs/
+/Obj/
+/Temp/
+
+/Assets/WSATestCertificate.pfx
+/Assets/WSATestCertificate.pfx.meta
+
+/ProjectSettings/UnityConnectSettings.asset
+
+# ============================================= #
+# Auto documentation generation temporary files #
+# ============================================= #
+
+/DocGen/Temp/
+
+
+# ===================================== #
+# Visual Studio / MonoDevelop generated #
+# ===================================== #
+*.svd
+*.userprefs
+*.csproj
+*.pidb
+*.suo
+*.sln
+*.user
+*.unityproj
+*.booproj
+
+# ============ #
+# OS generated #
+# ============ #
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+/.vs/
+*.lnk
+/Assets/Packages/
+/Assets/Packages.meta
+Assets/XR.meta
+Assets/XR
+
+# ===================== #
+# Third party tools #
+# ===================== #
+Assets/TextMesh Pro.meta
+Assets/TextMesh Pro/

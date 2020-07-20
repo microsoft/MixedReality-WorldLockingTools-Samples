@@ -1,0 +1,10 @@
+1) Switch platform to Android (in Build Settings).
+
+To create this project from base WLT:
+1) Switch platform to Androi (in Build Settings).
+2) Install XR Plug-in Management (either from Projct Settings or Package Manager)
+3) Install AR Core (either from XR Plug-in Management or Package Manager)
+4) Install AR Foundation (from Package Manager).
+5) Ensure no Legacy VR enabled (examine ProjectSettings >> Player Settings >> XR Settings
+  5.1) Ensure AR Core is UNCHECKED in XR Settings (other AR Core checkbox checked in XR Plug-in Management)
+  5.2) Ensure Virtual Reality Supported UNCHECKED
