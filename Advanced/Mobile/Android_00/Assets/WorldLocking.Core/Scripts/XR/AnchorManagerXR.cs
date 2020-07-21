@@ -5,10 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.XR;
 
 #if WLT_ARSUBSYSTEMS_PRESENT
-using UnityEngine.SpatialTracking;
 using UnityEngine.XR.ARSubsystems;
 
 namespace Microsoft.MixedReality.WorldLocking.Core
@@ -153,8 +151,8 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         public static string DebugEuler(string label, Vector3 euler)
         {
             euler = DebugNormRot(euler);
-            //            return $"{label}{euler}";
-            return DebugVector3(label, euler);
+            return $"{label}{euler}";
+            //return DebugVector3(label, euler);
         }
         public static string DebugQuaternion(string label, Quaternion q)
         {
@@ -185,7 +183,12 @@ namespace Microsoft.MixedReality.WorldLocking.Core
 
                 /// mafinc - Would rather base this on the current TrackingState of the XRAnchor, 
                 /// but that is not currently reliable.
-                tracker.IsReliablyLocated = true;
+                //tracker.IsReliablyLocated = true;
+                if (tracker.IsReliablyLocated != (xrAnchor.trackingState != TrackingState.None))
+                {
+                    Debug.Log($"TOGGLE::{label}{tracker.name} - {xrAnchor.trackingState}");
+                }
+                tracker.IsReliablyLocated = xrAnchor.trackingState != TrackingState.None;
 
                 Pose repose = ExtractPose(xrAnchor);
                 tracker.transform.position = repose.position;
