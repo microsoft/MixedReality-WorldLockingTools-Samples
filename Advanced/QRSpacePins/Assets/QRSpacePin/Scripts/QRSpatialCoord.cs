@@ -3,6 +3,8 @@
 
 using UnityEngine;
 
+using Microsoft.MixedReality.WorldLocking.Tools;
+
 /// A note about the appearance of "global::Windows.Etc" here. This is to disambiguate between
 /// Windows.Perception.Spatial, which we want, and Microsoft.Windows.Perception.Spatial, which we don't want.
 /// Because this sample is in a Microsoft namespace (Microsoft.MixedReality.WorldLocking.Samples), 
