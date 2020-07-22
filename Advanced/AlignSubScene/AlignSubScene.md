@@ -14,6 +14,10 @@ There are situations in which it is preferable to pin a subset of the scene, rep
 
 The accompanying video tries to make the distinction between pinning the model's coordinate space at strategic points versus manipulating the model into a new position and orientation.
 
+## Project source assets
+
+https://github.com/microsoft/MixedReality-WorldLockingTools-Samples/tree/master/Advanced/AlignSubScene
+
 ## Dependencies:
 * Built on WLT version 0.8.5.
 * Built with MRTK version v2.4.
