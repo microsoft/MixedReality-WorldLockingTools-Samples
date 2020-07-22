@@ -590,7 +590,10 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLWasmStreaming: 0
   scriptingDefineSymbols:
-    14: DOTNETWINRT_PRESENT
+    1: 
+    4: 
+    7: 
+    14: 
   platformArchitecture:
     iPhone: 1
   scriptingBackend:
