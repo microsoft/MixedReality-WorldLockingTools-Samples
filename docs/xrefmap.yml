@@ -7,12 +7,6 @@ references:
   commentId: N:Microsoft.MixedReality.WorldLocking.Samples
   fullName: Microsoft.MixedReality.WorldLocking.Samples
   nameWithType: Microsoft.MixedReality.WorldLocking.Samples
-- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced
-  name: Microsoft.MixedReality.WorldLocking.Samples.Advanced
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.html
-  commentId: N:Microsoft.MixedReality.WorldLocking.Samples.Advanced
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced
-  nameWithType: Microsoft.MixedReality.WorldLocking.Samples.Advanced
 - uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
   name: Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene
   href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.AlignSubScene.html
@@ -348,69 +342,6 @@ references:
   commentId: F:Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.rampUp
   fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins.ShowMarker.rampUp
   nameWithType: ShowMarker.rampUp
-- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole
-  name: SimpleConsole
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.html
-  commentId: T:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole
-  nameWithType: SimpleConsole
-- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.Active
-  name: Active
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_SimpleConsole_Active
-  commentId: P:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.Active
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.Active
-  nameWithType: SimpleConsole.Active
-- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.Active*
-  name: Active
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_SimpleConsole_Active_
-  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.Active
-  isSpec: "True"
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.Active
-  nameWithType: SimpleConsole.Active
-- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.AddLine(System.Int32,System.String)
-  name: AddLine(Int32, String)
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_SimpleConsole_AddLine_System_Int32_System_String_
-  commentId: M:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.AddLine(System.Int32,System.String)
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.AddLine(System.Int32, System.String)
-  nameWithType: SimpleConsole.AddLine(Int32, String)
-- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.AddLine*
-  name: AddLine
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_SimpleConsole_AddLine_
-  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.AddLine
-  isSpec: "True"
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.AddLine
-  nameWithType: SimpleConsole.AddLine
-- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.console
-  name: console
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_SimpleConsole_console
-  commentId: F:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.console
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.console
-  nameWithType: SimpleConsole.console
-- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.LineCount
-  name: LineCount
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_SimpleConsole_LineCount
-  commentId: P:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.LineCount
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.LineCount
-  nameWithType: SimpleConsole.LineCount
-- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.LineCount*
-  name: LineCount
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_SimpleConsole_LineCount_
-  commentId: Overload:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.LineCount
-  isSpec: "True"
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.LineCount
-  nameWithType: SimpleConsole.LineCount
-- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.logVerbosity
-  name: logVerbosity
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_SimpleConsole_logVerbosity
-  commentId: F:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.logVerbosity
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.logVerbosity
-  nameWithType: SimpleConsole.logVerbosity
-- uid: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.screenVerbosity
-  name: screenVerbosity
-  href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.html#Microsoft_MixedReality_WorldLocking_Samples_Advanced_SimpleConsole_screenVerbosity
-  commentId: F:Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.screenVerbosity
-  fullName: Microsoft.MixedReality.WorldLocking.Samples.Advanced.SimpleConsole.screenVerbosity
-  nameWithType: SimpleConsole.screenVerbosity
 - uid: Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong
   name: SimpleTagalong
   href: DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Samples.SimpleTagalong.html
