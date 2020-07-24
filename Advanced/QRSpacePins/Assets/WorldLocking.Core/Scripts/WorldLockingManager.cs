@@ -29,7 +29,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// allowing quick visual verification of the version of World Locking Tools for Unity currently installed.
         /// It has no effect in code, but serves only as a label.
         /// </summary>
-        public static string Version => "0.8.5";
+        public static string Version => "0.8.6";
 
         /// <summary>
         /// The configuration settings may only be set as a block.
@@ -376,10 +376,26 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         }
 
         /// <summary>
+        /// Push the current anchor maintenance settings to the AnchorManager.
+        /// </summary>
+        private void ApplyAnchorSettings()
+        {
+            if (!shared.anchorSettings.IsValid)
+            {
+                Debug.LogWarning("Invalid anchor management settings detected, resetting to default values.");
+                shared.anchorSettings.UseDefaults = true;
+            }
+            AnchorManager.MinNewAnchorDistance = shared.anchorSettings.MinNewAnchorDistance;
+            AnchorManager.MaxAnchorEdgeLength = shared.anchorSettings.MaxAnchorEdgeLength;
+        }
+
+        /// <summary>
         /// Make sure any new settings have a chance to be applied. 
         /// </summary>
         private void ApplyNewSettings()
         {
+            ApplyAnchorSettings();
+
             if (!shared.linkageSettings.UseExisting)
             {
                 CameraParent = shared.linkageSettings.CameraParent;

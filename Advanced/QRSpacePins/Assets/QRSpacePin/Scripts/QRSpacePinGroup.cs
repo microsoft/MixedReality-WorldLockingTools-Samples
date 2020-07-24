@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Microsoft.MixedReality.WorldLocking.Core;
+using Microsoft.MixedReality.WorldLocking.Tools;
 using Microsoft.MixedReality.QR;
 
 namespace Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins

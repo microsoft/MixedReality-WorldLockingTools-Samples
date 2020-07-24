@@ -5,7 +5,10 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/dEmo/Scenes/SpacePinPlacards.unity
     guid: e2ed0a72d4c4de445b318962ee52042e
+  - enabled: 1
+    path: Assets/dEmo/Scenes/TwoIndependentSpaces.unity
+    guid: 9a5196b44193b5745b078c705b9ca2b5
   m_configObjects: {}

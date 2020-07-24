@@ -1,23 +1,26 @@
 # =============== #
 # Unity generated #
 # =============== #
-/App/
-/Assets/AssetStoreTools*
-/Library/
-/Logs/
-/Obj/
-/Temp/
+App/
+Assets/AssetStoreTools*
+Library/
+Logs/
+Obj/
+Temp/
+Il2CppOutputProject/
+bin/
+obj/
 
-/Assets/WSATestCertificate.pfx
-/Assets/WSATestCertificate.pfx.meta
+WSATestCertificate.pfx
+WSATestCertificate.pfx.meta
 
-/ProjectSettings/UnityConnectSettings.asset
+ProjectSettings/UnityConnectSettings.asset
 
 # ============================================= #
 # Auto documentation generation temporary files #
 # ============================================= #
 
-/DocGen/Temp/
+**/DocGen/Temp/
 
 
 # ===================================== #
@@ -43,10 +46,10 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
-/.vs/
+.vs/
 *.lnk
-/Assets/Packages/
-/Assets/Packages.meta
+**/Packages/
+**/Packages.meta
 
 # ===================== #
 # Third party tools #

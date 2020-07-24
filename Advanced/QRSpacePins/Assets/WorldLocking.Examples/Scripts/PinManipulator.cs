@@ -78,7 +78,7 @@ namespace Microsoft.MixedReality.WorldLocking.Examples
         /// <summary>
         /// Event handler for manipulations.
         /// </summary>
-        private ManipulationHandler manipulationHandler;
+        private ObjectManipulator manipulationHandler;
 
         /// <summary>
         /// Make the target grabbable.
@@ -251,10 +251,10 @@ namespace Microsoft.MixedReality.WorldLocking.Examples
                 boundingBox.ScaleStopped.AddListener(FinishManipulation);
                 float maxScaleFactor = 8.0f;
                 float minScaleFactor = 0.2f;
-                TransformScaleHandler scaleHandler = owner.GetComponent<TransformScaleHandler>();
+                MinMaxScaleConstraint scaleHandler = owner.GetComponent<MinMaxScaleConstraint>();
                 if (scaleHandler == null)
                 {
-                    scaleHandler = owner.gameObject.AddComponent<TransformScaleHandler>();
+                    scaleHandler = owner.gameObject.AddComponent<MinMaxScaleConstraint>();
                 }
                 scaleHandler.RelativeToInitialState = true;
                 scaleHandler.ScaleMaximum = maxScaleFactor;
@@ -262,10 +262,16 @@ namespace Microsoft.MixedReality.WorldLocking.Examples
 
             }
 
-            manipulationHandler = owner.gameObject.AddComponent<ManipulationHandler>();
-            manipulationHandler.OneHandRotationModeFar = ManipulationHandler.RotateInOneHandType.MaintainOriginalRotation;
-            manipulationHandler.OneHandRotationModeNear = ManipulationHandler.RotateInOneHandType.MaintainOriginalRotation;
-            manipulationHandler.ConstraintOnRotation = Toolkit.Utilities.RotationConstraintType.None;
+            manipulationHandler = owner.gameObject.AddComponent<ObjectManipulator>();
+
+            var rotationAxisConstraint = owner.gameObject.AddComponent<RotationAxisConstraint>();
+            rotationAxisConstraint.HandType = Toolkit.Utilities.ManipulationHandFlags.OneHanded | Toolkit.Utilities.ManipulationHandFlags.TwoHanded;
+            rotationAxisConstraint.ProximityType = Toolkit.Utilities.ManipulationProximityFlags.Near | Toolkit.Utilities.ManipulationProximityFlags.Far;
+            rotationAxisConstraint.ConstraintOnRotation = 0;
+
+            var fixedRotationToWorldConstraint = owner.gameObject.AddComponent<FixedRotationToWorldConstraint>();
+            fixedRotationToWorldConstraint.HandType = Toolkit.Utilities.ManipulationHandFlags.OneHanded;
+            fixedRotationToWorldConstraint.ProximityType = Toolkit.Utilities.ManipulationProximityFlags.Near | Toolkit.Utilities.ManipulationProximityFlags.Far;
 
             manipulationHandler.OnManipulationStarted.AddListener(BeginManipulation);
             manipulationHandler.OnManipulationEnded.AddListener(FinishManipulation);
