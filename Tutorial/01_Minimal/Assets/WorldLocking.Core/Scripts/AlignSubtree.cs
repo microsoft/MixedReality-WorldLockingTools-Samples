@@ -50,6 +50,9 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// <summary>
         /// File name for saving to and loading from. Defaults to gameObject's name. Use forward slash '/' for subfolders.
         /// </summary>
+        /// <remarks>
+        /// Any non-existent file and/or containing folders will be created if possible.
+        /// </remarks>
         public string SaveFileName
         {
             get
@@ -59,15 +62,12 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                 {
                     name = gameObject.name;
                 }
-                if (Path.GetExtension(name) != "fwb")
-                {
-                    name = Path.ChangeExtension(name, "fwb");
-                }
-                return name;
+                saveFileName = FixExtension(name, "fwb");
+                return saveFileName;
             }
             set
             {
-                saveFileName = value;
+                saveFileName = FixExtension(value, "fwb");
                 if (alignmentManager != null)
                 {
                     alignmentManager.SaveFileName = saveFileName;
@@ -75,18 +75,22 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             }
         }
 
-        [SerializeField]
-        [Tooltip("Whether to perform saves automatically and load at startup.")]
-        private bool autoSave = false;
+        private static string FixExtension(string name, string ext)
+        {
+            if (Path.GetExtension(name) != ext)
+            {
+                name = Path.ChangeExtension(name, ext);
+            }
+            return name;
+        }
 
         /// <summary>
-        /// Whether to perform saves automatically and load at startup.
+        /// The transform to align. If unset, will align this.transform. 
         /// </summary>
-        public bool AutoSave { get { return autoSave; } set { autoSave = value; } }
-
-        /// <summary>
-        /// The transform to align. If unset, will align this.transform.
-        /// </summary>
+        /// <remarks>
+        /// This transform must be identity at startup, and must not be modified
+        /// by anything but this AlignSubtree component.
+        /// </remarks>
         public Transform subTree = null;
 
         #endregion Inspector fields
@@ -98,7 +102,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// </summary>
         private AlignmentManager alignmentManager = null;
 
-        private bool needLoad = true;
+        private bool needLoad = false;
 
         #endregion Internal members
 
@@ -189,10 +193,6 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             {
                 pin.AlignmentManager = alignmentManager;
             }
-            if (AutoSave)
-            {
-                needLoad = true;
-            }
         }
         #endregion Public APIs
 
@@ -225,10 +225,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         private void Start()
         {
             CheckInternalWiring();
-            if (AutoSave && !WorldLockingManager.GetInstance().AutoSave)
-            {
-                Debug.LogError("AutoSaving alignment requires WorldLockingManager.AutoSave to work as expected.");
-            }
+            needLoad = WorldLockingManager.GetInstance().AutoLoad;
         }
 
         /// <summary>
@@ -268,17 +265,6 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         private void OnEnable()
         {
             ClaimPinOwnership();
-        }
-
-        /// <summary>
-        /// Force a save on the way out.
-        /// </summary>
-        private void OnDisable()
-        {
-            if (AutoSave)
-            {
-                Save();
-            }
         }
 
         #endregion Internal AlignmentManager management
