@@ -30,7 +30,7 @@
       "output": {
         ".html": {
           "relative_path": "Advanced/AlignSubScene/AlignSubScene.html",
-          "hash": "UNAijJVgKirWs3X6dWmuog=="
+          "hash": "vlgUGQQ5QIIKr7vGYPLbXg=="
         }
       },
       "is_incremental": false,
@@ -38,11 +38,11 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "Advanced/AlignSubScene/Assets/Packages/Microsoft.MixedReality.Unity.FrozenWorld.Engine.0.5.3/LICENSE.md",
+      "source_relative_path": "Advanced/AlignSubScene/Assets/Packages/Microsoft.MixedReality.Unity.FrozenWorld.Engine.1.0.0/LICENSE.md",
       "output": {
         ".html": {
-          "relative_path": "Advanced/AlignSubScene/Assets/Packages/Microsoft.MixedReality.Unity.FrozenWorld.Engine.0.5.3/LICENSE.html",
-          "hash": "y+plq26stZfFjbcuFIm8MQ=="
+          "relative_path": "Advanced/AlignSubScene/Assets/Packages/Microsoft.MixedReality.Unity.FrozenWorld.Engine.1.0.0/LICENSE.html",
+          "hash": "imGQcjrI+RfRGcgY5ezzvA=="
         }
       },
       "is_incremental": false,
@@ -50,11 +50,23 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "Advanced/QRSpacePins/Assets/Packages/Microsoft.MixedReality.Unity.FrozenWorld.Engine.0.5.3/LICENSE.md",
+      "source_relative_path": "Advanced/Mobile/General/Assets/Packages/Microsoft.MixedReality.Unity.FrozenWorld.Engine.1.0.0-494665/LICENSE.md",
       "output": {
         ".html": {
-          "relative_path": "Advanced/QRSpacePins/Assets/Packages/Microsoft.MixedReality.Unity.FrozenWorld.Engine.0.5.3/LICENSE.html",
-          "hash": "PVTzIKXjuOwlaEQVmyAAFw=="
+          "relative_path": "Advanced/Mobile/General/Assets/Packages/Microsoft.MixedReality.Unity.FrozenWorld.Engine.1.0.0-494665/LICENSE.html",
+          "hash": "VnT87IDde/wvnPFSagaBlQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "Advanced/QRSpacePins/Assets/Packages/Microsoft.MixedReality.Unity.FrozenWorld.Engine.1.0.0/LICENSE.md",
+      "output": {
+        ".html": {
+          "relative_path": "Advanced/QRSpacePins/Assets/Packages/Microsoft.MixedReality.Unity.FrozenWorld.Engine.1.0.0/LICENSE.html",
+          "hash": "sm8FyKJCspWE8TW9aYZuQA=="
         }
       },
       "is_incremental": false,
@@ -66,7 +78,7 @@
       "output": {
         ".html": {
           "relative_path": "Advanced/QRSpacePins/QRSpacePins.html",
-          "hash": "p2VXeIl8oIjFBi4IOYt6AQ=="
+          "hash": "bj4RN5TiG8ss7xhob5jmtg=="
         }
       },
       "is_incremental": false,
@@ -734,11 +746,11 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "Tutorial/01_Minimal/Assets/Packages/Microsoft.MixedReality.Unity.FrozenWorld.Engine.0.5.3/LICENSE.md",
+      "source_relative_path": "Tutorial/01_Minimal/Assets/Packages/Microsoft.MixedReality.Unity.FrozenWorld.Engine.1.0.0/LICENSE.md",
       "output": {
         ".html": {
-          "relative_path": "Tutorial/01_Minimal/Assets/Packages/Microsoft.MixedReality.Unity.FrozenWorld.Engine.0.5.3/LICENSE.html",
-          "hash": "P42zIsiGfvmDNymN08PwFg=="
+          "relative_path": "Tutorial/01_Minimal/Assets/Packages/Microsoft.MixedReality.Unity.FrozenWorld.Engine.1.0.0/LICENSE.html",
+          "hash": "6kpwW22JYy8KEonnpy9Fag=="
         }
       },
       "is_incremental": false,
@@ -783,25 +795,23 @@
   "incremental_info": [
     {
       "status": {
-        "can_incremental": false,
-        "details": "Cannot build incrementally because last build info is missing.",
+        "can_incremental": true,
         "incrementalPhase": "build",
         "total_file_count": 0,
-        "skipped_file_count": 0,
-        "full_build_reason_code": "NoAvailableBuildCache"
+        "skipped_file_count": 0
       },
       "processors": {
         "ConceptualDocumentProcessor": {
-          "can_incremental": false,
+          "can_incremental": true,
           "incrementalPhase": "build",
-          "total_file_count": 16,
-          "skipped_file_count": 0
+          "total_file_count": 17,
+          "skipped_file_count": 11
         },
         "ManagedReferenceDocumentProcessor": {
-          "can_incremental": false,
+          "can_incremental": true,
           "incrementalPhase": "build",
           "total_file_count": 11,
-          "skipped_file_count": 0
+          "skipped_file_count": 11
         },
         "ResourceDocumentProcessor": {
           "can_incremental": false,
