@@ -5,7 +5,7 @@
 This sample codes directly to Google's ARCore SDK for Unity.
 
 ## Dependencies:
-* Built on WLT version 1.1.1.
+* Built on WLT version 1.2.0.
 * Incompatible with MRTK
 * Built on Unity v2019.4.15f.
 * Built on ARCore Unity SDK v1.22.0.
@@ -36,6 +36,7 @@ Import the .unitypackage into the Unity project. The examples may be imported or
 
 > [!NOTE]: ARCore as packaged is not in an assembly specialization, that is it compiles into the predefined Assembly-CSharp.dll. Unfortunately, [from the Unity documentation](https://docs.unity3d.com/Manual/ScriptCompilationAssemblyDefinitionFiles.html):
 >> Classes in assemblies created with an Assembly Definition cannot use types defined in the predefined assemblies.
+>
 > Therefore, in order for WLT to access and manage ARCore, ARCore must be moved into an Assembly Definition.
 > This next step achieves that, by simply unpacking appropriate assembly definition (.asmdef) files onto the ARCore assets imported in the previous step.
 > IMPORTANT: If the folder structure of the GoogleARCore assets is to be changed or renamed, first perform the following step.
@@ -48,12 +49,15 @@ Ensure your build target is Android.
 
 In your project's Player Settings, in the XR section at the end, ensure that "ARCore Supported" is enabled.
 
-## Running the sample:
-Brief walk through of:
-Startup – where are you?
-Next steps – how do you get to the good stuff?
-Conclusion – what should you have experienced?
+## Running the samples:
 
-## Special controls:
-Any speech commands, UX, etc. What does one need to know to fully experience the sample?
+Several sample scenes may be found in Assets/ARCoreSample/Scenes
+
+### ARCoreWLT.unity
+
+This sample is the most elemental, the simplest possible application running WLT on top of ARCore. It does nothing but load a couple of cubes, which will remain fixed in physical space (contingent on tracking). 
+
+#### Special controls:
+
+The sample includes the anchor graph visualization enabled. To disable WLT's anchor graph visualization, and get the truly simplest WLT on ARCore application possible, delete or disable the AnchorGraphVisual attached to the scene's WorldLocking object.
 
