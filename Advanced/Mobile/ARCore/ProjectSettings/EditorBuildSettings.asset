@@ -5,25 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/WorldLocking.Examples/Scenes/WorldLockingBasic.unity
-    guid: 483fb9a6d06c4e6468a69739ef78c5b7
-  - enabled: 0
-    path: Assets/WorldLocking.Examples/Scenes/WorldLockedPhysicsSample.unity
-    guid: 77340a89908d678449b51949f87784a9
-  - enabled: 0
-    path: Assets/WorldLocking.Examples/Scenes/SpacePin.unity
-    guid: 516c32e1748c92a4280675c0a2c3f24f
-  - enabled: 0
-    path: Assets/WorldLocking.Examples/Scenes/RayPins.unity
-    guid: b3a4438e30b0b504793dc9c24fe033f3
-  - enabled: 0
-    path: Assets/WorldLocking.Examples/Scenes/SpacePinPartial.unity
-    guid: 35915962443f8ce4a89e03bb68b09f9a
-  - enabled: 0
-    path: Assets/WorldLocking.Examples/Scenes/ARCore.unity
-    guid: 43f0cfa552fd7404aacbdfb75993d81d
   - enabled: 1
-    path: Assets/WorldLocking.Examples/Scenes/ARCoreWLT.unity
+    path: Assets/ARCoreSample/Scenes/ARCoreWLT.unity
     guid: 72d5f9af0aee5fc439a6c0207d58b2e3
   m_configObjects: {}
