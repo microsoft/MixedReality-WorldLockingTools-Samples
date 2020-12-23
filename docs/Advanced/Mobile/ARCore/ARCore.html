@@ -1,0 +1,181 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Direct to ARCore | World Locking Tools Samples Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Direct to ARCore | World Locking Tools Samples Documentation ">
+    <meta name="generator" content="docfx 2.53.1.0">
+    
+    <link rel="shortcut icon" href="../../../DocGen/Images/Logos/favicon.ico">
+    <link rel="stylesheet" href="../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../toc.html">
+    <meta property="docfx:tocrel" content="../../../DocGen/Documentation/toc.html">
+    
+    <meta property="docfx:rel" content="../../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../index.html">
+                <img id="logo" class="svg" src="../../../DocGen/Images/Logos/WLS64.png" alt="">
+              </a>
+            </div>
+          
+          <div class="version-dropdown" id="versionDropdown">
+           </div>
+         
+          <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="direct-to-arcore">Direct to ARCore</h1>
+
+<h2 id="summary">Summary:</h2>
+<p>This sample codes directly to Google's ARCore SDK for Unity.</p>
+<h2 id="dependencies">Dependencies:</h2>
+<ul>
+<li>Built on WLT version 1.2.0.</li>
+<li>Incompatible with MRTK</li>
+<li>Built on Unity v2019.4.15f.</li>
+<li>Built on ARCore Unity SDK v1.22.0.</li>
+<li>Uses Frozen World Engine DLL v1.0.0 or later.</li>
+</ul>
+<h2 id="additional-setup">Additional setup:</h2>
+<p>Building the sample requires installing Google's ARCore Unity SDK v1.22.0 or later, including dependencies.</p>
+<p>These notes are intended to be helpful in setting up ARCore Unity SDK, but are no substitute for the official full documentation, which can be found at the following:</p>
+<blockquote>
+<p><a href="https://developers.google.com/ar/develop/unity/quickstart-android">https://developers.google.com/ar/develop/unity/quickstart-android</a></p>
+</blockquote>
+<p>The instructions here are trying to be brief. If anything is unclear, please refer to the full documentation for details.</p>
+<h3 id="installing-dependencies">Installing dependencies</h3>
+<p>From Unity Package Manager, install:</p>
+<ul>
+<li>Multiplayer HLAPI</li>
+<li>XR Legacy Input Helpers</li>
+</ul>
+<h3 id="installing-arcore-unity-sdk">Installing ARCore Unity SDK</h3>
+<p>Download the ARCore Unity SDK unity package from <a href="https://github.com/google-ar/arcore-unity-sdk/releases">github</a>.</p>
+<p>Import the .unitypackage into the Unity project. The examples may be imported or not, on your preference.</p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>ARCore as packaged is not in an assembly specialization. That is, it compiles into the predefined Assembly-CSharp.dll. Unfortunately, <a href="https://docs.unity3d.com/Manual/ScriptCompilationAssemblyDefinitionFiles.html">from the Unity documentation</a>:</p>
+<blockquote>
+<p>Classes in assemblies created with an Assembly Definition cannot use types defined in the predefined assemblies.</p>
+</blockquote>
+<p>Therefore, in order for WLT to access and manage ARCore, ARCore must be moved into an Assembly Definition.
+This next step achieves that, by simply unpacking appropriate assembly definition (.asmdef) files onto the ARCore assets imported in the previous step.
+IMPORTANT: If the folder structure of the GoogleARCore assets is to be changed or renamed, first perform the following step.</p>
+</div>
+<p>Import arcore-1.22.0-asmdef-fixup.unitypackage into your project. This unity package can be found in the Misc folder of this sample. It contains only assembly definition (.asmdef) files.</p>
+<ul>
+<li>Once the ARCore unitypackage and the fixup unitypackage have been imported, you may safely rename or move the GoogleARCore folder to match your organization.</li>
+</ul>
+<p>Ensure your build target is Android.</p>
+<p>In your project's Player Settings, in the XR section at the end, ensure that &quot;ARCore Supported&quot; is enabled.</p>
+<h2 id="adding-wlt-arcore-support-to-an-existing-project">Adding WLT ARCore support to an existing project</h2>
+<p>In addition to installing ARCore Unity SDK as described above, and of course installing WLT as described <a href="">here</a>, there are two additional steps in order to get WLT to target the ARCore SDK directly.</p>
+<p>First, the additional define of <code>WLT_ARCORE_SDK_INCLUDED</code> must be added to your project in <code>Player Settings =&gt; Other Settings</code> under the Android tab.</p>
+<img src="../../../DocGen/Images/ARCore/ARCoreDefine.PNG">
+<p>Next, in the <code>World Locking Context</code> in the <code>World Locking Manager</code> prefab within your scene, in the <code>Anchor Management</code> settings, change the <code>Anchor Subsystem</code> to <code>AR Core</code>, as shown below. Note that you will need to uncheck the <code>Use Defaults</code> checkbox in order to change the subsystem type.</p>
+<img src="../../../DocGen/Images/ARCore/ARCoreSubsystem.PNG">
+<h2 id="running-the-samples">Running the samples:</h2>
+<p>Several sample scenes may be found in Assets/ARCoreSample/Scenes</p>
+<h3 id="arcorewltunity">ARCoreWLT.unity</h3>
+<p>This sample is the most elemental, the simplest possible application running WLT on top of ARCore. It does nothing but load a couple of cubes, which will remain fixed in physical space (contingent on tracking).</p>
+<h4 id="special-controls">Special controls:</h4>
+<p>The sample includes the anchor graph visualization enabled. To disable WLT's anchor graph visualization, and get the truly simplest WLT on ARCore application possible, delete or disable the AnchorGraphVisual attached to the scene's WorldLocking object.</p>
+<h3 id="placementunity">Placement.unity</h3>
+<p>This sample includes visualization of the found environment planes.</p>
+<h4 id="special-controls-1">Special controls:</h4>
+<p>Tap the screen to place a coordinate frame representation where a ray cast intersects the environment's planes.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Microsoft/MixedReality-WorldLockingTools-Samples/blob/master/Advanced/Mobile/ARCore/ARCore.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../styles/main.js"></script>
+  </body>
+</html>
