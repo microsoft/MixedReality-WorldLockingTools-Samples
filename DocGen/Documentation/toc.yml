@@ -13,5 +13,7 @@
       href: ~/Advanced/AlignSubScene/AlignSubScene.md
     - name: QR Space Pins
       href: ~/Advanced/QRSpacePins/QRSpacePins.md
+    - name: AR Core Unity SDK
+      href: ~/Advanced/Mobile/ARCore/ARCore.md
 - name: Notice
   href: NOTICE.md
