@@ -93,8 +93,8 @@
 <p><a href="https://github.com/microsoft/MixedReality-WorldLockingTools-Samples/tree/master/Advanced/AlignSubScene">https://github.com/microsoft/MixedReality-WorldLockingTools-Samples/tree/master/Advanced/AlignSubScene</a></p>
 <h2 id="dependencies">Dependencies:</h2>
 <ul>
-<li>Built on WLT version 1.0.0.</li>
-<li>Built with MRTK version v2.4.</li>
+<li>Built on WLT version 1.2.1.</li>
+<li>Built with MRTK version v2.5.1.</li>
 <li>Built with Unity 2019.4.2f1.</li>
 <li>No further dependencies.</li>
 </ul>
@@ -104,6 +104,10 @@
 <h2 id="running-the-sample">Running the sample:</h2>
 <p>On startup, the nose of the space craft will be stuck in your head (at the origin). Take a step back.</p>
 <p>Grab any of the spheres and drag it into position to move the model's coordinate space. After positioning the first sphere, try to keep the other sphere's in a plausible new position as you move them. For that, having a physical proxy setup to give target to your sphere movements is helpful.</p>
+<p>Click on the physical environment to place placards. The WLT system will keep them bound to the physical environment.</p>
+<h3 id="twoindependentspacesunity">TwoIndependentSpaces.unity</h3>
+<p>This scene takes the SpacePin feature a step further, using them to align multiple independent spaces within the scene.</p>
+<p>Note the use of the SpacePinVisualizer prefabs in the scene under the Visualizers object. There is one for each of the local (AlignSubTree) alignment managers, and one to visualize the global SpacePins.</p>
 <h2 id="special-controls">Special controls:</h2>
 <p>At any time, clicking on the scene (but not the model) will place a placard into the scene. The placard will be put in Unity global space, so will be unaffected by manipulations of the model's space. Clicking on a placard will delete it.</p>
 </article>

@@ -32,6 +32,8 @@ namespace Microsoft.MixedReality.WorldLocking.Core
 
             var context = target as WorldLockingContext;
 
+            bool useMgrDefaults = false;
+
             showWorld = EditorGUILayout.Foldout(showWorld, "Automation settings", true);
             if (showWorld)
             {
@@ -39,10 +41,9 @@ namespace Microsoft.MixedReality.WorldLocking.Core
 
                 SerializedProperty mgrUseDefaultsProp = AddProperty(mgrPath, "useDefaults");
 
-                bool mgrUseDefault = mgrUseDefaultsProp.boolValue;
-                context.SharedSettings.settings.UseDefaults = mgrUseDefault;
+                useMgrDefaults = mgrUseDefaultsProp.boolValue;
 
-                using (new EditorGUI.DisabledScope(mgrUseDefault))
+                using (new EditorGUI.DisabledScope(useMgrDefaults))
                 {
                     using (new EditorGUI.IndentLevelScope())
                     {
@@ -85,6 +86,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
 
             EditorGUILayout.Space();
 
+            bool useAnchorDefaults = false;
             showAnchor = EditorGUILayout.Foldout(showAnchor, "Anchor Management", true);
             if (showAnchor)
             {
@@ -92,22 +94,35 @@ namespace Microsoft.MixedReality.WorldLocking.Core
 
                 SerializedProperty anchorUseDefaults = AddProperty(mgrPath, "useDefaults");
 
-                bool useDefaults = anchorUseDefaults.boolValue;
-                context.SharedSettings.anchorSettings.UseDefaults = useDefaults;
+                useAnchorDefaults = anchorUseDefaults.boolValue;
 
-                using (new EditorGUI.DisabledScope(useDefaults))
+                using (new EditorGUI.DisabledScope(useAnchorDefaults))
                 {
                     using (new EditorGUI.IndentLevelScope())
                     {
+                        SerializedProperty anchorSubsystem = AddProperty(mgrPath, "anchorSubsystem");
+                        bool isARF = anchorSubsystem.intValue == (int)(AnchorSettings.AnchorSubsystem.DONT_USE);
+
+                        if (isARF)
+                        {
+                            AddProperty(mgrPath, "ARSessionSource");
+
+                            AddProperty(mgrPath, "ARSessionOriginSource");
+                        }
+
                         AddProperty(mgrPath, "MinNewAnchorDistance");
 
                         AddProperty(mgrPath, "MaxAnchorEdgeLength");
+
+                        AddProperty(mgrPath, "MaxLocalAnchors");
                     }
                 }
 
             }
 
             EditorGUILayout.Space();
+
+            bool useDiagDefaults = false;
 
             showDiagnostics = EditorGUILayout.Foldout(showDiagnostics, "Diagnostics settings", true);
             if (showDiagnostics)
@@ -118,9 +133,9 @@ namespace Microsoft.MixedReality.WorldLocking.Core
 
                 SerializedProperty diagUseDefaultsProp = AddProperty(diagPath, "useDefaults");
 
-                bool diagUseDefaults = diagUseDefaultsProp.boolValue;
+                useDiagDefaults = diagUseDefaultsProp.boolValue;
 
-                using (new EditorGUI.DisabledScope(diagUseDefaults))
+                using (new EditorGUI.DisabledScope(useDiagDefaults))
                 {
                     using (new EditorGUI.IndentLevelScope())
                     {
@@ -138,6 +153,20 @@ namespace Microsoft.MixedReality.WorldLocking.Core
 
             }
             serializedObject.ApplyModifiedProperties();
+            // This next section syncs the internal state to the default states, changing the scene object (if appropriate).
+            // For some reason, this seems to need to happen outside the modify/ApplyModified block.
+            if (useMgrDefaults)
+            {
+                context.SharedSettings.settings.UseDefaults = true;
+            }
+            if (useAnchorDefaults)
+            {
+                context.SharedSettings.anchorSettings.UseDefaults = true;
+            }
+            if (useDiagDefaults)
+            {
+                context.DiagnosticsSettings.settings.UseDefaults = true;
+            }
         }
 
         /// <summary>

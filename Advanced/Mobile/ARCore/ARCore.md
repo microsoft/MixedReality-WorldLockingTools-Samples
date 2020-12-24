@@ -5,7 +5,7 @@
 This sample codes directly to Google's ARCore SDK for Unity.
 
 ## Dependencies:
-* Built on WLT version 1.2.0.
+* Built on WLT version 1.2.1.
 * Incompatible with MRTK
 * Built on Unity v2019.4.15f.
 * Built on ARCore Unity SDK v1.22.0.
