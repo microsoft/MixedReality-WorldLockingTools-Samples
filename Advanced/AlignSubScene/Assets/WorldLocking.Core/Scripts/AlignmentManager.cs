@@ -98,6 +98,13 @@ namespace Microsoft.MixedReality.WorldLocking.Core
 
         #endregion Lifetime management
 
+        #region Public events
+
+        /// <inheritdocs />
+        public event EventHandler<Triangulator.ITriangulator> OnTriangulationBuilt;
+
+        #endregion
+
         #region Public methods
 
         /// <summary>
@@ -1187,6 +1194,8 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                 }
                 triangulator.Add(positions);
             }
+
+            OnTriangulationBuilt?.Invoke(this,triangulator);
         }
 
         private void InitTriangulator()
