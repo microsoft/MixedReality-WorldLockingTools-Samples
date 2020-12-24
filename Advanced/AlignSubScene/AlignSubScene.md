@@ -36,6 +36,14 @@ On startup, the nose of the space craft will be stuck in your head (at the origi
 
 Grab any of the spheres and drag it into position to move the model's coordinate space. After positioning the first sphere, try to keep the other sphere's in a plausible new position as you move them. For that, having a physical proxy setup to give target to your sphere movements is helpful.
 
+Click on the physical environment to place placards. The WLT system will keep them bound to the physical environment.
+
+### TwoIndependentSpaces.unity
+
+This scene takes the SpacePin feature a step further, using them to align multiple independent spaces within the scene.
+
+Note the use of the SpacePinVisualizer prefabs in the scene under the Visualizers object. There is one for each of the local (AlignSubTree) alignment managers, and one to visualize the global SpacePins.
+
 ## Special controls:
 
 At any time, clicking on the scene (but not the model) will place a placard into the scene. The placard will be put in Unity global space, so will be unaffected by manipulations of the model's space. Clicking on a placard will delete it.
