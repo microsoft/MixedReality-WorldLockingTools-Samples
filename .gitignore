@@ -54,8 +54,8 @@ Thumbs.db
 # ===================== #
 # Third party tools #
 # ===================== #
-Assets/TextMesh Pro.meta
-Assets/TextMesh Pro/
-Assets/GoogleARCore*
-Assets/PlayServicesResolver/
-Assets/Plugins/
+**/Assets/TextMesh Pro.meta
+**/Assets/TextMesh Pro/
+**/Assets/GoogleARCore*
+**/Assets/PlayServicesResolver*
+**/Assets/Plugins*
