@@ -24,25 +24,27 @@ https://github.com/microsoft/MixedReality-WorldLockingTools-Samples/tree/master/
 
 ![](~/DocGen/Images/Minimal/AdjustMRTK.png)
  
-2. Install [NuGet for Unity](https://github.com/GlitchEnzo/NuGetForUnity/releases). It's really a phenomenal piece of technology, you should have it anyway.
+2. Install the FrozenWorld Engine DLL.
 
-3. With NuGet for Unity installed, in Unity, go to 
+    a. Install [NuGet for Unity](https://github.com/GlitchEnzo/NuGetForUnity/releases). It's really a phenomenal piece of technology, you should have it anyway. If for any reason you can't use NuGet for Unity, follow the steps for [Manual FrozenWorld Engine DLL Installation](https://microsoft.github.io/MixedReality-WorldLockingTools-Unity/DocGen/Documentation/HowTos/InitialSetup.html#manual-frozen-world-engine-dll-installation), and proceed to step 3.
 
-`NuGet > Manage NuGet Packages`
+    b. With NuGet for Unity installed, in Unity, go to 
+
+    `NuGet > Manage NuGet Packages`
  
-  * Search for FrozenWorld.Engine, and install the latest version of Microsoft.MixedReality.Unity.FrozenWorld.Engine.
+    * Search for FrozenWorld.Engine, and install the latest version of Microsoft.MixedReality.Unity.FrozenWorld.Engine.
  
 ![](~/DocGen/Images/Minimal/NuGetFWE.png)
 
-4. Download and import the latest version of the Microsoft.MixedReality.Unity.WorldLockingTools.CoreEngine unity package from [releases](https://github.com/microsoft/MixedReality-WorldLockingTools-Unity/releases).
+3. Download and import the latest version of the Microsoft.MixedReality.Unity.WorldLockingTools.CoreEngine unity package from [releases](https://github.com/microsoft/MixedReality-WorldLockingTools-Unity/releases).
 
 ![](~/DocGen/Images/Minimal/WLTReleases.png)
 
-5. In your Unity Project, go to 
+4. In your Unity Project, go to 
 
-  `Assets > WorldLocking.Core > Prefabs`
+    `Assets > WorldLocking.Core > Prefabs`
 
-  * Drag the WorldLockingManager prefab into your scene.
+    * Drag the WorldLockingManager prefab into your scene.
 
 ![](~/DocGen/Images/Minimal/WLTPrefab.png)
 
@@ -58,7 +60,7 @@ It can be useful to visualize the world anchor graph which the World Locking Too
 
 * In your Unity Project, go to
 
-`Assets > WorldLocking.Tools > Prefabs`
+    `Assets > WorldLocking.Tools > Prefabs`
 
 * Drag the AnchorGraphVisual prefab into your scene. At this point it can be helpful to create a WorldLocking empty object in your scene and attach your WorldLockingManager and your AnchorGraphVisual objects to it. There is no functional impact, but it helps avoid cluttering up your scene.
 

@@ -101,27 +101,28 @@
 </ul>
 <p><img src="../../DocGen/Images/Minimal/AdjustMRTK.png" alt=""></p>
 <ol start="2">
-<li><p>Install <a href="https://github.com/GlitchEnzo/NuGetForUnity/releases">NuGet for Unity</a>. It's really a phenomenal piece of technology, you should have it anyway.</p>
-</li>
-<li><p>With NuGet for Unity installed, in Unity, go to</p>
-</li>
-</ol>
+<li><p>Install the FrozenWorld Engine DLL.</p>
+<p>a. Install <a href="https://github.com/GlitchEnzo/NuGetForUnity/releases">NuGet for Unity</a>. It's really a phenomenal piece of technology, you should have it anyway. If for any reason you can't use NuGet for Unity, follow the steps for <a href="https://microsoft.github.io/MixedReality-WorldLockingTools-Unity/DocGen/Documentation/HowTos/InitialSetup.html#manual-frozen-world-engine-dll-installation">Manual FrozenWorld Engine DLL Installation</a>, and proceed to step 3.</p>
+<p>b. With NuGet for Unity installed, in Unity, go to</p>
 <p><code>NuGet &gt; Manage NuGet Packages</code></p>
 <ul>
 <li>Search for FrozenWorld.Engine, and install the latest version of Microsoft.MixedReality.Unity.FrozenWorld.Engine.</li>
 </ul>
+</li>
+</ol>
 <p><img src="../../DocGen/Images/Minimal/NuGetFWE.png" alt=""></p>
-<ol start="4">
+<ol start="3">
 <li>Download and import the latest version of the Microsoft.MixedReality.Unity.WorldLockingTools.CoreEngine unity package from <a href="https://github.com/microsoft/MixedReality-WorldLockingTools-Unity/releases">releases</a>.</li>
 </ol>
 <p><img src="../../DocGen/Images/Minimal/WLTReleases.png" alt=""></p>
-<ol start="5">
-<li>In your Unity Project, go to</li>
-</ol>
+<ol start="4">
+<li><p>In your Unity Project, go to</p>
 <p><code>Assets &gt; WorldLocking.Core &gt; Prefabs</code></p>
 <ul>
 <li>Drag the WorldLockingManager prefab into your scene.</li>
 </ul>
+</li>
+</ol>
 <p><img src="../../DocGen/Images/Minimal/WLTPrefab.png" alt=""></p>
 <p>At this point your project should look a lot like <code>01_Minimal</code>. A few visual reference points (colored capsules) have been added to the MinimalScene in <code>01_Minimal</code>, just so you can see that it is working (the capsules remain fixed relative to real world features around them during the session, and even persisting across sessions).</p>
 <h2 id="bonus-round---adding-anchor-graph-visualization">Bonus round - adding anchor graph visualization</h2>
@@ -131,11 +132,10 @@
 <li><p>Download and import the  version of Microsoft.MixedReality.Unity.WorldLockingTools.Tools which corresponds with the CoreEngine package you previously imported.</p>
 </li>
 <li><p>In your Unity Project, go to</p>
-</li>
-</ul>
 <p><code>Assets &gt; WorldLocking.Tools &gt; Prefabs</code></p>
-<ul>
-<li>Drag the AnchorGraphVisual prefab into your scene. At this point it can be helpful to create a WorldLocking empty object in your scene and attach your WorldLockingManager and your AnchorGraphVisual objects to it. There is no functional impact, but it helps avoid cluttering up your scene.</li>
+</li>
+<li><p>Drag the AnchorGraphVisual prefab into your scene. At this point it can be helpful to create a WorldLocking empty object in your scene and attach your WorldLockingManager and your AnchorGraphVisual objects to it. There is no functional impact, but it helps avoid cluttering up your scene.</p>
+</li>
 </ul>
 <p>That's it. Now when you deploy, you will see the graph of WorldAnchor nodes created under the hood, along with some other helpful visualizations. More description is available in the <a href="https://microsoft.github.io/MixedReality-WorldLockingTools-Unity/DocGen/Documentation/HowTos/Tools.html#anchor-graph-visualization">Tools documentation</a>.</p>
 <p>When you decide you don't need the visualizations anymore, you can either disable the AnchorGraphVisual in the scene or delete it.</p>
