@@ -1,6 +1,11 @@
-﻿using System.Collections;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
+
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading.Tasks;
 
 using Microsoft.MixedReality.WorldLocking.Tools;
 using Microsoft.MixedReality.QR;
@@ -208,14 +213,43 @@ namespace Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
         /// <summary>
         /// Record whether the QRCodeWatcher reports itself as supported, and request access.
         /// </summary>
+        /// <remarks>
+        /// If the camera permission has not already been granted (GetPermissions has successfully completed),
+        /// then the call to QRCodeWather.RequestAccessAsync will never return, even after the user grants permissions.
+        /// See https://github.com/microsoft/MixedReality-WorldLockingTools-Samples/issues/20
+        /// </remarks>
         private async void Start()
         {
             isSupported = QRCodeWatcher.IsSupported();
-            var capabilityTask = QRCodeWatcher.RequestAccessAsync();
-            accessStatus = await capabilityTask;
-            SimpleConsole.AddLine(log, $"Requested caps, access: {accessStatus.ToString()}");
+            bool gotPermission = await GetPermissions();
+            if (gotPermission)
+            {
+                var capabilityTask = QRCodeWatcher.RequestAccessAsync();
+                accessStatus = await capabilityTask;
+                SimpleConsole.AddLine(log, $"Requested caps, access: {accessStatus.ToString()}");
+            }
         }
 
+        private async Task<bool> GetPermissions()
+        {
+#if WINDOWS_UWP
+            try
+            {
+                var capture = new Windows.Media.Capture.MediaCapture();
+                await capture.InitializeAsync();
+                Debug.Log("Camera and Microphone permissions OK");
+                return true;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Debug.LogError("Camera and microphone permissions not granted.");
+                return false;
+            }
+#else // WINDOWS_UWP
+            await Task.CompletedTask;
+            return false;
+#endif // WINDOWS_UWP
+        }
         /// <summary>
         /// Lazily create qr code watcher resources if needed, then issue any queued events.
         /// </summary>
