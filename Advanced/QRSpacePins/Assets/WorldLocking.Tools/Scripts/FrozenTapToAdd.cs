@@ -1,8 +1,16 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+#pragma warning disable CS0618
+
+#if UNITY_WSA && !UNITY_2020_1_OR_NEWER
+#define WLT_ENABLE_LEGACY_WSA
+#endif
+
 using UnityEngine;
+#if WLT_ENABLE_LEGACY_WSA
 using UnityEngine.XR.WSA.Input;
+#endif // WLT_ENABLE_LEGACY_WSA
 
 using Microsoft.MixedReality.WorldLocking.Core;
 
@@ -28,21 +36,26 @@ namespace Microsoft.MixedReality.WorldLocking.Tools
         /// </summary>
         public bool Active { get; set; }
 
+#if WLT_ENABLE_LEGACY_WSA
         private GestureRecognizer gestureRecognizer;
+#endif // WLT_ENABLE_LEGACY_WSA
 
         private WorldLockingManager manager {  get { return WorldLockingManager.GetInstance(); } }
 
         // Start is called before the first frame update
         private void Start()
         {
+#if WLT_ENABLE_LEGACY_WSA
             gestureRecognizer = new GestureRecognizer();
             gestureRecognizer.SetRecognizableGestures(GestureSettings.Tap);
 
             gestureRecognizer.Tapped += HandleTapped;
 
             gestureRecognizer.StartCapturingGestures();
+#endif // WLT_ENABLE_LEGACY_WSA
         }
 
+#if WLT_ENABLE_LEGACY_WSA
         private void HandleTapped(TappedEventArgs eventArgs)
         {
             
@@ -78,5 +91,6 @@ namespace Microsoft.MixedReality.WorldLocking.Tools
                 }
             }
         }
+#endif // WLT_ENABLE_LEGACY_WSA
     }
 }

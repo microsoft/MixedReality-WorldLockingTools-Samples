@@ -1,9 +1,17 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+#pragma warning disable CS0618
+
+#if UNITY_WSA && !UNITY_2020_1_OR_NEWER
+#define WLT_ENABLE_LEGACY_WSA
+#endif
+
 using UnityEngine;
+#if WLT_ENABLE_LEGACY_WSA
 using UnityEngine.XR;
 using UnityEngine.XR.WSA;
+#endif // WLT_ENABLE_LEGACY_WSA
 using UnityEngine.Rendering;
 using UnityEngine.Assertions;
 using System;
@@ -42,10 +50,12 @@ namespace Microsoft.MixedReality.WorldLocking.Tools
             public BakedState currentState = BakedState.NeverBaked;
         }
 
+#if WLT_ENABLE_LEGACY_WSA
         /// <summary>
         /// Interface to spatial mapping
         /// </summary>
         private SurfaceObserver observer;
+#endif // WLT_ENABLE_LEGACY_WSA
 
         /// <summary>
         /// Store known surfaces by handle.
@@ -88,7 +98,9 @@ namespace Microsoft.MixedReality.WorldLocking.Tools
                 display = value;
                 if (Display != oldDisplay)
                 {
+#if WLT_ENABLE_LEGACY_WSA
                     ChangeDisplayState();
+#endif // WLT_ENABLE_LEGACY_WSA 
                 }
             }
         }
@@ -192,17 +204,25 @@ namespace Microsoft.MixedReality.WorldLocking.Tools
         private void Start()
         {
             spatialMappingLayer = LayerMask.NameToLayer("SpatialMapping");
+            // dummy use of variables to silence unused variable warning in non-WSA build.
+            if (updateCountdown > 0 && waitingForBake)
+            {
+                updateCountdown = 0;
+            }
         }
 
         private void Setup()
         {
+#if WLT_ENABLE_LEGACY_WSA
             Debug.Assert(observer == null, "Setting up an already setup FrozenSpatialMapping");
             observer = new SurfaceObserver();
             observer.SetVolumeAsSphere(Vector3.zero, Radius);
+#endif // WLT_ENABLE_LEGACY_WSA
         }
 
         private void Teardown()
         {
+#if WLT_ENABLE_LEGACY_WSA
             Debug.Assert(observer != null, "Tearing down FrozenSpatialMapping that isn't set up.");
             foreach (var surface in surfaces.Values)
             {
@@ -211,17 +231,21 @@ namespace Microsoft.MixedReality.WorldLocking.Tools
             surfaces.Clear();
             observer.Dispose();
             observer = null;
+#endif // WLT_ENABLE_LEGACY_WSA
         }
 
         private void Update()
         {
+#if WLT_ENABLE_LEGACY_WSA
             if (CheckState())
             {
                 UpdateObserver();
                 UpdateSurfaces();
             }
+#endif // WLT_ENABLE_LEGACY_WSA
         }
 
+#if WLT_ENABLE_LEGACY_WSA
         private bool CheckState()
         {
             if (Active)
@@ -443,5 +467,6 @@ namespace Microsoft.MixedReality.WorldLocking.Tools
                 Assert.IsTrue(false);
             }
         }
+#endif // WLT_ENABLE_LEGACY_WSA
     }
 }
