@@ -3,16 +3,20 @@
 
 #pragma warning disable CS0618
 
+#if UNITY_WSA && !UNITY_2020_1_OR_NEWER
+#define WLT_ENABLE_LEGACY_WSA
+#endif
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.XR;
-#if UNITY_WSA
+#if WLT_ENABLE_LEGACY_WSA
 using UnityEngine.XR.WSA;
 using UnityEngine.XR.WSA.Persistence;
-#endif // UNITY_WSA
+#endif // WLT_ENABLE_LEGACY_WSA
 
 namespace Microsoft.MixedReality.WorldLocking.Core
 {
@@ -37,13 +41,16 @@ namespace Microsoft.MixedReality.WorldLocking.Core
     /// </remarks>
     public class AnchorManagerWSA : AnchorManager
     {
+        /// <inheritdoc/>
+        public override bool SupportsPersistence { get { return true; } }
+
         protected override float TrackingStartDelayTime { get { return SpongyAnchorWSA.TrackingStartDelayTime; } }
 
         public static AnchorManagerWSA TryCreate(IPlugin plugin, IHeadPoseTracker headTracker)
         {
             if (!UnityEngine.XR.XRSettings.enabled)
             {
-                return null;
+                Debug.LogWarning($"Warning: Legacy WSA AnchorManager selected but legacy WSA not enabled. Check Player Settings/XR.");
             }
 
             AnchorManagerWSA anchorManagerWSA = new AnchorManagerWSA(plugin, headTracker);
@@ -61,11 +68,11 @@ namespace Microsoft.MixedReality.WorldLocking.Core
 
         protected override bool IsTracking()
         {
-#if UNITY_WSA
+#if WLT_ENABLE_LEGACY_WSA
             return UnityEngine.XR.WSA.WorldManager.state == UnityEngine.XR.WSA.PositionalLocatorState.Active;
-#else // UNITY_WSA
+#else // WLT_ENABLE_LEGACY_WSA
             return true;
-#endif // UNITY_WSA
+#endif // WLT_ENABLE_LEGACY_WSA
         }
 
         protected override SpongyAnchor CreateAnchor(AnchorId id, Transform parent, Pose initialPose)
@@ -87,7 +94,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             return null;
         }
 
-#if UNITY_WSA
+#if WLT_ENABLE_LEGACY_WSA
         /// <summary>
         /// Convert WorldAnchorStore.GetAsync call into a modern C# async call
         /// </summary>
@@ -101,11 +108,11 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             });
             return await tcs.Task;
         }
-#endif // UNITY_WSA
+#endif // WLT_ENABLE_LEGACY_WSA
 
         protected override async Task SaveAnchors(List<SpongyAnchorWithId> spongyAnchors)
         {
-#if UNITY_WSA
+#if WLT_ENABLE_LEGACY_WSA
 
             var worldAnchorStore = await getWorldAnchorStoreAsync();
             foreach (var keyval in spongyAnchors)
@@ -119,9 +126,9 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                     wsaAnchor.Save(worldAnchorStore);
                 }
             }
-#else // UNITY_WSA
+#else // WLT_ENABLE_LEGACY_WSA
             await Task.CompletedTask;
-#endif // UNITY_WSA
+#endif // WLT_ENABLE_LEGACY_WSA
         }
 
 
@@ -137,7 +144,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// </remarks>
         protected override async Task LoadAnchors(IPlugin plugin, AnchorId firstId, Transform parent, List<SpongyAnchorWithId> spongyAnchors)
         {
-#if UNITY_WSA
+#if WLT_ENABLE_LEGACY_WSA
             var worldAnchorStore = await getWorldAnchorStoreAsync();
 
             var anchorIds = plugin.GetFrozenAnchorIds();
@@ -172,9 +179,9 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                 }
             }
 
-#else // UNITY_WSA
+#else // WLT_ENABLE_LEGACY_WSA
             await Task.CompletedTask;
-#endif // UNITY_WSA
+#endif // WLT_ENABLE_LEGACY_WSA
         }
     }
 }

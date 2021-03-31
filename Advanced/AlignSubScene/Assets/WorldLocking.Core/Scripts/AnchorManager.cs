@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 //#define WLT_EXTRA_LOGGING
+//#define WLT_DUMP_SPONGY
 
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.XR;
+
+#if WLT_DUMP_SPONGY
+using System.IO;
+#endif // WLT_DUMP_SPONGY
 
 
 namespace Microsoft.MixedReality.WorldLocking.Core
@@ -34,6 +39,9 @@ namespace Microsoft.MixedReality.WorldLocking.Core
     /// </remarks>
     public abstract class AnchorManager : IAnchorManager
     {
+        /// <inheritdoc/>
+        public abstract bool SupportsPersistence { get; }
+
         /// <summary>
         /// minimum distance that can occur in regular anchor creation.
         /// </summary>
@@ -65,7 +73,6 @@ namespace Microsoft.MixedReality.WorldLocking.Core
 
         protected abstract float TrackingStartDelayTime { get; }
 
-        // UNITY_WSA - abstract?
         protected abstract bool IsTracking();
 
         // mafinc - this ErrorStatus would be well refactored.
@@ -317,6 +324,10 @@ namespace Microsoft.MixedReality.WorldLocking.Core
 
             CheckForCull(maxDistAnchorId, maxDistSpongyAnchor);
 
+#if WLT_DUMP_SPONGY
+            DumpSpongy(spongyHead);
+#endif // WLT_DUMP_SPONGY
+
             plugin.ClearSpongyAnchors();
             plugin.Step_Init(spongyHead);
             plugin.AddSpongyAnchors(activeAnchors);
@@ -326,6 +337,44 @@ namespace Microsoft.MixedReality.WorldLocking.Core
 
             return true;
         }
+
+#if WLT_DUMP_SPONGY
+        private Vector3 previousDeltaHead = Vector3.zero;
+        private void DumpSpongy(Pose spongyHead)
+        {
+            Vector3 deltaHead = spongyHead.position - plugin.GetSpongyHead().position;
+            Vector3 accelHead = deltaHead - previousDeltaHead;
+            previousDeltaHead = deltaHead;
+
+            int activeCount = 0;
+            float averageDeltaLength = 0.0f;
+            Vector3 averageDelta = Vector3.zero;
+            for (int i = 0; i < spongyAnchors.Count; ++i)
+            {
+                var spongyAnchor = spongyAnchors[i].spongyAnchor;
+                if (spongyAnchor.IsLocated)
+                {
+                    ++activeCount;
+                    averageDelta += spongyAnchor.Delta;
+                    averageDeltaLength += spongyAnchor.Delta.magnitude;
+                    spongyAnchor.Delta = Vector3.zero;
+                }
+            }
+            if (activeCount > 0)
+            {
+                averageDelta /= activeCount;
+                averageDeltaLength /= activeCount;
+            }
+
+            string fileName = "spongy.csv";
+            fileName = Path.Combine(Application.persistentDataPath, fileName);
+            using (StreamWriter writer = File.AppendText(fileName))
+            {
+                writer.WriteLine($"{Time.time}, {accelHead.magnitude}, {deltaHead.magnitude}, {averageDeltaLength}, {averageDelta.magnitude}");
+                writer.Flush();
+            }
+        }
+#endif // WLT_DUMP_SPONGY
 
         private bool LostTrackingCleanup(string message)
         {
@@ -469,7 +518,6 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             await SaveAnchors(spongyAnchors);
         }
 
-        // UNITY_WSA - abstract?
         protected virtual async Task SaveAnchors(List<SpongyAnchorWithId> spongyAnchors)
         {
             await Task.CompletedTask;
@@ -485,7 +533,6 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// Likewise, when a spongy anchor fails to load, this routine will delete its frozen
         /// counterpart from the plugin.
         /// </remarks>
-        /// UNITY_WSA
         public async Task LoadAnchors()
         {
             await LoadAnchors(plugin, newAnchorId, worldAnchorParent, spongyAnchors);
@@ -499,7 +546,6 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             }
         }
 
-        // UNITY_WSA - abstract?
         protected virtual async Task LoadAnchors(IPlugin plugin, AnchorId firstId, Transform parent, List<SpongyAnchorWithId> spongyAnchors)
         {
             await Task.CompletedTask;
