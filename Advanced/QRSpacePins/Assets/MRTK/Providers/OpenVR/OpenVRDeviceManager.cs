@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License. See LICENSE in the project root for license information.
+﻿// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Input.UnityInput;
@@ -32,9 +32,9 @@ namespace Microsoft.MixedReality.Toolkit.OpenVR.Input
         public OpenVRDeviceManager(
             IMixedRealityServiceRegistrar registrar,
             IMixedRealityInputSystem inputSystem,
-            string name = null, 
-            uint priority = DefaultPriority, 
-            BaseMixedRealityProfile profile = null) : this(inputSystem, name, priority, profile) 
+            string name = null,
+            uint priority = DefaultPriority,
+            BaseMixedRealityProfile profile = null) : this(inputSystem, name, priority, profile)
         {
             Registrar = registrar;
         }
@@ -114,15 +114,16 @@ namespace Microsoft.MixedReality.Toolkit.OpenVR.Input
                     case SupportedControllerType.WindowsMixedReality:
                         controllerType = typeof(WindowsMixedRealityOpenVRMotionController);
                         break;
+                    case SupportedControllerType.HPMotionController:
+                        controllerType = typeof(HPMotionController);
+                        break;
                     default:
                         return null;
                 }
 
-                IMixedRealityInputSystem inputSystem = Service as IMixedRealityInputSystem;
-
-                var pointers = RequestPointers(currentControllerType, controllingHand);
-                var inputSource = inputSystem?.RequestNewGenericInputSource($"{currentControllerType} Controller {controllingHand}", pointers, InputSourceType.Controller);
-                var detectedController = Activator.CreateInstance(controllerType, TrackingState.NotTracked, controllingHand, inputSource, null) as GenericOpenVRController;
+                IMixedRealityPointer[] pointers = RequestPointers(currentControllerType, controllingHand);
+                IMixedRealityInputSource inputSource = Service?.RequestNewGenericInputSource($"{currentControllerType} Controller {controllingHand}", pointers, InputSourceType.Controller);
+                GenericOpenVRController detectedController = Activator.CreateInstance(controllerType, TrackingState.NotTracked, controllingHand, inputSource, null) as GenericOpenVRController;
 
                 if (detectedController == null || !detectedController.Enabled)
                 {
@@ -198,7 +199,16 @@ namespace Microsoft.MixedReality.Toolkit.OpenVR.Input
 
             if (joystickName.Contains("WindowsMR"))
             {
-                return SupportedControllerType.WindowsMixedReality;
+                // Working around the fact that HP controllers identify as a WindowsMR controller, but have a specific PID we can check
+                // https://github.com/microsoft/MixedRealityToolkit-Unity/pull/8794#discussion_r523313899
+                if (joystickName.Contains("0x066A"))
+                {
+                    return SupportedControllerType.HPMotionController;
+                }
+                else
+                {
+                    return SupportedControllerType.WindowsMixedReality;
+                }
             }
 
             Debug.Log($"{joystickName} does not have a defined controller type, falling back to generic controller type");

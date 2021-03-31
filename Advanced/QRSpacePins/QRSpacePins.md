@@ -11,10 +11,10 @@ The Space Pins feature of World Locking Tools is combined with QR code scanning 
 https://github.com/microsoft/MixedReality-WorldLockingTools-Samples/tree/master/Advanced/QRSpacePins
 
 ## Dependencies:
-* Built on WLT v1.0.0.
-* Built with MRTK v2.4.
-* QR code from NuGet package 0.5.2102.
-* VCRTForwarders.140 (QR code dependency) from NuGet package 1.0.6. 
+* Built on WLT v1.3.4.
+* Built with MRTK v2.6.1.
+* QR code from NuGet package 0.5.2112.
+* VCRTForwarders.140 (QR code dependency) from NuGet package 1.0.7. 
 * Built with Unity 2019.4.2f1.
 
 Requires **HoloLens2** for QR code scanning.

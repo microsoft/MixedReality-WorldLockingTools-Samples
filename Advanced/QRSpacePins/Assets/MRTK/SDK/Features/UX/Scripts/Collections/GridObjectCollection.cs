@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License. See LICENSE in the project root for license information.
+﻿// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 using UnityEditor;
 using UnityEngine;
@@ -11,7 +11,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
     /// layout parameters.  The collection can be used to quickly create 
     /// control panels or sets of prefab/objects.
     /// </summary>
-    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/README_ObjectCollection.html")]
+    [HelpURL("https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/features/ux-building-blocks/object-collection")]
     [AddComponentMenu("Scripts/MRTK/SDK/GridObjectCollection")]
     [ExecuteAlways]
     public partial class GridObjectCollection : BaseObjectCollection
@@ -87,7 +87,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
         /// <summary>
         /// How the columns are aligned in the grid
         /// </summary>
-        public LayoutHorizontalAlignment ColumnAlignment 
+        public LayoutHorizontalAlignment ColumnAlignment
         {
             get { return columnAlignment; }
             set { columnAlignment = value; }
@@ -147,11 +147,11 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
             set { distance = value; }
         }
 
-        private static readonly int defaultValueRowsCols = 3;
+        private const int DefaultValueRowsCols = 3;
 
         [Tooltip("Number of rows per column")]
         [SerializeField]
-        private int rows = defaultValueRowsCols;
+        private int rows = DefaultValueRowsCols;
 
         /// <summary>
         /// Number of rows per column. Can only be assigned when layout type is
@@ -173,7 +173,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
 
         [Tooltip("Number of columns per row")]
         [SerializeField]
-        private int columns = defaultValueRowsCols;
+        private int columns = DefaultValueRowsCols;
 
         /// <summary>
         /// Number of columns per row. Can only be assigned when layout type is 
@@ -369,7 +369,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
             float startOffsetY = (yMax * 0.5f) * CellHeight;
             if (anchor == LayoutAnchor.UpperLeft || anchor == LayoutAnchor.UpperCenter || anchor == LayoutAnchor.UpperRight)
             {
-                startOffsetY = anchorAlongAxis ? 0.5f * CellHeight: 0;
+                startOffsetY = anchorAlongAxis ? 0.5f * CellHeight : 0;
             }
             else if (anchor == LayoutAnchor.BottomLeft || anchor == LayoutAnchor.BottomCenter || anchor == LayoutAnchor.BottomRight)
             {
@@ -392,7 +392,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
                                     alignmentOffsetX = 0;
                                     break;
                                 case LayoutHorizontalAlignment.Center:
-                                    alignmentOffsetX = CellWidth *((xMax - (NodeList.Count % xMax)) % xMax) * 0.5f;
+                                    alignmentOffsetX = CellWidth * ((xMax - (NodeList.Count % xMax)) % xMax) * 0.5f;
                                     break;
                                 case LayoutHorizontalAlignment.Right:
                                     alignmentOffsetX = CellWidth * ((xMax - (NodeList.Count % xMax)) % xMax);
@@ -438,7 +438,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities
                                                  (startOffsetY - (y * CellHeight) - HalfCell.y) + NodeList[cellCounter].Offset.y + alignmentOffsetY,
                                                  0.0f);
                         }
-                    cellCounter++;
+                        cellCounter++;
                     }
                 }
             }

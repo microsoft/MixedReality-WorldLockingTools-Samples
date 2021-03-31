@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License. See LICENSE in the project root for license information.
+﻿// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 using Microsoft.MixedReality.Toolkit.Editor;
 using System;
@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -48,9 +49,14 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor
         public const float DottedLineScreenSpace = 4.65f;
         public const string DefaultConfigProfileName = "DefaultMixedRealityToolkitConfigurationProfile";
 
-        public static readonly Texture2D LogoLightTheme = (Texture2D)AssetDatabase.LoadAssetAtPath(MixedRealityToolkitFiles.MapRelativeFilePath("StandardAssets/Textures/MRTK_Logo_Black.png"), typeof(Texture2D));
+        // StandardAssets/Textures/MRTK_Logo_Black.png
+        private const string LogoLightThemeGuid = "c2c00ef21cc44bcfa09695879e0ebecd";
+        // StandardAssets/Textures/MRTK_Logo_White.png
+        private const string LogoDarkThemeGuid = "84643a20fa6b4fa7969ef84ad2e40992";
 
-        public static readonly Texture2D LogoDarkTheme = (Texture2D)AssetDatabase.LoadAssetAtPath(MixedRealityToolkitFiles.MapRelativeFilePath("StandardAssets/Textures/MRTK_Logo_White.png"), typeof(Texture2D));
+        public static readonly Texture2D LogoLightTheme = AssetDatabase.LoadAssetAtPath<Texture2D>(AssetDatabase.GUIDToAssetPath(LogoLightThemeGuid));
+
+        public static readonly Texture2D LogoDarkTheme = AssetDatabase.LoadAssetAtPath<Texture2D>(AssetDatabase.GUIDToAssetPath(LogoDarkThemeGuid));
 
         private const string CloneProfileHelpLabel = "Currently viewing a MRTK default profile. It is recommended to clone defaults and modify a custom profile.";
         private const string CloneProfileHelpLockedLabel = "Clone this default profile to edit properties below";
@@ -98,6 +104,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor
                 {
                     newInstance.ActiveProfile = configProfile;
                 }
+                EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
             }
         }
 
@@ -551,7 +558,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor
 
                 int newIndex = EditorGUILayout.Popup(
                     new GUIContent(oldProfileObject != null ? "" : property.displayName),
-                    selectedIndex, 
+                    selectedIndex,
                     profileContent,
                     GUILayout.ExpandWidth(true));
 
@@ -563,7 +570,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor
                 {
                     // The view asset button should always be enabled.
                     using (new GUIEnabledWrapper())
-                    { 
+                    {
                         if (GUILayout.Button("View Asset", EditorStyles.miniButton, GUILayout.Width(80)))
                         {
                             EditorGUIUtility.PingObject(property.objectReferenceValue);

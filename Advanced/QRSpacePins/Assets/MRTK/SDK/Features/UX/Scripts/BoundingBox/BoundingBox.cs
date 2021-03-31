@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License. See LICENSE in the project root for license information.
+﻿// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Utilities;
@@ -19,8 +19,8 @@ namespace Microsoft.MixedReality.Toolkit.UI
     /// BoundingBox provides scale and rotation handles that can be used for far and near interaction manipulation
     /// of the object. It further provides a proximity effect for scale and rotation handles that alters scaling and material. 
     /// </summary>
-    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/README_BoundingBox.html")]
-    [AddComponentMenu("Scripts/MRTK/SDK/BoundingBox")]
+    [HelpURL("https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/features/ux-building-blocks/bounding-box")]
+    [AddComponentMenu("Scripts/MRTK/SDK/BoundingBox (deprecated)")]
     public class BoundingBox : MonoBehaviour,
         IMixedRealitySourceStateHandler,
         IMixedRealityFocusChangedHandler,
@@ -69,8 +69,8 @@ namespace Microsoft.MixedReality.Toolkit.UI
         /// consists of. 
         /// </summary>
         /// <remarks>
-        /// Wireframe refers to the thin linkage between the handles. When the handles are invisible
-        /// the wireframe looks like an outline box around an object.
+        /// <para>Wireframe refers to the thin linkage between the handles. When the handles are invisible
+        /// the wireframe looks like an outline box around an object.</para>
         /// </remarks> 
         public enum WireframeType
         {
@@ -277,7 +277,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
                 {
                     return scaleConstraint.ScaleMinimum;
                 }
-                return 0.0f;
+                return scaleMinimum;
             }
         }
 
@@ -295,7 +295,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
                 {
                     return scaleConstraint.ScaleMaximum;
                 }
-                return 0.0f;
+                return scaleMaximum;
             }
         }
 
@@ -1091,15 +1091,21 @@ namespace Microsoft.MixedReality.Toolkit.UI
         // Used to determine if boundsOverride size has changed.
         private Bounds prevBoundsOverride = new Bounds();
 
+        // Used to record the initial size of the bounds override, if it exists.
+        // Necessary because BoxPadding will destructively edit the size of the
+        // override BoxCollider, and repeated calls to BoxPadding will result
+        // in the override bounds growing continually larger/smaller.
+        private Vector3? initialBoundsOverrideSize = null;
+
         // True if this game object is a child of the Target one
         private bool isChildOfTarget = false;
-        private static readonly string rigRootName = "rigRoot";
+        private const string RigRootName = "rigRoot";
 
         // Cache for the corner points of either renderers or colliders during the bounds calculation phase
-        private static List<Vector3> totalBoundsCorners = new List<Vector3>();
+        private static readonly List<Vector3> TotalBoundsCorners = new List<Vector3>();
 
-        private HashSet<IMixedRealityPointer> proximityPointers = new HashSet<IMixedRealityPointer>();
-        private List<Vector3> proximityPoints = new List<Vector3>();
+        private readonly HashSet<IMixedRealityPointer> proximityPointers = new HashSet<IMixedRealityPointer>();
+        private readonly List<Vector3> proximityPoints = new List<Vector3>();
 
         #endregion
 
@@ -1120,7 +1126,10 @@ namespace Microsoft.MixedReality.Toolkit.UI
                 if (active != value)
                 {
                     active = value;
-                    rigRoot?.gameObject.SetActive(value);
+                    if (rigRoot != null)
+                    {
+                        rigRoot.gameObject.SetActive(value);
+                    }
                     ResetHandleVisibility();
 
                     if (value && proximityEffectActive)
@@ -1159,7 +1168,6 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
         #endregion Public Properties
 
-
         #region Public Methods
 
         /// <summary>
@@ -1196,6 +1204,14 @@ namespace Microsoft.MixedReality.Toolkit.UI
         /// </summary>
         public void CreateRig()
         {
+            // Record what the initial size of the bounds override
+            // was when we constructed the rig, so we can restore
+            // it after we destructively edit the size with the
+            // BoxPadding (#7997)
+            if (boundsOverride != null)
+            {
+                initialBoundsOverrideSize = boundsOverride.size;
+            }
             DestroyRig();
             SetMaterials();
             InitializeRigRoot();
@@ -1211,10 +1227,10 @@ namespace Microsoft.MixedReality.Toolkit.UI
             ResetHandleVisibility();
             rigRoot.gameObject.SetActive(active);
             UpdateRigVisibilityInInspector();
+            CaptureInitialState();
         }
 
         #endregion
-
 
         #region MonoBehaviour Methods
 
@@ -1306,7 +1322,6 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
         #endregion MonoBehaviour Methods
 
-
         #region Private Methods
 
         private void DestroyRig()
@@ -1317,7 +1332,13 @@ namespace Microsoft.MixedReality.Toolkit.UI
             }
             else
             {
-                boundsOverride.size -= boxPadding;
+                // If we have previously logged an initial bounds size,
+                // reset the boundsOverride BoxCollider to the initial size.
+                // This is because the CalculateBoxPadding
+                if (initialBoundsOverrideSize.HasValue)
+                {
+                    boundsOverride.size = initialBoundsOverrideSize.Value;
+                }
 
                 if (TargetBounds != null)
                 {
@@ -1536,6 +1557,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
             // to add NearInteractionGrabbable;
             var g = afford.EnsureComponent<NearInteractionGrabbable>();
             g.ShowTetherWhenManipulating = drawTetherWhenManipulating;
+            g.IsBoundsHandles = true;
 
             var contextInfo = afford.EnsureComponent<CursorContextInfo>();
             contextInfo.CurrentCursorAction = cursorType;
@@ -1796,7 +1818,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
         private Bounds GetTargetBounds()
         {
-            totalBoundsCorners.Clear();
+            TotalBoundsCorners.Clear();
 
             // Collect all Transforms except for the rigRoot(s) transform structure(s)
             // Its possible we have two rigRoots here, the one about to be deleted and the new one
@@ -1811,7 +1833,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
             foreach (Transform childTransform in Target.transform)
             {
-                if (childTransform.name.Equals(rigRootName)) { continue; }
+                if (childTransform.name.Equals(RigRootName)) { continue; }
                 childTransforms.AddRange(childTransform.GetComponentsInChildren<Transform>());
             }
 
@@ -1826,20 +1848,20 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
             Transform targetTransform = Target.transform;
 
-            // In case we found nothing and this is the Target, we add it's inevitable collider's bounds
+            // In case we found nothing and this is the Target, we add its inevitable collider's bounds
 
-            if (totalBoundsCorners.Count == 0 && Target == gameObject)
+            if (TotalBoundsCorners.Count == 0 && Target == gameObject)
             {
                 ExtractBoundsCorners(targetTransform, BoundsCalculationMethod.ColliderOnly);
             }
 
             // Gather all corners and calculate their bounds
 
-            Bounds finalBounds = new Bounds(targetTransform.InverseTransformPoint(totalBoundsCorners[0]), Vector3.zero);
+            Bounds finalBounds = new Bounds(targetTransform.InverseTransformPoint(TotalBoundsCorners[0]), Vector3.zero);
 
-            for (int i = 1; i < totalBoundsCorners.Count; i++)
+            for (int i = 1; i < TotalBoundsCorners.Count; i++)
             {
-                finalBounds.Encapsulate(targetTransform.InverseTransformPoint(totalBoundsCorners[i]));
+                finalBounds.Encapsulate(targetTransform.InverseTransformPoint(TotalBoundsCorners[i]));
             }
 
             return finalBounds;
@@ -1903,7 +1925,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
             Vector3[] cornersToWorld = null;
             rendererBoundsByTarget.Value.GetCornerPositions(rendererBoundsByTarget.Key, ref cornersToWorld);
-            totalBoundsCorners.AddRange(cornersToWorld);
+            TotalBoundsCorners.AddRange(cornersToWorld);
 
             return true;
         }
@@ -1912,7 +1934,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
         {
             if (colliderByTransform.Key == null) { return false; }
 
-            BoundsExtensions.GetColliderBoundsPoints(colliderByTransform.Value, totalBoundsCorners, 0);
+            BoundsExtensions.GetColliderBoundsPoints(colliderByTransform.Value, TotalBoundsCorners, 0);
 
             return colliderByTransform.Key != null;
         }
@@ -1954,7 +1976,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
         private void InitializeRigRoot()
         {
-            var rigRootObj = new GameObject(rigRootName);
+            var rigRootObj = new GameObject(RigRootName);
             rigRoot = rigRootObj.transform;
             rigRoot.parent = Target.transform;
 
@@ -2014,13 +2036,13 @@ namespace Microsoft.MixedReality.Toolkit.UI
                 if (scaleConstraint == null)
                 {
                     scaleConstraint = gameObject.AddComponent<MinMaxScaleConstraint>();
-
-                    scaleConstraint.TargetTransform = Target.transform;
 #pragma warning disable 0618
                     scaleConstraint.ScaleMinimum = scaleMinimum;
                     scaleConstraint.ScaleMaximum = scaleMaximum;
 #pragma warning restore 0618
                 }
+
+                scaleConstraint.Initialize(new MixedRealityTransform(target.transform));
             }
         }
 
@@ -2248,7 +2270,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
                         }
                     }
                 }
-                
+
                 // Get the max radius possible of our current bounds and extent the range to include proximity scaled objects. This is done by adjusting the original bounds to include the ObjectMediumProximity range in x, y and z axis
                 float maxRadius = currentBoundsExtents.sqrMagnitude + (3 * handleMediumProximity * handleMediumProximity);
 
@@ -2528,7 +2550,6 @@ namespace Microsoft.MixedReality.Toolkit.UI
 
         #endregion Private Methods
 
-
         #region Used Event Handlers
 
         void IMixedRealityFocusChangedHandler.OnFocusChanged(FocusEventData eventData)
@@ -2670,7 +2691,6 @@ namespace Microsoft.MixedReality.Toolkit.UI
         }
 
         #endregion Used Event Handlers
-
 
         #region Unused Event Handlers
 

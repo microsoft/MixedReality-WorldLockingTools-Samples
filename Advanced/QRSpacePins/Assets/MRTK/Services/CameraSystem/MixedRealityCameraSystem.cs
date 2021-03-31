@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License. See LICENSE in the project root for license information.
+﻿// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 using Microsoft.MixedReality.Toolkit.Utilities;
 using System.Collections;
@@ -12,7 +12,7 @@ namespace Microsoft.MixedReality.Toolkit.CameraSystem
     /// <summary>
     /// The Camera system controls the settings of the main camera.
     /// </summary>
-    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/MixedRealityConfigurationGuide.html#camera")]
+    [HelpURL("https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/configuration/mixed-reality-configuration-guide#camera")]
     public class MixedRealityCameraSystem : BaseDataProviderAccessCoreSystem, IMixedRealityCameraSystem
     {
         /// <summary>
@@ -61,6 +61,7 @@ namespace Microsoft.MixedReality.Toolkit.CameraSystem
                 {
                     Debug.LogWarning("Windows Mixed Reality specific camera code has been moved into Windows Mixed Reality Camera Settings. Please ensure you have this added under your Camera System's Settings Providers, as this deprecated code path may be removed in a future update.");
 
+#if !UNITY_2020_1_OR_NEWER
                     // Ensure compatibility with the pre-2019.3 XR architecture for customers / platforms
                     // with legacy requirements.
 #pragma warning disable 0618
@@ -69,6 +70,7 @@ namespace Microsoft.MixedReality.Toolkit.CameraSystem
                         currentDisplayType = DisplayType.Transparent;
                     }
 #pragma warning restore 0618
+#endif // !UNITY_2020_1_OR_NEWER
                 }
 #endif
 
@@ -98,6 +100,8 @@ namespace Microsoft.MixedReality.Toolkit.CameraSystem
         /// <inheritdoc />
         public override void Initialize()
         {
+            base.Initialize();
+
             MixedRealityCameraProfile profile = ConfigurationProfile as MixedRealityCameraProfile;
 
             if ((GetDataProviders<IMixedRealityCameraSettingsProvider>().Count == 0) && (profile != null))
@@ -107,16 +111,17 @@ namespace Microsoft.MixedReality.Toolkit.CameraSystem
                 {
                     MixedRealityCameraSettingsConfiguration configuration = profile.SettingsConfigurations[i];
 
-                    if (configuration.ComponentType?.Type == null) 
-                    { 
+                    if (configuration.ComponentType?.Type == null)
+                    {
                         // Incomplete configuration, do not try to register until a type is set in the profile.
-                        continue; 
+                        continue;
                     }
 
                     object[] args = { this, configuration.ComponentName, configuration.Priority, configuration.SettingsProfile };
 
                     if (RegisterDataProvider<IMixedRealityCameraSettingsProvider>(
                         configuration.ComponentType.Type,
+                        configuration.ComponentName,
                         configuration.RuntimePlatform,
                         args))
                     {
@@ -203,6 +208,8 @@ namespace Microsoft.MixedReality.Toolkit.CameraSystem
 
             using (UpdatePerfMarker.Auto())
             {
+                base.Update();
+
                 if (IsOpaque != cameraOpaqueLastFrame)
                 {
                     cameraOpaqueLastFrame = IsOpaque;

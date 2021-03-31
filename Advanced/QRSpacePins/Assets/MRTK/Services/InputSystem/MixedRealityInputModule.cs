@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License. See LICENSE in the project root for license information.
+﻿// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 using System.Collections.Generic;
 using Unity.Profiling;
@@ -14,7 +14,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
     {
         protected class PointerData
         {
-            public IMixedRealityPointer pointer;
+            public readonly IMixedRealityPointer pointer;
 
             public Vector3? lastMousePoint3d = null; // Last position of the pointer for the input in 3D.
             public PointerEventData.FramePressState nextPressState = PointerEventData.FramePressState.NotChanged;
@@ -45,6 +45,16 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
         public Camera RaycastCamera { get; private set; }
 
+        /// <summary>
+        /// Whether the input module is auto initialized by event system or requires a manual call to Initialize()
+        /// </summary>
+        public bool ManualInitializationRequired { get; private set; } = false;
+
+        /// <summary>
+        /// Whether the input module should pause processing temporarily
+        /// </summary>
+        public bool ProcessPaused { get; set; } = false;
+
         public IEnumerable<IMixedRealityPointer> ActiveMixedRealityPointers
         {
             get
@@ -63,16 +73,34 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
             if (CoreServices.InputSystem != null)
             {
-                RaycastCamera = CoreServices.InputSystem.FocusProvider.UIRaycastCamera;
-
-                foreach (IMixedRealityInputSource inputSource in CoreServices.InputSystem.DetectedInputSources)
-                {
-                    OnSourceDetected(inputSource);
-                }
-
-                CoreServices.InputSystem.RegisterHandler<IMixedRealityPointerHandler>(this);
-                CoreServices.InputSystem.RegisterHandler<IMixedRealitySourceStateHandler>(this);
+                Initialize();
             }
+        }
+
+        /// <summary>
+        /// Initialize the input module.
+        /// </summary>
+        public void Initialize()
+        {
+            RaycastCamera = CoreServices.InputSystem.FocusProvider.UIRaycastCamera;
+            foreach (IMixedRealityInputSource inputSource in CoreServices.InputSystem.DetectedInputSources)
+            {
+                OnSourceDetected(inputSource);
+            }
+            CoreServices.InputSystem.RegisterHandler<IMixedRealityPointerHandler>(this);
+            CoreServices.InputSystem.RegisterHandler<IMixedRealitySourceStateHandler>(this);
+            ManualInitializationRequired = false;
+        }
+
+        /// <summary>
+        /// Suspend the input module when a runtime profile change is about to happen.
+        /// </summary>
+        public void Suspend()
+        {
+            // Process once more to handle pointer removals.
+            Process();
+            // Set the flag so that we manually initialize the input module after the profile switch.
+            ManualInitializationRequired = true;
         }
 
         /// <inheritdoc />
@@ -107,6 +135,11 @@ namespace Microsoft.MixedReality.Toolkit.Input
         {
             using (ProcessPerfMarker.Auto())
             {
+                // Do not process when we are waiting for initialization
+                if (ManualInitializationRequired || ProcessPaused)
+                {
+                    return;
+                }
                 CursorLockMode cursorLockStateBackup = Cursor.lockState;
 
                 try
@@ -146,6 +179,12 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
                 base.Process();
             }
+        }
+
+        /// <inheritdoc />
+        public override bool IsModuleSupported()
+        {
+            return true;
         }
 
         private static readonly ProfilerMarker ProcessMrtkPointerLostPerfMarker = new ProfilerMarker("[MRTK] MixedRealityInputModule.ProcessMrtkPointerLost");
@@ -305,8 +344,15 @@ namespace Microsoft.MixedReality.Toolkit.Input
         void IMixedRealityPointerHandler.OnPointerUp(MixedRealityPointerEventData eventData)
         {
             int pointerId = (int)eventData.Pointer.PointerId;
-            Debug.Assert(pointerDataToUpdate.ContainsKey(pointerId));
-            pointerDataToUpdate[pointerId].nextPressState = PointerEventData.FramePressState.Released;
+
+            // OnPointerUp can be raised during an OnSourceLost. If the pointer has already been removed
+            // from the pointerDataToUpdate Dictionary and added to the pointerDataToRemove list, then
+            // that pointer's state update can be ignored.
+            Debug.Assert(pointerDataToUpdate.ContainsKey(pointerId) || IsPointerIdInRemovedList(pointerId));
+            if (pointerDataToUpdate.TryGetValue(pointerId, out PointerData pointerData))
+            {
+                pointerData.nextPressState = PointerEventData.FramePressState.Released;
+            }
         }
 
         void IMixedRealityPointerHandler.OnPointerDown(MixedRealityPointerEventData eventData)
@@ -320,6 +366,19 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
         void IMixedRealityPointerHandler.OnPointerClicked(MixedRealityPointerEventData eventData)
         {
+        }
+
+        private bool IsPointerIdInRemovedList(int pointerId)
+        {
+            for (int i = 0; i < pointerDataToRemove.Count; i++)
+            {
+                if (pointerDataToRemove[i].pointer.PointerId == pointerId)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         #endregion
@@ -368,10 +427,17 @@ namespace Microsoft.MixedReality.Toolkit.Input
                     if (pointer.InputSourceParent == inputSource)
                     {
                         int pointerId = (int)pointer.PointerId;
-                        Debug.Assert(pointerDataToUpdate.ContainsKey(pointerId));
+                        if (!pointerDataToUpdate.ContainsKey(pointerId))
+                        {
+                            // During runtime profile switch this may happen but we can ignore
+                            if (!MixedRealityToolkit.Instance.IsProfileSwitching)
+                            {
+                                Debug.LogError("The pointer you are trying to remove does not exist in the mapping dict!");
+                            }
+                            return;
+                        }
 
-                        PointerData pointerData = null;
-                        if (pointerDataToUpdate.TryGetValue(pointerId, out pointerData))
+                        if (pointerDataToUpdate.TryGetValue(pointerId, out PointerData pointerData))
                         {
                             Debug.Assert(!pointerDataToRemove.Contains(pointerData));
                             pointerDataToRemove.Add(pointerData);

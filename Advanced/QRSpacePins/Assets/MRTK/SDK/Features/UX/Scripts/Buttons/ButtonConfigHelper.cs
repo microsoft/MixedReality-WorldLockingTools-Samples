@@ -1,10 +1,11 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License. See LICENSE in the project root for license information.
+﻿// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using System;
+using UnityEngine.Serialization;
+
 #if UNITY_EDITOR
 using UnityEditor;
 using Microsoft.MixedReality.Toolkit.Utilities.Editor;
@@ -16,7 +17,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
     /// Helper component that gathers the most commonly modified button elements in one place.
     /// </summary>
     [ExecuteAlways]
-    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/README_Button.html#how-to-change-the-icon-and-text")]
+    [HelpURL("https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/features/ux-building-blocks/button#how-to-change-the-icon-and-text")]
     public partial class ButtonConfigHelper : MonoBehaviour
     {
         /// <summary>
@@ -24,7 +25,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
         /// </summary>
         public string MainLabelText
         {
-            get { return mainLabelText?.text; }
+            get { return mainLabelText != null ? mainLabelText.text : null; }
             set
             {
                 if (mainLabelText == null)
@@ -42,16 +43,16 @@ namespace Microsoft.MixedReality.Toolkit.UI
         /// </summary>
         public string SeeItSayItLabelText
         {
-            get { return seeItSatItLabelText?.text; }
+            get { return seeItSayItLabelText != null ? seeItSayItLabelText.text : null; }
             set
             {
-                if (seeItSatItLabelText == null)
+                if (seeItSayItLabelText == null)
                 {
                     Debug.LogWarning("No see it / say it label set in " + name + " - not setting see it / say it label text.");
                     return;
                 }
 
-                seeItSatItLabelText.text = value;
+                seeItSayItLabelText.text = value;
             }
         }
 
@@ -132,8 +133,8 @@ namespace Microsoft.MixedReality.Toolkit.UI
         private Interactable interactable = null;
         [SerializeField, Tooltip("Optional see it / say it object.")]
         private GameObject seeItSayItLabel = null;
-        [SerializeField, Tooltip("Optional see it / say it label used by the button. Should be subsumed under the seeItSayItLabel object.")]
-        private TextMeshPro seeItSatItLabelText = null;
+        [SerializeField, Tooltip("Optional see it / say it label used by the button. Should be subsumed under the seeItSayItLabel object."), FormerlySerializedAs("seeItSatItLabelText")]
+        private TextMeshPro seeItSayItLabelText = null;
         [SerializeField, Tooltip("How the button icon should be rendered.")]
         private ButtonIconStyle iconStyle = ButtonIconStyle.Quad;
 
@@ -159,7 +160,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
         [SerializeField, Tooltip("Optional texture used for texture icon. This will be set by configuration actions.")]
         private Texture iconQuadTexture = null;
         // Disable 'assigned but never used' errors to avoid errors related to editor-only fields.
-        #pragma warning disable CS0414
+#pragma warning disable CS0414
         [SerializeField, Tooltip("The default material used by quad button icons. Used to detect legacy custom buttons.")]
         private Material defaultButtonQuadMaterial = null;
 
@@ -168,7 +169,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
         private ButtonIconSet iconSet = null;
         [SerializeField, Tooltip("The default icon set.")]
         private ButtonIconSet defaultIconSet = null;
-        #pragma warning restore CS0414
+#pragma warning restore CS0414
 
         private MaterialPropertyBlock iconTexturePropertyBlock;
 
@@ -433,7 +434,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
         private static readonly string generatedIconSetName = "CustomIconSet";
         private static readonly string customIconSetsFolderName = "CustomIconSets";
         private static readonly string customIconSetCreatedMessage = "A new icon set has been created to hold your button's custom icons. This icon set will be used by your button's ButtonConfigHelper component. It has been saved to:\n\n{0}";
-        
+
         /// <summary>
         /// Returns true if the button is using a custom icon material.
         /// </summary>
