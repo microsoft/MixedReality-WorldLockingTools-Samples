@@ -28,7 +28,7 @@
       },
       {
         "files": [ "Advanced/**/*.md", "Tutorial/**/*.md" ],
-        "exclude": [ "**/Il2CppOutputProject/**", "**/Library/**", "**/MRTK/**", "**/WorldLocking.Engine/**", "**/*WorldLocking.Core/**", "**/*WorldLocking.Examples/**", "**/*WorldLocking.Tools/**", "**/GoogleARCore/**" ]
+        "exclude": [ "**/Il2CppOutputProject/**", "**/Library/**", "**/MRTK/**", "**/WorldLocking.Engine/**", "**/*WorldLocking.Core/**", "**/*WorldLocking.Examples/**", "**/*WorldLocking.Tools/**", "**/Packages/**", "**/GoogleARCore/**" ]
       }
     ],
     "resource": [

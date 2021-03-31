@@ -30,7 +30,7 @@
       "output": {
         ".html": {
           "relative_path": "Advanced/AlignSubScene/AlignSubScene.html",
-          "hash": "jRbnfXySXGotGaZ2VUwzeQ=="
+          "hash": "aNBk8Fi9ZiyyLF6uBdDe1w=="
         }
       },
       "is_incremental": false,
@@ -50,23 +50,11 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "Advanced/Mobile/ARCore/Assets/Packages/Microsoft.MixedReality.Unity.FrozenWorld.Engine.1.0.0/LICENSE.md",
-      "output": {
-        ".html": {
-          "relative_path": "Advanced/Mobile/ARCore/Assets/Packages/Microsoft.MixedReality.Unity.FrozenWorld.Engine.1.0.0/LICENSE.html",
-          "hash": "elFFDt/lnhHmG3B1M2TFFA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
       "source_relative_path": "Advanced/QRSpacePins/QRSpacePins.md",
       "output": {
         ".html": {
           "relative_path": "Advanced/QRSpacePins/QRSpacePins.html",
-          "hash": "bj4RN5TiG8ss7xhob5jmtg=="
+          "hash": "XxZ+AJc3pcb8bP8AvbcK/g=="
         }
       },
       "is_incremental": false,
@@ -817,25 +805,23 @@
   "incremental_info": [
     {
       "status": {
-        "can_incremental": false,
-        "details": "Cannot build incrementally because last build info is missing.",
+        "can_incremental": true,
         "incrementalPhase": "build",
         "total_file_count": 0,
-        "skipped_file_count": 0,
-        "full_build_reason_code": "NoAvailableBuildCache"
+        "skipped_file_count": 0
       },
       "processors": {
         "ConceptualDocumentProcessor": {
-          "can_incremental": false,
+          "can_incremental": true,
           "incrementalPhase": "build",
-          "total_file_count": 15,
-          "skipped_file_count": 0
+          "total_file_count": 14,
+          "skipped_file_count": 13
         },
         "ManagedReferenceDocumentProcessor": {
-          "can_incremental": false,
+          "can_incremental": true,
           "incrementalPhase": "build",
           "total_file_count": 13,
-          "skipped_file_count": 0
+          "skipped_file_count": 13
         },
         "ResourceDocumentProcessor": {
           "can_incremental": false,

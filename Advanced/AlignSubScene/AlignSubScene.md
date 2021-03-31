@@ -19,8 +19,8 @@ The accompanying video tries to make the distinction between pinning the model's
 https://github.com/microsoft/MixedReality-WorldLockingTools-Samples/tree/master/Advanced/AlignSubScene
 
 ## Dependencies:
-* Built on WLT version 1.2.1.
-* Built with MRTK version v2.5.1.
+* Built on WLT version 1.3.4.
+* Built with MRTK version v2.6.1.
 * Built with Unity 2019.4.2f1.
 * No further dependencies.
 
