@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License. See LICENSE in the project root for license information.
+﻿// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 using System;
 
@@ -11,8 +11,8 @@ namespace Microsoft.MixedReality.Toolkit.Input
     /// appear, hide the gaze cursor. Whenever user says "select", make the gaze cursor appear.
     /// </summary>
     /// <remarks>
-    /// Has different behavior depending on whether or not eye gaze or head gaze in use - see comments on
-    /// GazePointerState for more details.
+    /// <para>Has different behavior depending on whether or not eye gaze or head gaze in use - see comments on
+    /// GazePointerState for more details.</para>
     /// </remarks>
     public class GazePointerVisibilityStateMachine : IMixedRealitySpeechHandler
     {

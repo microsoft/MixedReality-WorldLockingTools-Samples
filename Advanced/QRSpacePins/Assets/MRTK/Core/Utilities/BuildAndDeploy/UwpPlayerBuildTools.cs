@@ -1,5 +1,5 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License. See LICENSE in the project root for license information.
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 using Microsoft.MixedReality.Toolkit.Utilities.Editor;
 using System;
@@ -102,7 +102,7 @@ namespace Microsoft.MixedReality.Toolkit.Build.Editor
         }
 
         /// <summary>
-        /// Build the Uwp Player.
+        /// Build the UWP Player.
         /// </summary>
         public static async Task<bool> BuildPlayer(UwpBuildInfo buildInfo, CancellationToken cancellationToken = default)
         {

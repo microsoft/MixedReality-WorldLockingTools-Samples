@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License. See LICENSE in the project root for license information.﻿
+﻿// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.﻿
 
 using Microsoft.MixedReality.Toolkit.Utilities;
 using Microsoft.MixedReality.Toolkit.Utilities.Editor;
@@ -25,8 +25,8 @@ namespace Microsoft.MixedReality.Toolkit.Input.Editor
         private SerializedProperty renderMotionControllers;
         private SerializedProperty defaultControllerVisualizationType;
 
-        private SerializedProperty useDefaultModels;
-        private SerializedProperty defaultControllerModelMaterial;
+        private SerializedProperty usePlatformControllerModels;
+        private SerializedProperty platformControllerModelMaterial;
         private SerializedProperty globalLeftHandedControllerModel;
         private SerializedProperty globalRightHandedControllerModel;
         private SerializedProperty globalLeftHandModel;
@@ -55,8 +55,8 @@ namespace Microsoft.MixedReality.Toolkit.Input.Editor
 
             renderMotionControllers = serializedObject.FindProperty("renderMotionControllers");
             defaultControllerVisualizationType = serializedObject.FindProperty("defaultControllerVisualizationType");
-            useDefaultModels = serializedObject.FindProperty("useDefaultModels");
-            defaultControllerModelMaterial = serializedObject.FindProperty("defaultControllerModelMaterial");
+            usePlatformControllerModels = serializedObject.FindProperty("usePlatformModels");
+            platformControllerModelMaterial = serializedObject.FindProperty("platformModelMaterial");
             globalLeftHandedControllerModel = serializedObject.FindProperty("globalLeftControllerModel");
             globalRightHandedControllerModel = serializedObject.FindProperty("globalRightControllerModel");
             globalLeftHandModel = serializedObject.FindProperty("globalLeftHandVisualizer");
@@ -66,7 +66,7 @@ namespace Microsoft.MixedReality.Toolkit.Input.Editor
 
         public override void OnInspectorGUI()
         {
-           if (!RenderProfileHeader(ProfileTitle, ProfileDescription, target, true, BackProfileType.Input))
+            if (!RenderProfileHeader(ProfileTitle, ProfileDescription, target, true, BackProfileType.Input))
             {
                 return;
             }
@@ -92,12 +92,15 @@ namespace Microsoft.MixedReality.Toolkit.Input.Editor
                 var rightHandModelPrefab = globalRightHandedControllerModel.objectReferenceValue as GameObject;
 
                 EditorGUILayout.Space();
-                EditorGUILayout.LabelField("Controller Model Settings", EditorStyles.boldLabel);
+                EditorGUILayout.LabelField("Global Controller Model Settings", EditorStyles.boldLabel);
                 {
-                    EditorGUILayout.PropertyField(useDefaultModels);
-                    EditorGUILayout.PropertyField(defaultControllerModelMaterial);
+                    EditorGUILayout.PropertyField(usePlatformControllerModels);
+                    if (usePlatformControllerModels.boolValue)
+                    {
+                        EditorGUILayout.PropertyField(platformControllerModelMaterial);
+                    }
 
-                    if (useDefaultModels.boolValue && (leftHandModelPrefab != null || rightHandModelPrefab != null))
+                    if (usePlatformControllerModels.boolValue && (leftHandModelPrefab != null || rightHandModelPrefab != null))
                     {
                         EditorGUILayout.HelpBox("When default models are used, an attempt is made to obtain controller models from the platform SDK. The global left and right models are only shown if no model can be obtained.", MessageType.Warning);
                     }
@@ -192,7 +195,6 @@ namespace Microsoft.MixedReality.Toolkit.Input.Editor
                 {
                     controllerList.DeleteArrayElementAtIndex(i);
                     EditorGUILayout.EndHorizontal();
-                    GUILayout.EndVertical();
                     return;
                 }
 
@@ -213,7 +215,6 @@ namespace Microsoft.MixedReality.Toolkit.Input.Editor
 
                 EditorGUI.BeginChangeCheck();
                 handednessValue = EditorGUILayout.IntPopup(new GUIContent(mixedRealityControllerHandedness.displayName, mixedRealityControllerHandedness.tooltip), handednessValue, HandednessSelections, null);
-
                 if (EditorGUI.EndChangeCheck())
                 {
                     mixedRealityControllerHandedness.intValue = handednessValue + 1;
@@ -222,17 +223,15 @@ namespace Microsoft.MixedReality.Toolkit.Input.Editor
                 var overrideModel = controllerSetting.FindPropertyRelative("overrideModel");
                 var overrideModelPrefab = overrideModel.objectReferenceValue as GameObject;
 
-                var controllerUseDefaultModelOverride = controllerSetting.FindPropertyRelative("useDefaultModel");
-
-                using (new GUILayout.HorizontalScope())
+                var controllerUsePlatformModelOverride = controllerSetting.FindPropertyRelative("usePlatformModels");
+                EditorGUILayout.PropertyField(controllerUsePlatformModelOverride);
+                if (controllerUsePlatformModelOverride.boolValue)
                 {
-                    EditorGUILayout.PropertyField(controllerUseDefaultModelOverride);
-
-                    var defaultModelMaterial = controllerSetting.FindPropertyRelative("defaultModelMaterial");
-                    EditorGUILayout.PropertyField(defaultModelMaterial);
+                    var platformModelMaterial = controllerSetting.FindPropertyRelative("platformModelMaterial");
+                    EditorGUILayout.PropertyField(platformModelMaterial);
                 }
 
-                if (controllerUseDefaultModelOverride.boolValue && overrideModelPrefab != null)
+                if (controllerUsePlatformModelOverride.boolValue && overrideModelPrefab != null)
                 {
                     EditorGUILayout.HelpBox("When default model is used, the override model will only be used if the default model cannot be loaded from the driver.", MessageType.Warning);
                 }

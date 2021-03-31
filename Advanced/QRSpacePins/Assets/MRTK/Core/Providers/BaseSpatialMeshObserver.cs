@@ -11,7 +11,7 @@ namespace Microsoft.MixedReality.Toolkit.SpatialAwareness
     /// <summary>
     /// Class providing a base implementation of the <see cref="IMixedRealitySpatialAwarenessMeshObserver"/> interface.
     /// </summary>
-    public abstract class BaseSpatialMeshObserver : BaseSpatialObserver, IMixedRealitySpatialAwarenessMeshObserver
+    public abstract class BaseSpatialMeshObserver : BaseSpatialObserver, IMixedRealitySpatialAwarenessMeshObserver, ISpatialAwarenessPhysicsProperties
     {
         /// <summary>
         /// Constructor.
@@ -66,9 +66,12 @@ namespace Microsoft.MixedReality.Toolkit.SpatialAwareness
             LevelOfDetail = profile.LevelOfDetail;
             MeshPhysicsLayer = profile.MeshPhysicsLayer;
             OcclusionMaterial = profile.OcclusionMaterial;
+            PhysicsMaterial = profile.PhysicsMaterial;
             RecalculateNormals = profile.RecalculateNormals;
             TrianglesPerCubicMeter = profile.TrianglesPerCubicMeter;
             VisibleMaterial = profile.VisibleMaterial;
+
+            RuntimeSpatialMeshPrefab = profile.RuntimeSpatialMeshPrefab;
         }
 
         private static readonly ProfilerMarker ApplyUpdatedMeshDisplayOptionPerfMarker = new ProfilerMarker("[MRTK] BaseSpatialMeshObserver.ApplyUpdatedMeshDisplayOption");
@@ -95,6 +98,23 @@ namespace Microsoft.MixedReality.Toolkit.SpatialAwareness
                     }
 
                     meshObject.Renderer.enabled = enable;
+                }
+            }
+        }
+
+        private static readonly ProfilerMarker ApplyUpdatedMeshPhysicsPerfMarker = new ProfilerMarker("[MRTK] BaseSpatialMeshObserver.ApplyUpdatedMeshPhysics");
+
+        /// <summary>
+        /// Applies the physical material to existing meshes when modified at runtime.
+        /// </summary>
+        protected virtual void ApplyUpdatedMeshPhysics()
+        {
+            using (ApplyUpdatedMeshPhysicsPerfMarker.Auto())
+            {
+                foreach (SpatialAwarenessMeshObject meshObject in Meshes.Values)
+                {
+                    if (meshObject?.Collider == null) { continue; }
+                    meshObject.Collider.material = PhysicsMaterial;
                 }
             }
         }
@@ -281,6 +301,21 @@ namespace Microsoft.MixedReality.Toolkit.SpatialAwareness
             }
         }
 
+        private PhysicMaterial physicsMaterial;
+
+        public PhysicMaterial PhysicsMaterial
+        {
+            get { return physicsMaterial; }
+            set
+            {
+                if (value != physicsMaterial)
+                {
+                    physicsMaterial = value;
+                    ApplyUpdatedMeshPhysics();
+                }
+            }
+        }
+
         private Material visibleMaterial = null;
 
         /// <inheritdoc />
@@ -301,6 +336,58 @@ namespace Microsoft.MixedReality.Toolkit.SpatialAwareness
             }
         }
 
+        private GameObject runtimeSpatialMeshPrefab = null;
+
+        /// <inheritdoc />
+        public GameObject RuntimeSpatialMeshPrefab
+        {
+            get { return runtimeSpatialMeshPrefab; }
+            set
+            {
+                if (value != runtimeSpatialMeshPrefab)
+                {
+                    runtimeSpatialMeshPrefab = value;
+                }
+            }
+        }
+
         #endregion IMixedRealitySpatialMeshObserver Implementation
+
+        /// <summary>
+        /// Instantiates and appends a prefab to the Runtime (on device and not in editor) 
+        /// Spatial Awareness hierarchy. 
+        /// 
+        /// The default structure of the Spatial Awareness System:
+        /// 
+        /// Spatial Awareness System 
+        ///     Windows Mixed Reality Spatial Mesh Observer
+        ///         Spatial Mesh - ID
+        ///         Spatial Mesh - ID
+        ///         ...
+        /// 
+        /// If the Runtime Spatial Mesh Prefab field is not null, this method adds the prefab 
+        /// between the Spatial Awareness System and the Windows Mixed Reality Spatial Mesh Observer which results in this structure:
+        /// 
+        /// Spatial Awareness System 
+        ///         Runtime Spatial Mesh Prefab
+        ///             Windows Mixed Reality Spatial Mesh Observer
+        ///                 Spatial Mesh - ID
+        ///                 Spatial Mesh - ID
+        ///                 ...
+        /// </summary>
+        protected void AddRuntimeSpatialMeshPrefabToHierarchy()
+        {
+            if (RuntimeSpatialMeshPrefab != null)
+            {
+                GameObject spatialMeshPrefab = GameObject.Instantiate(RuntimeSpatialMeshPrefab, SpatialAwarenessSystem.SpatialAwarenessObjectParent.transform);
+
+                if (spatialMeshPrefab.transform.position != Vector3.zero)
+                {
+                    spatialMeshPrefab.transform.position = Vector3.zero;
+                }
+
+                ObservedObjectParent.transform.SetParent(spatialMeshPrefab.transform, false);
+            }
+        }
     }
 }

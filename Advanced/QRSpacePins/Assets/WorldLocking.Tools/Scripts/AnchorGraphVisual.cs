@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR.WSA;
 
 using Microsoft.MixedReality.WorldLocking.Core;
 using Microsoft.MixedReality.WorldLocking.Core.ResourceMirrorHelper;
@@ -332,7 +331,6 @@ namespace Microsoft.MixedReality.WorldLocking.Tools
                     frozenFragmentViz = Instantiate(Prefab_FrameViz, worldLockingRoot.transform);
                     frozenFragmentViz.name = fragmentId.ToString();
                     frozenFragmentVizs[fragmentId] = frozenFragmentViz;
-                    frozenFragmentViz.gameObject.AddComponent<AdjusterMoving>();
                 }
                 Color fragmentColor = Color.gray;
                 if (fragmentId == fragmentManager.CurrentFragmentId)
@@ -468,7 +466,7 @@ namespace Microsoft.MixedReality.WorldLocking.Tools
             {
                 var spongyAnchorVisual = Prefab_SpongyAnchorVisual.Instantiate(
                     spongyWorldVisual,
-                    source.spongyAnchor.GetComponent<WorldAnchor>());
+                    source.spongyAnchor);
 
                 resource = new IdPair<AnchorId, SpongyAnchorVisual>()
                 {
@@ -484,7 +482,7 @@ namespace Microsoft.MixedReality.WorldLocking.Tools
             /// <param name="target">The visual to destroy.</param>
             public void DestroySpongyVisual(IdPair<AnchorId, SpongyAnchorVisual> target)
             {
-                Destroy(target.target);
+                Destroy(target.target.gameObject);
             }
         }
 
@@ -536,7 +534,6 @@ namespace Microsoft.MixedReality.WorldLocking.Tools
                 // If there isn't a visualization for this anchor, add one.
                 FrozenAnchorVisual frozenAnchorVisual;
                 frozenAnchorVisual = Prefab_FrozenAnchorViz.Instantiate(anchorId.FormatStr(), frozenFragmentViz);
-                frozenAnchorVisual.gameObject.AddComponent<AdjusterMoving>();
 
                 // Put the frozen anchor vis at the world locked transform of the anchor
                 SetPose(source, frozenAnchorVisual);
@@ -580,7 +577,7 @@ namespace Microsoft.MixedReality.WorldLocking.Tools
             /// <param name="target"></param>
             public void DestroyFrozenVisual(IdPair<AnchorId, FrozenAnchorVisual> target)
             {
-                Destroy(target.target);
+                Destroy(target.target.gameObject);
             }
 
         }
@@ -660,7 +657,7 @@ namespace Microsoft.MixedReality.WorldLocking.Tools
             /// <param name="target">The resource to release.</param>
             public void DestroyFrozenEdge(IdPair<AnchorEdge, ConnectingLine> target)
             {
-                Destroy(target.target);
+                Destroy(target.target.gameObject);
             }
         }
 
@@ -704,7 +701,7 @@ namespace Microsoft.MixedReality.WorldLocking.Tools
             /// <param name="target">The resource to destroy.</param>
             public void DestroyDisplacement(IdPair<AnchorId, ConnectingLine> target)
             {
-                Destroy(target.target);
+                Destroy(target.target.gameObject);
             }
 
             /// <summary>

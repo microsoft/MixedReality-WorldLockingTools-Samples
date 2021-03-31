@@ -29,7 +29,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// allowing quick visual verification of the version of World Locking Tools for Unity currently installed.
         /// It has no effect in code, but serves only as a label.
         /// </summary>
-        public static string Version => "1.2.1";
+        public static string Version => "1.3.4";
 
         /// <summary>
         /// The configuration settings may only be set as a block.
@@ -139,7 +139,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// <summary>
         /// Interface to the fragment manager.
         /// </summary>
-        public  IFragmentManager FragmentManager => fragmentManager;
+        public IFragmentManager FragmentManager => fragmentManager;
 
         private readonly IAttachmentPointManager attachmentPointManager;
 
@@ -305,7 +305,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// </summary>
         private static GameObject updateProxyNode = null;
 
-#endregion
+        #endregion
 
         #region Update proxy
 
@@ -430,7 +430,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                 Debug.Log("Failed to create requested XR SDK anchor manager!");
             }
 #endif // WLT_ARSUBSYSTEMS_PRESENT
-#if UNITY_WSA
+#if UNITY_WSA && !UNITY_2020_1_OR_NEWER
             if (anchorSettings.anchorSubsystem == AnchorSettings.AnchorSubsystem.WSA)
             {
                 AnchorManagerWSA wsaAnchorManager = AnchorManagerWSA.TryCreate(plugin, headTracker);
@@ -442,10 +442,23 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                 Debug.Log("Failed to create requested WSA anchor manager!");
             }
 #endif // UNITY_WSA
+#if WLT_ARCORE_SDK_INCLUDED
+            if (anchorSettings.anchorSubsystem == AnchorSettings.AnchorSubsystem.ARCore)
+            {
+                AnchorManagerARCore arCoreAnchorManager = AnchorManagerARCore.TryCreate(plugin, headTracker);
+                if (arCoreAnchorManager != null)
+                {
+                    Debug.Log("Success creating ARCore anchor manager");
+                    return arCoreAnchorManager;
+                }
+                Debug.Log("Failed to create requested ARCore anchor manager!");
+            }
+#endif // WLT_ARCORE_SDK_INCLUDED
             if (anchorSettings.anchorSubsystem != AnchorSettings.AnchorSubsystem.Null)
             {
                 Debug.Log("Failure creating useful anchor manager of any type. Creating null manager");
                 anchorSettings.anchorSubsystem = AnchorSettings.AnchorSubsystem.Null;
+                shared.anchorSettings = anchorSettings;
             }
             AnchorManagerNull nullAnchorManager = AnchorManagerNull.TryCreate(plugin, headTracker);
             Debug.Assert(nullAnchorManager != null, "Creation of Null anchor manager should never fail.");
@@ -546,7 +559,6 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             // into the FrozenWorld engine
             bool hasSpongyAnchors = AnchorManager.Update();
 
-//#if UNITY_WSA
             if (!hasSpongyAnchors)
             {
                 // IFragmentManager.Pause() will set all fragments to disconnected.
@@ -554,7 +566,6 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                 FragmentManager.Pause();
                 return;
             }
-//#endif // UNITY_WSA
 
             try
             {
@@ -687,9 +698,9 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             }
         }
 
-#endregion
+        #endregion
 
-#region Public APIs
+        #region Public APIs
 
         /// <summary>
         /// Get the WorldLockingManager instance. This may be called at any time in program execution, 
@@ -725,7 +736,6 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         public void Save()
         {
             WrapErrors(saveAsync());
-            alignmentManager.Save();
         }
 
         /// <summary>
@@ -734,12 +744,11 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         public void Load()
         {
             WrapErrors(loadAsync());
-            alignmentManager.Load();
         }
 
-#endregion
+        #endregion
 
-#region Load and Save
+        #region Load and Save
 
         private string stateFileNameBase => Application.persistentDataPath + "/frozenWorldState.hkfw";
 
@@ -766,30 +775,35 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                     File.Delete(stateFileNameBase + ".new");
                 }
 
-                using (var file = File.Create(stateFileNameBase + ".new"))
-                {
-                    await AnchorManager.SaveAnchors();
+                await AnchorManager.SaveAnchors();
 
-                    using (var ps = Plugin.CreateSerializer())
+                if (AnchorManager.SupportsPersistence)
+                {
+                    alignmentManager.Save();
+
+                    using (var file = File.Create(stateFileNameBase + ".new"))
                     {
-                        ps.IncludePersistent = true;
-                        ps.IncludeTransient = false;
-                        ps.GatherRecord();
-                        await ps.WriteRecordToAsync(file);
+                        using (var ps = Plugin.CreateSerializer())
+                        {
+                            ps.IncludePersistent = true;
+                            ps.IncludeTransient = false;
+                            ps.GatherRecord();
+                            await ps.WriteRecordToAsync(file);
+                        }
                     }
-                }
 
-                if (File.Exists(stateFileNameBase + ".old"))
-                {
-                    File.Delete(stateFileNameBase + ".old");
-                }
-                if (File.Exists(stateFileNameBase))
-                {
-                    File.Move(stateFileNameBase, stateFileNameBase + ".old");
-                }
-                File.Move(stateFileNameBase + ".new", stateFileNameBase);
+                    if (File.Exists(stateFileNameBase + ".old"))
+                    {
+                        File.Delete(stateFileNameBase + ".old");
+                    }
+                    if (File.Exists(stateFileNameBase))
+                    {
+                        File.Move(stateFileNameBase, stateFileNameBase + ".old");
+                    }
+                    File.Move(stateFileNameBase + ".new", stateFileNameBase);
 
-                lastSavingTime = Time.unscaledTime;
+                    lastSavingTime = Time.unscaledTime;
+                }
             }
             finally
             {
@@ -827,7 +841,11 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                                 await pds.ReadRecordFromAsync(file);
                                 pds.ApplyRecord();
                             }
-                            await AnchorManager.LoadAnchors();
+                        }
+                        await AnchorManager.LoadAnchors();
+                        if (AnchorManager.SupportsPersistence)
+                        {
+                            AlignmentManager.Load();
                         }
 
                         // finish when reading was successful
@@ -846,9 +864,13 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// </summary>
         private void AutoSaveTriggerHook()
         {
-            if (AutoSave && Time.unscaledTime >= lastSavingTime + AutoSaveInterval)
+            if (AnchorManager.SupportsPersistence)
             {
-                WrapErrors(saveAsync());
+                /// Persistence currently only supported on HoloLens
+                if (AutoSave && Time.unscaledTime >= lastSavingTime + AutoSaveInterval)
+                {
+                    WrapErrors(saveAsync());
+                }
             }
         }
 
@@ -862,7 +884,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             await task;
         }
 
-#endregion Load and Save
+        #endregion Load and Save
 
     }
 }

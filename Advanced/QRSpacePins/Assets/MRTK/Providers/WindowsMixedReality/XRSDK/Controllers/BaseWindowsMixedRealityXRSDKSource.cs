@@ -8,10 +8,6 @@ using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.XR;
 
-#if WMR_ENABLED
-using Unity.XR.WindowsMR;
-#endif // WMR_ENABLED
-
 namespace Microsoft.MixedReality.Toolkit.XRSDK.WindowsMixedReality
 {
     /// <summary>
@@ -22,10 +18,15 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK.WindowsMixedReality
         /// <summary>
         /// Constructor.
         /// </summary>
-        protected BaseWindowsMixedRealityXRSDKSource(TrackingState trackingState, Handedness sourceHandedness, IMixedRealityInputSource inputSource = null, MixedRealityInteractionMapping[] interactions = null)
-                : base(trackingState, sourceHandedness, inputSource, interactions) { }
+        protected BaseWindowsMixedRealityXRSDKSource(
+            TrackingState trackingState,
+            Handedness sourceHandedness,
+            IMixedRealityInputSource inputSource = null,
+            MixedRealityInteractionMapping[] interactions = null,
+            IMixedRealityInputSourceDefinition definition = null)
+            : base(trackingState, sourceHandedness, inputSource, interactions, definition)
+        { }
 
-#if WMR_ENABLED
         private Vector3 currentPointerPosition = Vector3.zero;
         private Quaternion currentPointerRotation = Quaternion.identity;
         private MixedRealityPose currentPointerPose = MixedRealityPose.ZeroIdentity;
@@ -41,18 +42,16 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK.WindowsMixedReality
             {
                 Debug.Assert(interactionMapping.AxisType == AxisType.SixDof);
 
-                base.UpdatePoseData(interactionMapping, inputDevice);
-
                 // Update the interaction data source
                 switch (interactionMapping.InputType)
                 {
                     case DeviceInputType.SpatialPointer:
-                        if (inputDevice.TryGetFeatureValue(WindowsMRUsages.PointerPosition, out currentPointerPosition))
+                        if (inputDevice.TryGetFeatureValue(CustomUsages.PointerPosition, out currentPointerPosition))
                         {
                             currentPointerPose.Position = MixedRealityPlayspace.TransformPoint(currentPointerPosition);
                         }
 
-                        if (inputDevice.TryGetFeatureValue(WindowsMRUsages.PointerRotation, out currentPointerRotation))
+                        if (inputDevice.TryGetFeatureValue(CustomUsages.PointerRotation, out currentPointerRotation))
                         {
                             currentPointerPose.Rotation = MixedRealityPlayspace.Rotation * currentPointerRotation;
                         }
@@ -67,10 +66,10 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK.WindowsMixedReality
                         }
                         break;
                     default:
-                        return;
+                        base.UpdatePoseData(interactionMapping, inputDevice);
+                        break;
                 }
             }
         }
-#endif // WMR_ENABLED
     }
 }

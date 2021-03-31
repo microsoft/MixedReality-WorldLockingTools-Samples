@@ -12,7 +12,9 @@ namespace Microsoft.MixedReality.Toolkit.Editor.SpatialAwareness
 {
     [CustomEditor(typeof(MixedRealitySpatialAwarenessMeshObserverProfile))]
     public class MixedRealitySpatialAwarenessMeshObserverProfileInspector : BaseMixedRealityToolkitConfigurationProfileInspector
-    {
+    { 
+        private SerializedProperty runtimeSpatialMeshPrefab;
+
         // General settings
         private SerializedProperty startupBehavior;
         private SerializedProperty observationExtents;
@@ -23,6 +25,7 @@ namespace Microsoft.MixedReality.Toolkit.Editor.SpatialAwareness
         // Physics settings
         private SerializedProperty meshPhysicsLayer;
         private SerializedProperty recalculateNormals;
+        private SerializedProperty physicsMaterial;
 
         // Level of Detail settings
         private SerializedProperty levelOfDetail;
@@ -54,12 +57,14 @@ namespace Microsoft.MixedReality.Toolkit.Editor.SpatialAwareness
 
             // Mesh settings
             meshPhysicsLayer = serializedObject.FindProperty("meshPhysicsLayer");
+            physicsMaterial = serializedObject.FindProperty("physicsMaterial");
             recalculateNormals = serializedObject.FindProperty("recalculateNormals");
             levelOfDetail = serializedObject.FindProperty("levelOfDetail");
             trianglesPerCubicMeter = serializedObject.FindProperty("trianglesPerCubicMeter");
             displayOption = serializedObject.FindProperty("displayOption");
             visibleMaterial = serializedObject.FindProperty("visibleMaterial");
             occlusionMaterial = serializedObject.FindProperty("occlusionMaterial");
+            runtimeSpatialMeshPrefab = serializedObject.FindProperty("runtimeSpatialMeshPrefab");
         }
 
         public override void OnInspectorGUI()
@@ -72,6 +77,9 @@ namespace Microsoft.MixedReality.Toolkit.Editor.SpatialAwareness
             using (new EditorGUI.DisabledGroupScope(IsProfileLock((BaseMixedRealityProfile)target)))
             {
                 serializedObject.Update();
+
+                EditorGUILayout.PropertyField(runtimeSpatialMeshPrefab);
+                EditorGUILayout.Space();
 
                 EditorGUILayout.LabelField("General Settings", EditorStyles.boldLabel);
                 {
@@ -103,6 +111,7 @@ namespace Microsoft.MixedReality.Toolkit.Editor.SpatialAwareness
                 {
                     EditorGUILayout.PropertyField(meshPhysicsLayer, physicsLayerContent);
                     EditorGUILayout.PropertyField(recalculateNormals);
+                    EditorGUILayout.PropertyField(physicsMaterial);
                 }
 
                 EditorGUILayout.Space();

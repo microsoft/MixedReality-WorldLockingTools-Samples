@@ -2,10 +2,6 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using UnityEngine;
-#if UNITY_WSA
-using UnityEngine.XR.WSA;
-using UnityEngine.XR.WSA.Persistence;
-#endif // UNITY_WSA
 
 namespace Microsoft.MixedReality.WorldLocking.Core
 {
@@ -24,5 +20,10 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// Return the anchor's pose in spongy space.
         /// </summary>
         public abstract Pose SpongyPose { get; }
+
+        /// <summary>
+        /// Diagnostic only - to be removed.
+        /// </summary>
+        public virtual Vector3 Delta { get; set; }
     }
 }

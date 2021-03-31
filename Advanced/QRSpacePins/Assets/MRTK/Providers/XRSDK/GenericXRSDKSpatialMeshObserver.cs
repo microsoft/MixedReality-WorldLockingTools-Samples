@@ -16,7 +16,7 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK
         "XR SDK Spatial Mesh Observer",
         "Profiles/DefaultMixedRealitySpatialAwarenessMeshObserverProfile.asset",
         "MixedRealityToolkit.SDK")]
-    [HelpURL("https://microsoft.github.io/MixedRealityToolkit-Unity/Documentation/SpatialAwareness/SpatialAwarenessGettingStarted.html")]
+    [HelpURL("https://docs.microsoft.com/windows/mixed-reality/mrtk-unity/features/spatial-awareness/spatial-awareness-getting-started")]
     public class GenericXRSDKSpatialMeshObserver :
         BaseSpatialMeshObserver,
         IMixedRealityCapabilityCheck
@@ -44,7 +44,7 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK
         {
             if (SpatialAwarenessSystem == null) { return; }
 
-            if (XRSDKSubsystemHelpers.MeshSubsystem != null)
+            if (XRSubsystemHelpers.MeshSubsystem != null)
             {
                 ConfigureObserverVolume();
 
@@ -77,9 +77,16 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK
         {
             // For non-custom levels, the enum value is the appropriate triangles per cubic meter.
             int level = (int)levelOfDetail;
-            if (XRSDKSubsystemHelpers.MeshSubsystem != null)
+            if (XRSubsystemHelpers.MeshSubsystem != null)
             {
-                XRSDKSubsystemHelpers.MeshSubsystem.meshDensity = level / (float)SpatialAwarenessMeshLevelOfDetail.Fine; // For now, map Coarse to 0.0 and Fine to 1.0
+                if (levelOfDetail == SpatialAwarenessMeshLevelOfDetail.Unlimited)
+                {
+                    XRSubsystemHelpers.MeshSubsystem.meshDensity = 1;
+                }
+                else
+                {
+                    XRSubsystemHelpers.MeshSubsystem.meshDensity = level / (float)SpatialAwarenessMeshLevelOfDetail.Fine; // For now, map Coarse to 0.0 and Fine to 1.0
+                }
             }
             return level;
         }
@@ -113,6 +120,7 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK
         {
             using (UpdatePerfMarker.Auto())
             {
+                base.Update();
                 UpdateObserver();
             }
         }
@@ -228,7 +236,7 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK
         /// </summary>
         private void UpdateObserver()
         {
-            if (SpatialAwarenessSystem == null || XRSDKSubsystemHelpers.MeshSubsystem == null) { return; }
+            if (SpatialAwarenessSystem == null || XRSubsystemHelpers.MeshSubsystem == null) { return; }
 
             using (UpdateObserverPerfMarker.Auto())
             {
@@ -260,7 +268,7 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK
                         // The application can update the observer volume at any time, make sure we are using the latest.
                         ConfigureObserverVolume();
 
-                        if (XRSDKSubsystemHelpers.MeshSubsystem.TryGetMeshInfos(meshInfos))
+                        if (XRSubsystemHelpers.MeshSubsystem.TryGetMeshInfos(meshInfos))
                         {
                             UpdateMeshes(meshInfos);
                         }
@@ -271,41 +279,7 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK
             }
         }
 
-        /// <summary>
-        /// Internal component to monitor the WorldAnchor's transform, apply the MixedRealityPlayspace transform,
-        /// and apply it to its parent.
-        /// </summary>
-        private class PlayspaceAdapter : MonoBehaviour
-        {
-            /// <summary>
-            /// Compute concatenation of lhs * rhs such that lhs * (rhs * v) = Concat(lhs, rhs) * v
-            /// </summary>
-            /// <param name="lhs">Second transform to apply</param>
-            /// <param name="rhs">First transform to apply</param>
-            private static Pose Concatenate(Pose lhs, Pose rhs)
-            {
-                return rhs.GetTransformedBy(lhs);
-            }
-
-            private static readonly ProfilerMarker UpdatePerfMarker = new ProfilerMarker("[MRTK] GenericXRSDKSpatialMeshObserver+PlayspaceAdapter.Update");
-
-            /// <summary>
-            /// Compute and set the parent's transform.
-            /// </summary>
-            private void Update()
-            {
-                using (UpdatePerfMarker.Auto())
-                {
-                    Pose worldFromPlayspace = new Pose(MixedRealityPlayspace.Position, MixedRealityPlayspace.Rotation);
-                    Pose anchorPose = new Pose(transform.position, transform.rotation);
-                    Pose parentPose = Concatenate(worldFromPlayspace, anchorPose);
-                    transform.parent.position = parentPose.position;
-                    transform.parent.rotation = parentPose.rotation;
-                }
-            }
-        }
-
-        private static readonly ProfilerMarker RequestMeshPerfMarker = new ProfilerMarker("[MRTK] GenericXRSDKSpatialMeshObserver+PlayspaceAdapter.RequestMesh");
+        private static readonly ProfilerMarker RequestMeshPerfMarker = new ProfilerMarker("[MRTK] GenericXRSDKSpatialMeshObserver.RequestMesh");
 
         /// <summary>
         /// Issue a request to the Surface Observer to begin baking the mesh.
@@ -326,11 +300,6 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK
                         MeshPhysicsLayer,
                         meshName,
                         meshId.GetHashCode());
-
-                    GameObject anchorHolder = new GameObject(meshName + "_anchor");
-                    anchorHolder.AddComponent<PlayspaceAdapter>();
-                    // Right now, we don't add an anchor to the mesh. This may be resolved with the AnchorSubsystem.
-                    anchorHolder.transform.SetParent(newMesh.GameObject.transform, false);
                 }
                 else
                 {
@@ -342,12 +311,12 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK
                     newMesh.GameObject.SetActive(true);
                 }
 
-                XRSDKSubsystemHelpers.MeshSubsystem.GenerateMeshAsync(meshId, newMesh.Filter.mesh, newMesh.Collider, MeshVertexAttributes.Normals, (MeshGenerationResult meshGenerationResult) => MeshGenerationAction(meshGenerationResult));
+                XRSubsystemHelpers.MeshSubsystem.GenerateMeshAsync(meshId, newMesh.Filter.mesh, newMesh.Collider, MeshVertexAttributes.Normals, (MeshGenerationResult meshGenerationResult) => MeshGenerationAction(meshGenerationResult));
                 outstandingMeshObject = newMesh;
             }
         }
 
-        private static readonly ProfilerMarker RemoveMeshObjectPerfMarker = new ProfilerMarker("[MRTK] GenericXRSDKSpatialMeshObserver+PlayspaceAdapter.RemoveMeshObject");
+        private static readonly ProfilerMarker RemoveMeshObjectPerfMarker = new ProfilerMarker("[MRTK] GenericXRSDKSpatialMeshObserver.RemoveMeshObject");
 
         /// <summary>
         /// Removes the <see cref="SpatialAwareness.SpatialAwarenessMeshObject"/> associated with the specified id.
@@ -373,7 +342,7 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK
             }
         }
 
-        private static readonly ProfilerMarker ReclaimMeshObjectPerfMarker = new ProfilerMarker("[MRTK] GenericXRSDKSpatialMeshObserver+PlayspaceAdapter.ReclaimMeshObject");
+        private static readonly ProfilerMarker ReclaimMeshObjectPerfMarker = new ProfilerMarker("[MRTK] GenericXRSDKSpatialMeshObserver.ReclaimMeshObject");
 
         /// <summary>
         /// Reclaims the <see cref="SpatialAwareness.SpatialAwarenessMeshObject"/> to allow for later reuse.
@@ -402,14 +371,14 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK
             }
         }
 
-        private static readonly ProfilerMarker ConfigureObserverVolumePerfMarker = new ProfilerMarker("[MRTK] GenericXRSDKSpatialMeshObserver+PlayspaceAdapter.ConfigureObserverVolume");
+        private static readonly ProfilerMarker ConfigureObserverVolumePerfMarker = new ProfilerMarker("[MRTK] GenericXRSDKSpatialMeshObserver.ConfigureObserverVolume");
 
         /// <summary>
         /// Applies the configured observation extents.
         /// </summary>
         protected virtual void ConfigureObserverVolume()
         {
-            if (SpatialAwarenessSystem == null || XRSDKSubsystemHelpers.MeshSubsystem == null)
+            if (SpatialAwarenessSystem == null || XRSubsystemHelpers.MeshSubsystem == null)
             {
                 return;
             }
@@ -420,7 +389,7 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK
                 switch (ObserverVolumeType)
                 {
                     case VolumeType.AxisAlignedCube:
-                        XRSDKSubsystemHelpers.MeshSubsystem.SetBoundingVolume(ObserverOrigin, ObservationExtents);
+                        XRSubsystemHelpers.MeshSubsystem.SetBoundingVolume(ObserverOrigin, ObservationExtents);
                         break;
 
                     default:
@@ -430,7 +399,7 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK
             }
         }
 
-        private static readonly ProfilerMarker UpdateMeshesPerfMarker = new ProfilerMarker("[MRTK] GenericXRSDKSpatialMeshObserver+PlayspaceAdapter.UpdateMeshes");
+        private static readonly ProfilerMarker UpdateMeshesPerfMarker = new ProfilerMarker("[MRTK] GenericXRSDKSpatialMeshObserver.UpdateMeshes");
 
         /// <summary>
         /// Updates meshes based on the result of the MeshSubsystem.TryGetMeshInfos method.
@@ -458,7 +427,7 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK
             }
         }
 
-        private static readonly ProfilerMarker MeshGenerationActionPerfMarker = new ProfilerMarker("[MRTK] GenericXRSDKSpatialMeshObserver+PlayspaceAdapter.MeshGenerationAction");
+        private static readonly ProfilerMarker MeshGenerationActionPerfMarker = new ProfilerMarker("[MRTK] GenericXRSDKSpatialMeshObserver.MeshGenerationAction");
 
         private void MeshGenerationAction(MeshGenerationResult meshGenerationResult)
         {
@@ -486,19 +455,20 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK
                         meshObject.Id = meshGenerationResult.MeshId.GetHashCode();
                         outstandingMeshObject = null;
 
-                        // Apply the appropriate material to the mesh.
-                        SpatialAwarenessMeshDisplayOptions displayOption = DisplayOption;
-                        if (displayOption != SpatialAwarenessMeshDisplayOptions.None)
-                        {
-                            meshObject.Renderer.enabled = true;
-                            meshObject.Renderer.sharedMaterial = (displayOption == SpatialAwarenessMeshDisplayOptions.Visible) ?
-                                VisibleMaterial :
-                                OcclusionMaterial;
-                        }
-                        else
-                        {
-                            meshObject.Renderer.enabled = false;
-                        }
+                        // Check to see if this is a new or updated mesh.
+                        bool isMeshUpdate = meshes.ContainsKey(meshObject.Id);
+
+                        // We presume that if the display option is not occlusion, that we should 
+                        // default to the visible material. 
+                        // Note: We check explicitly for a display option of none later in this method.
+                        Material material = (DisplayOption == SpatialAwarenessMeshDisplayOptions.Occlusion) ?
+                            OcclusionMaterial : VisibleMaterial;
+
+                        // If this is a mesh update, we want to preserve the mesh's previous material.
+                        material = isMeshUpdate ? meshes[meshObject.Id].Renderer.sharedMaterial : material;
+
+                        // Apply the appropriate material.
+                        meshObject.Renderer.sharedMaterial = material;
 
                         // Recalculate the mesh normals if requested.
                         if (RecalculateNormals)
@@ -506,22 +476,30 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK
                             meshObject.Filter.sharedMesh.RecalculateNormals();
                         }
 
+                        // Check to see if the display option is set to none. If so, we disable
+                        // the renderer.
+                        meshObject.Renderer.enabled = (DisplayOption != SpatialAwarenessMeshDisplayOptions.None);
+
+                        // Set the physics material
+                        if (meshObject.Renderer.enabled)
+                        {
+                            meshObject.Collider.material = PhysicsMaterial;
+                        }
+
                         // Add / update the mesh to our collection
-                        bool sendUpdatedEvent = false;
-                        if (meshes.ContainsKey(meshObject.Id))
+                        if (isMeshUpdate)
                         {
                             // Reclaim the old mesh object for future use.
                             ReclaimMeshObject(meshes[meshObject.Id]);
                             meshes.Remove(meshObject.Id);
-
-                            sendUpdatedEvent = true;
                         }
                         meshes.Add(meshObject.Id, meshObject);
 
-                        meshObject.GameObject.transform.parent = (ObservedObjectParent.transform != null) ? ObservedObjectParent.transform : null;
+                        meshObject.GameObject.transform.parent = (ObservedObjectParent.transform != null) ?
+                            ObservedObjectParent.transform : null;
 
                         meshEventData.Initialize(this, meshObject.Id, meshObject);
-                        if (sendUpdatedEvent)
+                        if (isMeshUpdate)
                         {
                             SpatialAwarenessSystem?.HandleEvent(meshEventData, OnMeshUpdated);
                         }
@@ -535,5 +513,17 @@ namespace Microsoft.MixedReality.Toolkit.XRSDK
         }
 
         #endregion Helpers
+
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            if (SpatialAwarenessSystem == null || XRSubsystemHelpers.MeshSubsystem == null) { return; }
+
+            if (RuntimeSpatialMeshPrefab != null)
+            {
+                AddRuntimeSpatialMeshPrefabToHierarchy();
+            }
+        }
     }
 }
