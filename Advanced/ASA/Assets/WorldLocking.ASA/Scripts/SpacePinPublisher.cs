@@ -37,26 +37,30 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         private PlatformLocationProvider locationProvider = null;
         private readonly List<string> beaconUuids = new List<string>();
 
+        private int ConsoleHigh = 10;
+        private int ConsoleMid = 8;
+        private int ConsoleLow = 3;
+
+        private Transform anchorsParent = null;
+
         #endregion // Internal members
 
         #region Internal types
-        protected class AnchorRecord
+        private class AnchorRecord
         {
-            public NativeAnchor nativeAnchor = null;
+            public LocalPeg localPeg = null;
             public CloudSpatialAnchor cloudAnchor = null;
             public CloudAnchorId cloudAnchorId = null;
 
-            public GameObject anchorHanger = null;
-
-            public AnchoredObjectAndProperties GetPoseWithProperties()
+            public LocalPegAndProperties GetPegWithProperties()
             {
-                Debug.Assert(anchorHanger != null, "Missing GameObject on AnchorRecord.");
+                Debug.Assert(localPeg != null, "Missing localPeg on AnchorRecord.");
                 Debug.Assert(cloudAnchor != null, "Missing cloudAnchor on AnchorRecord.");
-                AnchoredObjectAndProperties obj = new AnchoredObjectAndProperties();
-                obj.anchorHanger = anchorHanger;
-                obj.properties = cloudAnchor.AppProperties;
+                LocalPegAndProperties peg = new LocalPegAndProperties();
+                peg.localPeg = localPeg;
+                peg.properties = cloudAnchor.AppProperties;
 
-                return obj;
+                return peg;
             }
 
             public static string DebugString(AnchorRecord record, string msg)
@@ -67,11 +71,11 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 }
                 Pose cloudPose = record.cloudAnchor == null ? Pose.identity : record.cloudAnchor.GetPose();
                 return msg + "\n"
-                    + $"nativeAnchor: {(record.nativeAnchor == null ? "null" : record.nativeAnchor.name)}\n"
+                    + $"nativeAnchor: {(record.localPeg.NativeAnchor == null ? "null" : record.localPeg.NativeAnchor.name)}\n"
                     + $"cloudAnchor: {(record.cloudAnchor == null ? "null" : record.cloudAnchor.Identifier)}\n"
                     + $"cloudAnchorId: {(!string.IsNullOrEmpty(record.cloudAnchorId) ? record.cloudAnchorId : "null")}\n"
-                    + $"hanger: {(record.anchorHanger == null ? "null" : record.anchorHanger.name)}\n"
-                    + $"pose: p={record.anchorHanger.transform.GetGlobalPose().position.ToString("F3")} r={record.anchorHanger.transform.GetGlobalPose().rotation.ToString("F3")}\n"
+                    + $"hanger: {(record.localPeg.anchorHanger == null ? "null" : record.localPeg.anchorHanger.name)}\n"
+                    + $"pose: p={record.localPeg.GlobalPose.position.ToString("F3")} r={record.localPeg.GlobalPose.rotation.ToString("F3")}\n"
                     + $"cldp: p={cloudPose.position.ToString("F3")} r={cloudPose.rotation.ToString("F3")}";
             }
 
@@ -81,12 +85,43 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
         };
 
+        private class LocalPeg : ILocalPeg
+        {
+            public GameObject anchorHanger;
+
+            public NativeAnchor NativeAnchor
+            {
+                get 
+                { 
+                    return anchorHanger?.FindNativeAnchor(); 
+                }
+            }
+
+            public string Name { get; set; }
+
+            public bool IsReadyForPublish 
+            {
+                get
+                {
+                    return NativeAnchor != null;
+                }
+            }
+
+            public Pose GlobalPose
+            {
+                get
+                {
+                    return anchorHanger.transform.GetGlobalPose();
+                }
+            }
+
+        }
 
         #endregion // Internal types
 
         #region Public API
 
-        public Transform anchorsParent = null;
+        public Transform AnchorsParent { get { return anchorsParent; } set { anchorsParent = value; } }
 
         /// <summary>
         /// Enable coarse relocation.
@@ -106,9 +141,6 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             Ready
         };
         private NotReadyReason readyReason = NotReadyReason.Invalid;
-        private int ConsoleHigh = 10;
-        private int ConsoleMid = 8;
-        private int ConsoleLow = 3;
         public bool IsReady
         {
             get
@@ -158,46 +190,6 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
         }
 
-        private bool LocationReady(NotReadyReason readyReason)
-        {
-            // If locationProvider is null, we aren't using location provider, so don't need to wait on it. I.e. ready.
-            if (locationProvider == null)
-            {
-                return true;
-            }
-            if (locationProvider.GeoLocationStatus == GeoLocationStatusResult.Available)
-            {
-                if (readyReason == NotReadyReason.NotReadyForLocate)
-                {
-                    SimpleConsole.AddLine(ConsoleHigh, $"Ready: GeoLocationStatus={locationProvider.GeoLocationStatus}");
-                }
-                return true;
-            }
-            if (locationProvider.WifiStatus == WifiStatusResult.Available)
-            {
-                if (readyReason == NotReadyReason.NotReadyForLocate)
-                {
-                    SimpleConsole.AddLine(ConsoleHigh, $"Ready: WifiStatus={locationProvider.WifiStatus}");
-                }
-                return true;
-            }
-            if (locationProvider.BluetoothStatus == BluetoothStatusResult.Available)
-            {
-                if (readyReason == NotReadyReason.NotReadyForLocate)
-                {
-                    SimpleConsole.AddLine(ConsoleHigh, $"Ready: BluetoothStatus={locationProvider.BluetoothStatus}");
-                }
-                return true;
-            }
-            if (readyReason != NotReadyReason.NotReadyForLocate)
-            {
-                SimpleConsole.AddLine(ConsoleHigh, $"Not Ready: GeoLocationStatus={locationProvider.GeoLocationStatus}");
-                SimpleConsole.AddLine(ConsoleHigh, $"Not Ready: WifiStatus={locationProvider.WifiStatus}");
-                SimpleConsole.AddLine(ConsoleHigh, $"Not Ready: BluetoothStatus={locationProvider.BluetoothStatus}");
-            }
-            return false;
-        }
-
         public async void Setup()
         {
 #if UNITY_ANDROID
@@ -238,52 +230,41 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             SimpleConsole.AddLine(ConsoleHigh, $"Publisher setup complete S={asaManager.IsSessionStarted}");
         }
 
-        private void OnASALog(object sender, OnLogDebugEventArgs args)
+        public async Task<ILocalPeg> CreateLocalPeg(string id, Pose lockedPose)
         {
-            SimpleConsole.AddLine(ConsoleLow, args.Message);
+            int waitForAnchor = 30;
+            await Task.Delay(waitForAnchor);
+
+            return InternalCreateLocalPeg(id, lockedPose);
         }
 
-        private void OnASAError(object sender, SessionErrorEventArgs args)
+        public void ReleaseLocalPeg(ILocalPeg peg)
         {
-            SimpleConsole.AddLine(ConsoleHigh, args.ErrorMessage);
-        }
-
-        private PlatformLocationProvider CreateLocationProvider()
-        {
-            Debug.Log($"To create location provider");
-
-            if (!CoarseRelocationEnabled)
+            LocalPeg localPeg = peg as LocalPeg;
+            if (localPeg == null)
             {
-                SimpleConsole.AddLine(8, $"Coarse relocation is not enabled!");
-                return null;
+                throw new ArgumentException("ILocalPeg argument should be of type LocalPeg. Gotten from invalid source?");
             }
-
-            PlatformLocationProvider provider = new PlatformLocationProvider();
-            // Allow GPS
-            provider.Sensors.GeoLocationEnabled = true;
-
-            // Allow WiFi scanning
-            provider.Sensors.WifiEnabled = true;
-
-            // Allow a set of known BLE beacons
-            provider.Sensors.BluetoothEnabled = (beaconUuids.Count > 0);
-            // mafinc - todo, add api for adding list of blutooth beacon uuids.
-            provider.Sensors.KnownBeaconProximityUuids = beaconUuids.ToArray();
-
-            return provider;
+            GameObject.Destroy(localPeg.anchorHanger);
         }
-        public async Task<CloudAnchorId> Create(AnchoredObjectAndProperties obj)
+
+        public async Task<CloudAnchorId> Create(LocalPegAndProperties peg)
         {
-            SimpleConsole.AddLine(ConsoleMid, $"Create for AH={obj.anchorHanger.name}, {obj.properties.Count} props.");
+            SimpleConsole.AddLine(ConsoleMid, $"Create for AH={peg.localPeg.Name}, {peg.properties.Count} props.");
 
             AnchorRecord record = new AnchorRecord();
 
-            if (obj.anchorHanger == null)
+            if (!peg.localPeg.IsReadyForPublish)
             {
-                throw new System.ArgumentNullException("obj.anchorHanger", "Null anchor object in Create");
+                throw new System.ArgumentNullException("peg.localPeg", "Local Peg not ready for create in Create");
             }
 
-            record.anchorHanger = obj.anchorHanger;
+            LocalPeg localPeg = peg.localPeg as LocalPeg;
+            if (localPeg == null)
+            {
+                throw new System.ArgumentException("Invalid type of local peg", "peg.localPeg");
+            }
+            record.localPeg = localPeg;
 
             // mafinc - this is a design flaw. Now is not the time to create the native anchor,
             // as we are not necessarily in a good position to create a good native anchor.
@@ -298,14 +279,13 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
             // manipulation or QR code read or whatever.
             // Create the native anchor.
-            record.nativeAnchor = record.anchorHanger.FindOrCreateNativeAnchor();
 
             AnchorRecord.DebugLog(record, "Pre ToCloud");
 
             // Now get the cloud spatial anchor
-            record.cloudAnchor = await record.nativeAnchor.ToCloud();
+            record.cloudAnchor = await record.localPeg.NativeAnchor.ToCloud();
 
-            foreach (var prop in obj.properties)
+            foreach (var prop in peg.properties)
             {
                 record.cloudAnchor.AppProperties[prop.Key] = prop.Value;
                 SimpleConsole.AddLine(8, $"Add prop {prop.Key}: {prop.Value}");
@@ -323,17 +303,17 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
             AddRecord(record.cloudAnchorId, record);
 
-            SimpleConsole.AddLine(ConsoleMid, $"Created {obj.anchorHanger.name} - {record.cloudAnchorId} at {record.anchorHanger.transform.position.ToString("F3")}");
+            SimpleConsole.AddLine(ConsoleMid, $"Created {peg.localPeg.Name} - {record.cloudAnchorId} at {record.localPeg.GlobalPose.position.ToString("F3")}");
 
             return record.cloudAnchorId;
         }
 
-        public async Task<AnchoredObjectAndProperties> Read(CloudAnchorId cloudAnchorId)
+        public async Task<LocalPegAndProperties> Read(CloudAnchorId cloudAnchorId)
         {
             SimpleConsole.AddLine(ConsoleMid, $"Read CID={cloudAnchorId}");
             // mafinc - do we want an option here to force downloading, even if we already have it cached locally?
             AnchorRecord record = GetRecord(cloudAnchorId);
-            Debug.Log($"GetRecord ca={cloudAnchorId}, record={(record == null ? "null" : record.anchorHanger.name)}");
+            Debug.Log($"GetRecord ca={cloudAnchorId}, record={(record == null ? "null" : record.localPeg.Name)}");
             if (record == null)
             {
                 Debug.Log($"Downloading record ca={cloudAnchorId}");
@@ -347,17 +327,17 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
             AnchorRecord.DebugLog(record, "Read: Got record");
 
-            SimpleConsole.AddLine(ConsoleMid, $"Got record p={record.anchorHanger.transform.position.ToString("F3")}");
+            SimpleConsole.AddLine(ConsoleMid, $"Got record p={record.localPeg.GlobalPose.position.ToString("F3")}");
 
-            return record.GetPoseWithProperties();
+            return record.GetPegWithProperties();
         }
 
-        public async Task<CloudAnchorId> Update(CloudAnchorId cloudAnchorId, AnchoredObjectAndProperties obj)
+        public async Task<CloudAnchorId> Update(CloudAnchorId cloudAnchorId, LocalPegAndProperties peg)
         {
             /// This might be more efficiently implemented with ASA update API.
             await Delete(cloudAnchorId);
 
-            return await Create(obj);
+            return await Create(peg);
         }
 
         public async Task Delete(string cloudAnchorId)
@@ -389,7 +369,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
         }
 
-        public async Task<Dictionary<CloudAnchorId, AnchoredObjectAndProperties>> Find(float radiusFromDevice)
+        public async Task<Dictionary<CloudAnchorId, LocalPegAndProperties>> Find(float radiusFromDevice)
         {
             if (locationProvider == null)
             {
@@ -399,11 +379,11 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             List<AnchorRecord> locatedRecords = await SearchForRecords(radiusFromDevice);
 
             SimpleConsole.AddLine(8, $"Found {locatedRecords.Count} records.");
-            Dictionary<CloudAnchorId, AnchoredObjectAndProperties> found = new Dictionary<CloudAnchorId, AnchoredObjectAndProperties>();
+            Dictionary<CloudAnchorId, LocalPegAndProperties> found = new Dictionary<CloudAnchorId, LocalPegAndProperties>();
             foreach (var record in locatedRecords)
             {
                 AddRecord(record.cloudAnchorId, record);
-                var obj = record.GetPoseWithProperties();
+                var obj = record.GetPegWithProperties();
                 found[record.cloudAnchorId] = obj;
             }
             return found;
@@ -568,10 +548,26 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         #region Internal helpers
 
+        private ILocalPeg InternalCreateLocalPeg(string id, Pose lockedPose)
+        {
+            LocalPeg peg = new LocalPeg();
+            peg.Name = id;
+
+            peg.anchorHanger = new GameObject(id);
+            peg.anchorHanger.transform.SetParent(AnchorsParent, false);
+
+            var wltMgr = WorldLockingManager.GetInstance();
+            Pose anchorPose = wltMgr.AnchorManager.AnchorFromSpongy.Multiply(wltMgr.SpongyFromLocked).Multiply(lockedPose);
+            peg.anchorHanger.transform.SetGlobalPose(anchorPose);
+            peg.anchorHanger.CreateNativeAnchor();
+
+            return peg;
+        }
+
 
         private bool AddRecord(CloudAnchorId id, AnchorRecord record)
         {
-            Debug.Log($"Adding record ah={record.anchorHanger.name} ca={id} ");
+            Debug.Log($"Adding record ah={record.localPeg.Name} ca={id} ");
             Debug.Assert(id == record.cloudAnchorId, $"Adding record under inconsistent id {id} vs {record.cloudAnchorId}");
             int idx = records.FindIndex(x => x.cloudAnchorId == record.cloudAnchorId);
             if (idx < 0)
@@ -609,22 +605,8 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         private AnchorRecord RecordFromCloud(AnchorRecord record)
         {
             Debug.Assert(record.cloudAnchor != null, $"Trying to create native resources from a null cloud anchor");
-            record.anchorHanger = new GameObject(record.cloudAnchorId);
-            record.anchorHanger.transform.SetParent(anchorsParent, false);
-            Debug.Log($"RecordFromCloud PreApply: ah={record.anchorHanger.transform.GetGlobalPose().ToString("F3")} ca={record.cloudAnchor.GetPose().ToString("F3")}");
-#if false
-            record.nativeAnchor = record.anchorHanger.ApplyCloudAnchor(record.cloudAnchor);
-#else
-            Pose cloudPose = record.cloudAnchor.GetPose();
-            record.anchorHanger.DeleteNativeAnchor();
-            Debug.Log($"RecordFromCloud PreSkipApply: ah={record.anchorHanger.transform.GetGlobalPose().ToString("F3")} ca={record.cloudAnchor.GetPose().ToString("F3")}");
-            Debug.Log($"NativeAnchor is {(record.anchorHanger.FindNativeAnchor() == null ? "null" : record.anchorHanger.FindNativeAnchor().name)}");
-            record.anchorHanger.transform.SetGlobalPose(cloudPose);
-            Debug.Log($"RecordFromCloud PostSkipApply: ah={record.anchorHanger.transform.GetGlobalPose().ToString("F3")} ca={record.cloudAnchor.GetPose().ToString("F3")}");
-            //record.nativeAnchor = record.anchorHanger.CreateNativeAnchor();
-            record.nativeAnchor = record.anchorHanger.AddComponent<NativeAnchor>();
-#endif
-            Debug.Log($"RecordFromCloud PostApply: ah={record.anchorHanger.transform.GetGlobalPose().ToString("F3")} ca={record.cloudAnchor.GetPose().ToString("F3")}");
+            record.localPeg = InternalCreateLocalPeg(record.cloudAnchorId, record.cloudAnchor.GetPose()) as LocalPeg;
+            Debug.Log($"RecordFromCloud: ah={record.localPeg.GlobalPose.ToString("F3")} ca={record.cloudAnchor.GetPose().ToString("F3")}");
             SimpleConsole.AddLine(ConsoleMid, $"Got record={record.cloudAnchorId} with {record.cloudAnchor.AppProperties.Count} properties.");
             foreach (var prop in record.cloudAnchor.AppProperties)
             {
@@ -657,9 +639,88 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                     $"OnAnchorLocateCompleted: {args.Watcher.Identifier} cancelled={args.Cancelled}"
                 ));
         }
+        private void OnASALog(object sender, OnLogDebugEventArgs args)
+        {
+            SimpleConsole.AddLine(ConsoleLow, args.Message);
+        }
+
+        private void OnASAError(object sender, SessionErrorEventArgs args)
+        {
+            SimpleConsole.AddLine(ConsoleHigh, args.ErrorMessage);
+        }
+
         #endregion // ASA events
 
+        #region Setup helpers
+        private PlatformLocationProvider CreateLocationProvider()
+        {
+            Debug.Log($"To create location provider");
+
+            if (!CoarseRelocationEnabled)
+            {
+                SimpleConsole.AddLine(8, $"Coarse relocation is not enabled!");
+                return null;
+            }
+
+            PlatformLocationProvider provider = new PlatformLocationProvider();
+            // Allow GPS
+            provider.Sensors.GeoLocationEnabled = true;
+
+            // Allow WiFi scanning
+            provider.Sensors.WifiEnabled = true;
+
+            // Allow a set of known BLE beacons
+            provider.Sensors.BluetoothEnabled = (beaconUuids.Count > 0);
+            // mafinc - todo, add api for adding list of blutooth beacon uuids.
+            provider.Sensors.KnownBeaconProximityUuids = beaconUuids.ToArray();
+
+            return provider;
+        }
+
+        private bool LocationReady(NotReadyReason readyReason)
+        {
+            // If locationProvider is null, we aren't using location provider, so don't need to wait on it. I.e. ready.
+            if (locationProvider == null)
+            {
+                return true;
+            }
+            if (locationProvider.GeoLocationStatus == GeoLocationStatusResult.Available)
+            {
+                if (readyReason == NotReadyReason.NotReadyForLocate)
+                {
+                    SimpleConsole.AddLine(ConsoleHigh, $"Ready: GeoLocationStatus={locationProvider.GeoLocationStatus}");
+                }
+                return true;
+            }
+            if (locationProvider.WifiStatus == WifiStatusResult.Available)
+            {
+                if (readyReason == NotReadyReason.NotReadyForLocate)
+                {
+                    SimpleConsole.AddLine(ConsoleHigh, $"Ready: WifiStatus={locationProvider.WifiStatus}");
+                }
+                return true;
+            }
+            if (locationProvider.BluetoothStatus == BluetoothStatusResult.Available)
+            {
+                if (readyReason == NotReadyReason.NotReadyForLocate)
+                {
+                    SimpleConsole.AddLine(ConsoleHigh, $"Ready: BluetoothStatus={locationProvider.BluetoothStatus}");
+                }
+                return true;
+            }
+            if (readyReason != NotReadyReason.NotReadyForLocate)
+            {
+                SimpleConsole.AddLine(ConsoleHigh, $"Not Ready: GeoLocationStatus={locationProvider.GeoLocationStatus}");
+                SimpleConsole.AddLine(ConsoleHigh, $"Not Ready: WifiStatus={locationProvider.WifiStatus}");
+                SimpleConsole.AddLine(ConsoleHigh, $"Not Ready: BluetoothStatus={locationProvider.BluetoothStatus}");
+            }
+            return false;
+        }
+
+        #endregion // Setup helpers
+
         #region Awful stuff
+
 #if UNITY_ANDROID
         private static readonly string[] androidPermissions = new string[]
             {

@@ -111,10 +111,10 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         #region Internal types
 
-        private class SpacePinAndObj
+        private class SpacePinAndPeg
         {
             public SpacePinASA spacePin;
-            public AnchoredObjectAndProperties obj;
+            public LocalPegAndProperties peg;
         };
 
         #endregion // Internal types
@@ -187,6 +187,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             if (idx <= 0)
             {
                 spacePins.Add(spacePin);
+                spacePin.Publisher = publisher;
                 return true;
             }
             return false;
@@ -200,6 +201,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 Debug.Assert(FindBindingBySpacePinId(spacePinId) < 0, $"Space pin id {spacePinId} not found in list of space pins, but found in bindings");
                 return false;
             }
+            spacePins[idx].Publisher = null;
             spacePins.RemoveAt(idx);
             int bindingIdx = FindBindingBySpacePinId(spacePinId);
             if (bindingIdx >= 0)
@@ -296,7 +298,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         public async Task<bool> Download()
         {
             bool allSuccessful = true;
-            List<SpacePinAndObj> readObjects = new List<SpacePinAndObj>();
+            List<SpacePinAndPeg> readObjects = new List<SpacePinAndPeg>();
             foreach (var spacePin in spacePins)
             {
                 int bindingIdx = FindBindingBySpacePinId(spacePin.name);
@@ -310,8 +312,8 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                     }
                     else
                     {
-                        Debug.Assert(obj.anchorHanger != null);
-                        readObjects.Add(new SpacePinAndObj() { spacePin = spacePin, obj = obj });
+                        Debug.Assert(obj.localPeg != null);
+                        readObjects.Add(new SpacePinAndPeg() { spacePin = spacePin, peg = obj });
                     }
                 }
             }
@@ -323,16 +325,16 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             Pose LockedFromAnchor = wltMgr.LockedFromSpongy.Multiply(SpongyFromAnchor);
             foreach (var readObj in readObjects)
             {
-                Pose lockedPose = LockedFromAnchor.Multiply(readObj.obj.anchorHanger.transform.GetGlobalPose());
+                Pose lockedPose = LockedFromAnchor.Multiply(readObj.peg.localPeg.GlobalPose);
                 readObj.spacePin.SetLockedPose(lockedPose);
-                readObj.spacePin.SetAnchorHolder(readObj.obj.anchorHanger);
+                readObj.spacePin.SetLocalPeg(readObj.peg.localPeg);
             }
             return allSuccessful;
         }
 
         public async Task<bool> Search()
         {
-            Dictionary<CloudAnchorId, AnchoredObjectAndProperties> found = await publisher.Find(searchRadius);
+            Dictionary<CloudAnchorId, LocalPegAndProperties> found = await publisher.Find(searchRadius);
 
             var wltMgr = WorldLockingManager.GetInstance();
             Pose SpongyFromAnchor = wltMgr.AnchorManager.AnchorFromSpongy.Inverse();
@@ -343,7 +345,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             {
                 string spacePinId = keyval.Value.properties[SpacePinIdKey];
                 string cloudAnchorId = keyval.Key;
-                var obj = keyval.Value;
+                var peg = keyval.Value;
                 int idx = FindSpacePinById(spacePinId);
                 if (idx >= 0)
                 {
@@ -351,9 +353,9 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                     foundAny = true;
                     SpacePinASA spacePin = spacePins[idx];
 
-                    Pose lockedPose = LockedFromAnchor.Multiply(obj.anchorHanger.transform.GetGlobalPose());
+                    Pose lockedPose = LockedFromAnchor.Multiply(peg.localPeg.GlobalPose);
                     spacePin.SetLockedPose(lockedPose);
-                    spacePin.SetAnchorHolder(obj.anchorHanger);
+                    spacePin.SetLocalPeg(peg.localPeg);
                 }
                 else
                 {
@@ -406,6 +408,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         {
             // When Setup is complete, publisher.IsReady will be true.
             publisher.Setup();
+            SetSpacePinsPublisher();
         }
 
         // Start is called before the first frame update
@@ -422,17 +425,27 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         #region Internal helpers
 
+        private void SetSpacePinsPublisher()
+        {
+            foreach (var spacePin in spacePins)
+            {
+                spacePin.Publisher = publisher;
+            }
+        }
+
         private bool IsReadyForPublish(SpacePinASA spacePin)
         {
-            if (spacePin.AnchorHolder == null)
+            if (spacePin == null)
             {
+                SimpleConsole.AddLine(11, $"Getting null space pin to check ready for publish.");
                 return false;
             }
-            if (spacePin.NativeAnchor == null)
+            if (spacePin.Publisher != publisher)
             {
+                SimpleConsole.AddLine(11, $"SpacePin={spacePin.name} has different publisher than binder={name}.");
                 return false;
             }
-            return true;
+            return spacePin.IsReadyForPublish;
         }
 
         private bool IsReadyForDownload(SpacePinASA spacePin)
@@ -462,16 +475,16 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
         }
 
-        private AnchoredObjectAndProperties ExtractForPublisher(SpacePinASA spacePin)
+        private LocalPegAndProperties ExtractForPublisher(SpacePinASA spacePin)
         {
-            if (spacePin.AnchorHolder == null || spacePin.NativeAnchor == null)
+            if (!spacePin.IsReadyForPublish)
             {
                 Debug.LogError($"Trying to publish a space pin with no native anchor. Place it first.");
                 return null;
             }
 
-            AnchoredObjectAndProperties ret = new AnchoredObjectAndProperties();
-            ret.anchorHanger = spacePin.AnchorHolder;
+            LocalPegAndProperties ret = new LocalPegAndProperties();
+            ret.localPeg = spacePin.LocalPeg;
             ret.properties = spacePin.Properties;
 
             return ret;

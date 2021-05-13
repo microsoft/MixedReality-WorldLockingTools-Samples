@@ -19,14 +19,12 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 {
     public class SpacePinASA : SpacePinOrientable
     {
-        private GameObject anchorHolder = null;
 
-        public GameObject AnchorHolder { get { return anchorHolder; } }
+        private ILocalPeg localPeg = null;
 
-        public NativeAnchor NativeAnchor
-        {
-            get { return anchorHolder?.FindNativeAnchor(); }
-        }
+        public ILocalPeg LocalPeg { get { return localPeg; } }
+
+        public IPublisher Publisher { get; set; }
 
         [Serializable]
         public class KeyValPair
@@ -83,7 +81,19 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 #endif
         }
 
-        public void SetAnchorHolder(GameObject holder)
+        public bool IsReadyForPublish
+        {
+            get
+            {
+                if (LocalPeg == null)
+                {
+                    return false;
+                }
+                return LocalPeg.IsReadyForPublish;
+            }
+        }
+#if false
+        public void SetLocalPeg(GameObject holder)
         {
             Debug.Assert(holder.FindNativeAnchor() != null, "Anchor holder must be provisioned with a NativeAnchor.");
             if (anchorHolder != null)
@@ -94,9 +104,20 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             Debug.Log($"SetAnchorHolder:{name}: anchorHolder={(anchorHolder == null ? "null" : anchorHolder.name)}, NativeAnchor={(NativeAnchor == null ? "null" : NativeAnchor.name)}");
             SimpleConsole.AddLine(8, $"SetAH: {name} p={anchorHolder.transform.position.ToString("F3")}");
         }
-
-        public async void ConfigureAnchorHolder()
+#else
+        public void SetLocalPeg(ILocalPeg peg)
         {
+            if (localPeg != null)
+            {
+                Publisher.ReleaseLocalPeg(peg);
+            }
+            localPeg = peg;
+        }
+#endif
+
+        public async void ConfigureLocalPeg()
+        {
+#if false
             SimpleConsole.AddLine(8, $"ConfigAH: {Time.frameCount}");
             int waitForAnchor = 30;
             await Task.Delay(waitForAnchor);
@@ -115,6 +136,18 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             anchorHolder.CreateNativeAnchor();
             Debug.Log($"ConfigureAnchorHolder:{name}: anchorHolder={(anchorHolder == null ? "null" : anchorHolder.name)}, NativeAnchor={(NativeAnchor == null ? "null" : NativeAnchor.name)}");
             SimpleConsole.AddLine(8, $"ConfigAH: {name} p={anchorHolder.transform.position.ToString("F3")}");
+#else
+            if (Publisher == null)
+            {
+                SimpleConsole.AddLine(8, $"Publisher hasn't been set on SpacePin={name}");
+                return;
+            }
+            if (localPeg != null)
+            {
+                Publisher.ReleaseLocalPeg(localPeg);
+            }
+            localPeg = await Publisher.CreateLocalPeg($"{name}_peg", LockedPose);
+#endif
         }
     }
 }

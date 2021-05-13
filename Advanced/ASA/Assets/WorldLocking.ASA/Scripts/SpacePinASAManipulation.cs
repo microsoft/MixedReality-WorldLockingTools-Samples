@@ -90,7 +90,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         private void OnFinishManipulation()
         {
             SetFrozenPose(ExtractModelPose());
-            ConfigureAnchorHolder();
+            ConfigureLocalPeg();
         }
     }
 }

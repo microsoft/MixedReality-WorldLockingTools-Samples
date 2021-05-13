@@ -10,9 +10,9 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 {
     using CloudAnchorId = System.String;
 
-    public class AnchoredObjectAndProperties
+    public class LocalPegAndProperties
     {
-        public GameObject anchorHanger;
+        public ILocalPeg localPeg;
         public IDictionary<string, string> properties;
     };
 
@@ -28,13 +28,17 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         public bool IsReady { get; }
 
-        public Task<CloudAnchorId> Create(AnchoredObjectAndProperties pose);
+        public Task<ILocalPeg> CreateLocalPeg(string id, Pose lockedPose);
 
-        public Task<AnchoredObjectAndProperties> Read(CloudAnchorId cloudAnchorId);
+        public void ReleaseLocalPeg(ILocalPeg peg);
 
-        public Task<CloudAnchorId> Update(CloudAnchorId cloudAnchorId, AnchoredObjectAndProperties pose);
+        public Task<CloudAnchorId> Create(LocalPegAndProperties peg);
 
-        public Task<Dictionary<CloudAnchorId, AnchoredObjectAndProperties>> Find(float radiusFromDevice);
+        public Task<LocalPegAndProperties> Read(CloudAnchorId cloudAnchorId);
+
+        public Task<CloudAnchorId> Update(CloudAnchorId cloudAnchorId, LocalPegAndProperties peg);
+
+        public Task<Dictionary<CloudAnchorId, LocalPegAndProperties>> Find(float radiusFromDevice);
 
         public Task PurgeArea(float radius);
 
