@@ -67,6 +67,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
     using AnchorProperties = Dictionary<string, string>;
     using CloudAnchorId = System.String;
 
+    [RequireComponent(typeof(SpacePinPublisher))]
     public partial class SpacePinBinder : MonoBehaviour, IBinder
     {
         #region Inspector members
@@ -111,10 +112,10 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         #region Internal types
 
-        private class SpacePinAndPeg
+        private class SpacePinPegAndProps
         {
             public SpacePinASA spacePin;
-            public LocalPegAndProperties peg;
+            public LocalPegAndProperties pegAndProps;
         };
 
         #endregion // Internal types
@@ -123,7 +124,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         private readonly List<SpacePinCloudBinding> bindings = new List<SpacePinCloudBinding>();
 
-        private readonly IPublisher publisher = new SpacePinPublisher();
+        private IPublisher publisher = null;
 
         #endregion // Internal members
 
@@ -298,7 +299,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         public async Task<bool> Download()
         {
             bool allSuccessful = true;
-            List<SpacePinAndPeg> readObjects = new List<SpacePinAndPeg>();
+            List<SpacePinPegAndProps> readObjects = new List<SpacePinPegAndProps>();
             foreach (var spacePin in spacePins)
             {
                 int bindingIdx = FindBindingBySpacePinId(spacePin.name);
@@ -313,7 +314,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                     else
                     {
                         Debug.Assert(obj.localPeg != null);
-                        readObjects.Add(new SpacePinAndPeg() { spacePin = spacePin, peg = obj });
+                        readObjects.Add(new SpacePinPegAndProps() { spacePin = spacePin, pegAndProps = obj });
                     }
                 }
             }
@@ -325,9 +326,9 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             Pose LockedFromAnchor = wltMgr.LockedFromSpongy.Multiply(SpongyFromAnchor);
             foreach (var readObj in readObjects)
             {
-                Pose lockedPose = LockedFromAnchor.Multiply(readObj.peg.localPeg.GlobalPose);
+                Pose lockedPose = LockedFromAnchor.Multiply(readObj.pegAndProps.localPeg.GlobalPose);
                 readObj.spacePin.SetLockedPose(lockedPose);
-                readObj.spacePin.SetLocalPeg(readObj.peg.localPeg);
+                readObj.spacePin.SetLocalPeg(readObj.pegAndProps.localPeg);
             }
             return allSuccessful;
         }
@@ -345,7 +346,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             {
                 string spacePinId = keyval.Value.properties[SpacePinIdKey];
                 string cloudAnchorId = keyval.Key;
-                var peg = keyval.Value;
+                var pegAndProps = keyval.Value;
                 int idx = FindSpacePinById(spacePinId);
                 if (idx >= 0)
                 {
@@ -353,9 +354,9 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                     foundAny = true;
                     SpacePinASA spacePin = spacePins[idx];
 
-                    Pose lockedPose = LockedFromAnchor.Multiply(peg.localPeg.GlobalPose);
+                    Pose lockedPose = LockedFromAnchor.Multiply(pegAndProps.localPeg.GlobalPose);
                     spacePin.SetLockedPose(lockedPose);
-                    spacePin.SetLocalPeg(peg.localPeg);
+                    spacePin.SetLocalPeg(pegAndProps.localPeg);
                 }
                 else
                 {
@@ -370,7 +371,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         public async Task<bool> Purge()
         {
-            await publisher.PurgeArea(25.0f);
+            await publisher.PurgeArea(searchRadius);
 
             return true;
         }
@@ -406,6 +407,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         #region Unity
         private void Awake()
         {
+            publisher = GetComponent<SpacePinPublisher>();
             // When Setup is complete, publisher.IsReady will be true.
             publisher.Setup();
             SetSpacePinsPublisher();

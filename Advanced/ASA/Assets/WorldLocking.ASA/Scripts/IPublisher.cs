@@ -36,7 +36,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         public Task<LocalPegAndProperties> Read(CloudAnchorId cloudAnchorId);
 
-        public Task<CloudAnchorId> Update(CloudAnchorId cloudAnchorId, LocalPegAndProperties peg);
+        public Task<CloudAnchorId> Modify(CloudAnchorId cloudAnchorId, LocalPegAndProperties peg);
 
         public Task<Dictionary<CloudAnchorId, LocalPegAndProperties>> Find(float radiusFromDevice);
 

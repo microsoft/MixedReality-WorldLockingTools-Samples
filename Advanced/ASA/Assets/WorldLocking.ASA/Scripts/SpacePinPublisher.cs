@@ -23,8 +23,37 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
     using AnchorProperties = Dictionary<string, string>;
     using CloudAnchorId = System.String;
 
-    public class SpacePinPublisher : IPublisher
+    public class SpacePinPublisher : MonoBehaviour, IPublisher
     {
+        #region Inspector fields
+        [SerializeField]
+        private List<string> beaconUuids = new List<string>();
+
+        public List<string> BeaconUuids { get { return beaconUuids; } }
+
+        [Tooltip("Enable coarse relocation")]
+        [SerializeField]
+        private bool coarseRelocationEnabled = true;
+        /// <summary>
+        /// Enable coarse relocation.
+        /// </summary>
+        /// <remarks>
+        /// This must be set before calling Setup to have any effect.
+        /// </remarks>
+        public bool CoarseRelocationEnabled { get { return coarseRelocationEnabled; } set { coarseRelocationEnabled = value; } }
+
+        [Tooltip("Transform to attach created anchors to. Should have identity global pose.")]
+        [SerializeField]
+        private Transform anchorsParent = null;
+
+        /// <summary>
+        /// Transform to attach created anchors to. Should have identity global pose.
+        /// </summary>
+        public Transform AnchorsParent { get { return anchorsParent; } set { anchorsParent = value; } }
+
+        private float maxSearchSeconds = 90.0f;
+        #endregion // Inspector fields
+
         #region Internal members
 
         private SpatialAnchorManager asaManager = null;
@@ -35,13 +64,10 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         private readonly List<AnchorLocatedEventArgs> locatedAnchors = new List<AnchorLocatedEventArgs>();
 
         private PlatformLocationProvider locationProvider = null;
-        private readonly List<string> beaconUuids = new List<string>();
 
         private int ConsoleHigh = 10;
         private int ConsoleMid = 8;
         private int ConsoleLow = 3;
-
-        private Transform anchorsParent = null;
 
         #endregion // Internal members
 
@@ -56,11 +82,11 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             {
                 Debug.Assert(localPeg != null, "Missing localPeg on AnchorRecord.");
                 Debug.Assert(cloudAnchor != null, "Missing cloudAnchor on AnchorRecord.");
-                LocalPegAndProperties peg = new LocalPegAndProperties();
-                peg.localPeg = localPeg;
-                peg.properties = cloudAnchor.AppProperties;
+                LocalPegAndProperties pegAndProps = new LocalPegAndProperties();
+                pegAndProps.localPeg = localPeg;
+                pegAndProps.properties = cloudAnchor.AppProperties;
 
-                return peg;
+                return pegAndProps;
             }
 
             public static string DebugString(AnchorRecord record, string msg)
@@ -121,15 +147,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         #region Public API
 
-        public Transform AnchorsParent { get { return anchorsParent; } set { anchorsParent = value; } }
 
-        /// <summary>
-        /// Enable coarse relocation.
-        /// </summary>
-        /// <remarks>
-        /// This must be set before calling Setup to have any effect.
-        /// </remarks>
-        public bool CoarseRelocationEnabled { get; set; } = true;
 
         private enum NotReadyReason
         {
@@ -248,21 +266,21 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             GameObject.Destroy(localPeg.anchorHanger);
         }
 
-        public async Task<CloudAnchorId> Create(LocalPegAndProperties peg)
+        public async Task<CloudAnchorId> Create(LocalPegAndProperties pegAndProps)
         {
-            SimpleConsole.AddLine(ConsoleMid, $"Create for AH={peg.localPeg.Name}, {peg.properties.Count} props.");
+            SimpleConsole.AddLine(ConsoleMid, $"Create for AH={pegAndProps.localPeg.Name}, {pegAndProps.properties.Count} props.");
 
             AnchorRecord record = new AnchorRecord();
 
-            if (!peg.localPeg.IsReadyForPublish)
+            if (!pegAndProps.localPeg.IsReadyForPublish)
             {
-                throw new System.ArgumentNullException("peg.localPeg", "Local Peg not ready for create in Create");
+                throw new System.ArgumentNullException("pegAndProps.localPeg", "Local Peg not ready for create in Create");
             }
 
-            LocalPeg localPeg = peg.localPeg as LocalPeg;
+            LocalPeg localPeg = pegAndProps.localPeg as LocalPeg;
             if (localPeg == null)
             {
-                throw new System.ArgumentException("Invalid type of local peg", "peg.localPeg");
+                throw new System.ArgumentException("Invalid type of local peg", "pegAndProps.localPeg");
             }
             record.localPeg = localPeg;
 
@@ -285,7 +303,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             // Now get the cloud spatial anchor
             record.cloudAnchor = await record.localPeg.NativeAnchor.ToCloud();
 
-            foreach (var prop in peg.properties)
+            foreach (var prop in pegAndProps.properties)
             {
                 record.cloudAnchor.AppProperties[prop.Key] = prop.Value;
                 SimpleConsole.AddLine(8, $"Add prop {prop.Key}: {prop.Value}");
@@ -303,7 +321,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
             AddRecord(record.cloudAnchorId, record);
 
-            SimpleConsole.AddLine(ConsoleMid, $"Created {peg.localPeg.Name} - {record.cloudAnchorId} at {record.localPeg.GlobalPose.position.ToString("F3")}");
+            SimpleConsole.AddLine(ConsoleMid, $"Created {pegAndProps.localPeg.Name} - {record.cloudAnchorId} at {record.localPeg.GlobalPose.position.ToString("F3")}");
 
             return record.cloudAnchorId;
         }
@@ -332,7 +350,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             return record.GetPegWithProperties();
         }
 
-        public async Task<CloudAnchorId> Update(CloudAnchorId cloudAnchorId, LocalPegAndProperties peg)
+        public async Task<CloudAnchorId> Modify(CloudAnchorId cloudAnchorId, LocalPegAndProperties peg)
         {
             /// This might be more efficiently implemented with ASA update API.
             await Delete(cloudAnchorId);
@@ -494,11 +512,13 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
             Debug.Log($"Got watcher, start waiting");
 
+            double startTime = Time.timeAsDouble;
             List<AnchorRecord> locatedRecords = new List<AnchorRecord>();
             bool haveAnchors = false;
             bool waiting = true;
             while (waiting)
             {
+                // If any records are found, then we give up waiting for more after waitForMoreAnchorsTimeoutMS.
                 int DownloadCheckDelayMS = 100;
                 await Task.Delay(DownloadCheckDelayMS);
                 lock (locatedAnchors)
@@ -527,10 +547,16 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                         waiting = !haveAnchors;
                     }
                 }
+                double timeSearching = Time.timeAsDouble - startTime;
                 if (haveAnchors)
                 {
                     int waitForMoreAnchorsTimeoutMS = 1000;
                     await Task.Delay(waitForMoreAnchorsTimeoutMS);
+                }
+                else if (timeSearching > maxSearchSeconds)
+                {
+                    SimpleConsole.AddLine(ConsoleHigh, $"Searched {timeSearching}s,found no anchors, giving up.");
+                    waiting = false;
                 }
             }
             watcher.Stop();
@@ -567,14 +593,16 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         private bool AddRecord(CloudAnchorId id, AnchorRecord record)
         {
-            Debug.Log($"Adding record ah={record.localPeg.Name} ca={id} ");
             Debug.Assert(id == record.cloudAnchorId, $"Adding record under inconsistent id {id} vs {record.cloudAnchorId}");
             int idx = records.FindIndex(x => x.cloudAnchorId == record.cloudAnchorId);
             if (idx < 0)
             {
+                SimpleConsole.AddLine(ConsoleLow, $"Adding record ah={record.localPeg.Name} ca={id} ");
                 records.Add(record);
                 return true;
             }
+            SimpleConsole.AddLine(ConsoleLow, $"Updating record ah={record.localPeg.Name} ca={id} ");
+            ReleaseLocalPeg(records[idx].localPeg);
             records[idx] = record;
             return false;
         }
@@ -596,6 +624,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             if (idx >= 0)
             {
                 ret = records[idx];
+                ReleaseLocalPeg(ret.localPeg);
                 records.RemoveAt(idx);
             }
             return ret;
