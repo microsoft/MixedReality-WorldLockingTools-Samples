@@ -11,6 +11,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
     public interface IBindingOracle
     {
+        string Name { get; }
 
         bool Put(IBinder binder);
 

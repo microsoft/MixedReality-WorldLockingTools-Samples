@@ -8,24 +8,63 @@ using UnityEngine;
 using Microsoft.MixedReality.WorldLocking.Tools;
 using Microsoft.MixedReality.WorldLocking.ASA;
 
+using TMPro;
+
 namespace WorldLocking.Trash
 {
     public class ActionPublish : ActionCube
     {
-        public SpacePinBinder binder;
+        public SpacePinBinder spacePinBinder;
 
-        public SpacePinBinderFile binderFile;
+        public SpacePinBinderFile spacePinBinderFile;
 
+        public TextMeshPro statusLine;
+
+        private IBinder binder;
+
+        private IBindingOracle bindingOracle;
+
+        [Tooltip("Number seconds to change color at finish.")]
         public float finishSeconds = 1.0f;
         
         private bool isReady = false;
 
+        private bool goodSetup = false;
+
         private void Start()
         {
+            Screen.sleepTimeout = SleepTimeout.NeverSleep;
+
             SetColors(Color.grey);
+
+            goodSetup = CheckSetup();
         }
+
+        private bool CheckSetup()
+        {
+            binder = spacePinBinder;
+            bindingOracle = spacePinBinderFile;
+            bool good = true;
+            if (binder == null)
+            {
+                SimpleConsole.AddLine(11, $"Missing Space Pin Binder on {name}");
+                good = false;
+            }
+            if (bindingOracle == null)
+            {
+                SimpleConsole.AddLine(11, $"Missing binding oracle (Space Pin Binder File) on {name}");
+                good = false;
+            }
+            return good;
+        }
+
         private void Update()
         {
+            DisplayStatus();
+            if (!goodSetup)
+            {
+                return;
+            }
             bool nowReady = binder.IsReady;
             if (nowReady != isReady)
             {
@@ -40,22 +79,37 @@ namespace WorldLocking.Trash
                 isReady = nowReady;
             }
         }
+
+        private void DisplayStatus()
+        {
+            if (statusLine != null)
+            {
+                var status = new IPublisher.ReadinessStatus();
+                if (binder != null)
+                {
+                    status = binder.PublisherStatus;
+                }
+                statusLine.faceColor = status.readiness == IPublisher.Readiness.Ready ? Color.white : Color.red;
+                statusLine.text = $"Status: {status.readiness.ToString()}, Create={status.recommendedForCreate.ToString("0.00")}, {status.readyForCreate.ToString("0.00")}";
+            }
+        }
+
         public async void DoPublish()
         {
             SetColors(Color.black);
 
-            SimpleConsole.AddLine(8, $"Publish cube, binder is {(binder == null ? "null" : binder.name)}");
+            SimpleConsole.AddLine(8, $"Publish cube, binder is {(binder == null ? "null" : binder.Name)}");
             if (binder != null)
             {
                 await binder.Publish();
 
-                if (binderFile != null)
+                if (bindingOracle != null)
                 {
-                    SimpleConsole.AddLine(8, $"Putting to {binderFile.name}");
-                    binderFile.Put(binder);
+                    SimpleConsole.AddLine(8, $"Putting to {bindingOracle.Name}");
+                    bindingOracle.Put(binder);
                 }
             }
-
+            SimpleConsole.AddLine(8, $"Finished.");
 
             await ChangeColorForSeconds(finishSeconds, Color.green);
         }
@@ -64,15 +118,15 @@ namespace WorldLocking.Trash
         {
             SetColors(Color.black);
 
-            SimpleConsole.AddLine(8, $"Download cube, binder is {(binder == null ? "null" : binder.name)}");
+            SimpleConsole.AddLine(8, $"Download cube, binder is {(binder == null ? "null" : binder.Name)}");
             if (binder != null)
             {
-                if (binderFile != null)
+                if (bindingOracle != null)
                 {
-                    SimpleConsole.AddLine(8, $"Getting from {binderFile.name}");
-                    binderFile.Get(binder);
+                    SimpleConsole.AddLine(8, $"Getting from {bindingOracle.Name}");
+                    bindingOracle.Get(binder);
                 }
-                SimpleConsole.AddLine(8, $"Starting download from {binder.name}");
+                SimpleConsole.AddLine(8, $"Starting download from {binder.Name}");
                 await binder.Download();
             }
             SimpleConsole.AddLine(8, $"Finished.");
@@ -84,11 +138,18 @@ namespace WorldLocking.Trash
         {
             SetColors(Color.black);
 
-            SimpleConsole.AddLine(8, $"Search cube, binder is {(binder == null ? "null" : binder.name)}");
+            SimpleConsole.AddLine(8, $"Search cube, binder is {(binder == null ? "null" : binder.Name)}");
             if (binder != null)
             {
-                SimpleConsole.AddLine(8, $"Starting search from {binder.name}");
+                SimpleConsole.AddLine(8, $"Starting search from {binder.Name}");
                 await binder.Search();
+
+                // Could check return result for binder.Search() to know whether we've gotten any new bindings.
+                // If we have new bindings, we want to update the oracle.
+                if (bindingOracle != null)
+                {
+                    bindingOracle.Put(binder);
+                }
             }
             SimpleConsole.AddLine(8, $"Finished.");
 
@@ -99,11 +160,18 @@ namespace WorldLocking.Trash
         {
             SetColors(Color.black);
 
-            SimpleConsole.AddLine(8, $"Purge cube, binder is {(binder == null ? "null" : binder.name)}");
+            SimpleConsole.AddLine(8, $"Purge cube, binder is {(binder == null ? "null" : binder.Name)}");
             if (binder != null)
             {
-                SimpleConsole.AddLine(8, $"Starting search from {binder.name}");
+                SimpleConsole.AddLine(8, $"Starting clear from {binder.Name}");
+                await binder.Clear();
+                SimpleConsole.AddLine(8, $"Starting purge from {binder.Name}");
                 await binder.Purge();
+
+                if (bindingOracle != null)
+                {
+                    bindingOracle.Put(binder);
+                }
             }
             SimpleConsole.AddLine(8, $"Finished.");
 
@@ -114,17 +182,23 @@ namespace WorldLocking.Trash
         {
             SetColors(Color.black);
 
-            SimpleConsole.AddLine(8, $"Clear cube, binder is {(binder == null ? "null" : binder.name)}");
+            SimpleConsole.AddLine(8, $"Clear cube, binder is {(binder == null ? "null" : binder.Name)}");
 
             if (binder != null)
             {
-                if (binderFile != null)
+                if (bindingOracle != null)
                 {
-                    SimpleConsole.AddLine(8, $"Getting from {binderFile.name}");
-                    binderFile.Get(binder);
+                    SimpleConsole.AddLine(8, $"Getting from {bindingOracle.Name}");
+                    bindingOracle.Get(binder);
                 }
                 await binder.Clear();
+                if (bindingOracle != null)
+                {
+                    SimpleConsole.AddLine(8, $"Putting empty binder to {bindingOracle.Name}");
+                    bindingOracle.Put(binder);
+                }
             }
+            SimpleConsole.AddLine(8, $"Finished.");
 
             await ChangeColorForSeconds(finishSeconds, Color.green);
         }

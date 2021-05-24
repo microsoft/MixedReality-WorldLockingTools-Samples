@@ -22,6 +22,8 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 {
     using AnchorProperties = Dictionary<string, string>;
     using CloudAnchorId = System.String;
+    using Readiness = IPublisher.Readiness;
+    using ReadinessStatus = IPublisher.ReadinessStatus;
 
     public class SpacePinPublisher : MonoBehaviour, IPublisher
     {
@@ -42,6 +44,11 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// </remarks>
         public bool CoarseRelocationEnabled { get { return coarseRelocationEnabled; } set { coarseRelocationEnabled = value; } }
 
+        [SerializeField]
+        private bool coarseRelocationCurationEnabled = true;
+
+        public bool CoarseRelocationCurationEnabled { get { return coarseRelocationCurationEnabled; } set { coarseRelocationCurationEnabled = value; } }
+
         [Tooltip("Transform to attach created anchors to. Should have identity global pose.")]
         [SerializeField]
         private Transform anchorsParent = null;
@@ -51,7 +58,21 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// </summary>
         public Transform AnchorsParent { get { return anchorsParent; } set { anchorsParent = value; } }
 
+        [SerializeField]
         private float maxSearchSeconds = 90.0f;
+
+        public float MaxSearchSeconds { get { return maxSearchSeconds; } set { maxSearchSeconds = value; } }
+
+        [SerializeField]
+        private float maxWaitForMoreAnchorsSeconds = 0.25f;
+
+        public float MaxWaitForMoreAnchorsSeconds { get { return maxWaitForMoreAnchorsSeconds; } set { maxWaitForMoreAnchorsSeconds = value; } }
+
+        [SerializeField]
+        private float minRecommendedForCreateProgress = 1.0f;
+
+        public float MinRecommendedForCreateProgress { get { return minRecommendedForCreateProgress; } set { minRecommendedForCreateProgress = value; } }
+
         #endregion // Inspector fields
 
         #region Internal members
@@ -64,6 +85,8 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         private readonly List<AnchorLocatedEventArgs> locatedAnchors = new List<AnchorLocatedEventArgs>();
 
         private PlatformLocationProvider locationProvider = null;
+
+        private Readiness readiness = Readiness.NotSetup;
 
         private int ConsoleHigh = 10;
         private int ConsoleMid = 8;
@@ -147,69 +170,96 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         #region Public API
 
+        public ReadinessStatus Status { get { return CheckReadiness(); } }
 
-
-        private enum NotReadyReason
+        private ReadinessStatus WrapReadiness()
         {
-            Invalid,
-            NoManager,
-            NotStarted,
-            NotReadyForCreate,
-            NotReadyForLocate,
-            Ready
-        };
-        private NotReadyReason readyReason = NotReadyReason.Invalid;
-        public bool IsReady
-        {
-            get
+            float recommended = 0;
+            float ready = 0;
+            if (asaManager != null && asaManager.SessionStatus != null)
             {
-                if (asaManager == null)
-                {
-                    if (readyReason != NotReadyReason.NoManager)
-                    {
-                        readyReason = NotReadyReason.NoManager;
-                        SimpleConsole.AddLine(ConsoleHigh, "Not ready: No ASA Manager.");
-                    }
-                    return false;
-                }
-                if (!asaManager.IsSessionStarted)
-                {
-                    if (readyReason != NotReadyReason.NotStarted)
-                    {
-                        readyReason = NotReadyReason.NotStarted;
-                        SimpleConsole.AddLine(ConsoleHigh, "Not ready: Not started.");
-                    }
-                    return false;
-                }
-                if (!asaManager.IsReadyForCreate)
-                {
-                    if (readyReason != NotReadyReason.NotReadyForCreate)
-                    {
-                        readyReason = NotReadyReason.NotReadyForCreate;
-                        SimpleConsole.AddLine(ConsoleHigh, "Not ready: Not ready for create.");
-                    }
-                    return false;
-                }
-                if (!LocationReady(readyReason))
-                {
-                    if (readyReason != NotReadyReason.NotReadyForLocate)
-                    {
-                        readyReason = NotReadyReason.NotReadyForLocate;
-                        SimpleConsole.AddLine(ConsoleHigh, "Not ready: Location provider not ready.");
-                    }
-                    return false;
-                }
-                if (readyReason != NotReadyReason.Ready)
-                {
-                    readyReason = NotReadyReason.Ready;
-                    SimpleConsole.AddLine(ConsoleHigh, "Ready.");
-                }
-                return true;
+                recommended = asaManager.SessionStatus.RecommendedForCreateProgress;
+                ready = asaManager.SessionStatus.ReadyForCreateProgress;
             }
+            var ret = new ReadinessStatus(readiness, recommended, ready);
+            return ret;
+        }
+        private ReadinessStatus CheckReadiness()
+        {
+            if (asaManager == null)
+            {
+                if (readiness != IPublisher.Readiness.NoManager)
+                {
+                    readiness = IPublisher.Readiness.NoManager;
+                    SimpleConsole.AddLine(ConsoleHigh, "Not ready: No ASA Manager.");
+                }
+                return WrapReadiness(); 
+            }
+            if (!asaManager.IsSessionStarted)
+            {
+                if (readiness != IPublisher.Readiness.Starting)
+                {
+                    readiness = IPublisher.Readiness.Starting;
+                    SimpleConsole.AddLine(ConsoleHigh, "Not ready: Not started.");
+                }
+                return WrapReadiness();
+            }
+            if (busy)
+            {
+                if (readiness != Readiness.Busy)
+                {
+                    readiness = Readiness.Busy;
+                    SimpleConsole.AddLine(ConsoleHigh, "Not ready: Already busy.");
+                }
+                return WrapReadiness();
+            }
+            if (CoarseRelocationCurationEnabled && !IsReadyForCreate(asaManager))
+            {
+                if (readiness != IPublisher.Readiness.NotReadyToCreate)
+                {
+                    readiness = IPublisher.Readiness.NotReadyToCreate;
+                    SimpleConsole.AddLine(ConsoleHigh, "Not ready: Not ready for create.");
+                }
+                return WrapReadiness();
+            }
+            if (!LocationReady(readiness))
+            {
+                if (readiness != IPublisher.Readiness.NotReadyToLocate)
+                {
+                    readiness = IPublisher.Readiness.NotReadyToLocate;
+                    SimpleConsole.AddLine(ConsoleHigh, "Not ready: Location provider not ready.");
+                }
+                return WrapReadiness();
+            }
+            if (readiness != IPublisher.Readiness.Ready)
+            {
+                readiness = IPublisher.Readiness.Ready;
+                SimpleConsole.AddLine(ConsoleHigh, "Ready.");
+            }
+
+            return WrapReadiness();
+        }
+
+        private bool IsReadyForCreate(SpatialAnchorManager mgr)
+        {
+            if (mgr == null)
+            {
+                return false;
+            }
+            if (mgr.SessionStatus.RecommendedForCreateProgress < minRecommendedForCreateProgress)
+            {
+                return false;
+            }
+            return true;
         }
 
         public async void Setup()
         {
+            if (CoarseRelocationCurationEnabled && !CoarseRelocationEnabled)
+            {
+                SimpleConsole.AddLine(ConsoleHigh, $"Coarse Reloc Curation enabled, but not Coarse Reloc. Disabling Coarse Reloc Curation.");
+                CoarseRelocationCurationEnabled = false;
+            }
 #if UNITY_ANDROID
             if (CoarseRelocationEnabled)
             {
@@ -245,7 +295,8 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             locationProvider = CreateLocationProvider();
             asaManager.Session.LocationProvider = locationProvider;
 
-            SimpleConsole.AddLine(ConsoleHigh, $"Publisher setup complete S={asaManager.IsSessionStarted}");
+            CheckReadiness();
+            SimpleConsole.AddLine(ConsoleHigh, $"Publisher setup complete S={asaManager.IsSessionStarted} Readiness={readiness}");
         }
 
         public async Task<ILocalPeg> CreateLocalPeg(string id, Pose lockedPose)
@@ -268,86 +319,98 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         public async Task<CloudAnchorId> Create(LocalPegAndProperties pegAndProps)
         {
-            SimpleConsole.AddLine(ConsoleMid, $"Create for AH={pegAndProps.localPeg.Name}, {pegAndProps.properties.Count} props.");
-
-            AnchorRecord record = new AnchorRecord();
-
-            if (!pegAndProps.localPeg.IsReadyForPublish)
+            if (AcquireBusy("Create"))
             {
-                throw new System.ArgumentNullException("pegAndProps.localPeg", "Local Peg not ready for create in Create");
+                SimpleConsole.AddLine(ConsoleMid, $"Create for AH={pegAndProps.localPeg.Name}, {pegAndProps.properties.Count} props.");
+
+                AnchorRecord record = new AnchorRecord();
+
+                if (!pegAndProps.localPeg.IsReadyForPublish)
+                {
+                    throw new System.ArgumentNullException("pegAndProps.localPeg", "Local Peg not ready for create in Create");
+                }
+
+                LocalPeg localPeg = pegAndProps.localPeg as LocalPeg;
+                if (localPeg == null)
+                {
+                    throw new System.ArgumentException("Invalid type of local peg", "pegAndProps.localPeg");
+                }
+                record.localPeg = localPeg;
+
+                // mafinc - this is a design flaw. Now is not the time to create the native anchor,
+                // as we are not necessarily in a good position to create a good native anchor.
+                // We should create the native anchor when we are as near as possible to the corresponding pose.
+                // Could we make the anchorHanger, with native anchor already on it, the input?
+                // I hate pusing that responsibility out to the caller, but the caller is in a much better
+                // position to make good anchors. For example, a SpacePin could create an anchor in SetLockedPose(),
+                // under the assumption that the camera is in vicinity when SetLockedPose is invoked, either from 
+                //
+                // Refactored to accept anchorHanger as input parameter. Should we throw an invalid argument exception
+                // if it doesn't already have a native anchor?
+
+                // manipulation or QR code read or whatever.
+                // Create the native anchor.
+
+                AnchorRecord.DebugLog(record, "Pre ToCloud");
+
+                // Now get the cloud spatial anchor
+                record.cloudAnchor = await record.localPeg.NativeAnchor.ToCloud();
+
+                foreach (var prop in pegAndProps.properties)
+                {
+                    record.cloudAnchor.AppProperties[prop.Key] = prop.Value;
+                    SimpleConsole.AddLine(8, $"Add prop {prop.Key}: {prop.Value}");
+                }
+
+                AnchorRecord.DebugLog(record, "Past ToCloud");
+
+                Debug.Log($"asaMgr:{(asaManager != null ? "valid" : "null")}, session:{(asaManager != null && asaManager.Session != null ? "valid" : "null")}");
+
+                await asaManager.Session.CreateAnchorAsync(record.cloudAnchor);
+
+                AnchorRecord.DebugLog(record, "Past CreateAnchorAsync");
+
+                record.cloudAnchorId = record.cloudAnchor.Identifier;
+
+                AddRecord(record.cloudAnchorId, record);
+
+                SimpleConsole.AddLine(ConsoleMid, $"Created {pegAndProps.localPeg.Name} - {record.cloudAnchorId} at {record.localPeg.GlobalPose.position.ToString("F3")}");
+
+                ReleaseBusy();
+                return record.cloudAnchorId;
             }
-
-            LocalPeg localPeg = pegAndProps.localPeg as LocalPeg;
-            if (localPeg == null)
-            {
-                throw new System.ArgumentException("Invalid type of local peg", "pegAndProps.localPeg");
-            }
-            record.localPeg = localPeg;
-
-            // mafinc - this is a design flaw. Now is not the time to create the native anchor,
-            // as we are not necessarily in a good position to create a good native anchor.
-            // We should create the native anchor when we are as near as possible to the corresponding pose.
-            // Could we make the anchorHanger, with native anchor already on it, the input?
-            // I hate pusing that responsibility out to the caller, but the caller is in a much better
-            // position to make good anchors. For example, a SpacePin could create an anchor in SetLockedPose(),
-            // under the assumption that the camera is in vicinity when SetLockedPose is invoked, either from 
-            //
-            // Refactored to accept anchorHanger as input parameter. Should we throw an invalid argument exception
-            // if it doesn't already have a native anchor?
-
-            // manipulation or QR code read or whatever.
-            // Create the native anchor.
-
-            AnchorRecord.DebugLog(record, "Pre ToCloud");
-
-            // Now get the cloud spatial anchor
-            record.cloudAnchor = await record.localPeg.NativeAnchor.ToCloud();
-
-            foreach (var prop in pegAndProps.properties)
-            {
-                record.cloudAnchor.AppProperties[prop.Key] = prop.Value;
-                SimpleConsole.AddLine(8, $"Add prop {prop.Key}: {prop.Value}");
-            }
-
-            AnchorRecord.DebugLog(record, "Past ToCloud");
-
-            Debug.Log($"asaMgr:{(asaManager != null ? "valid" : "null")}, session:{(asaManager != null && asaManager.Session != null ? "valid" : "null")}");
-
-            await asaManager.Session.CreateAnchorAsync(record.cloudAnchor);
-
-            AnchorRecord.DebugLog(record, "Past CreateAnchorAsync");
-
-            record.cloudAnchorId = record.cloudAnchor.Identifier;
-
-            AddRecord(record.cloudAnchorId, record);
-
-            SimpleConsole.AddLine(ConsoleMid, $"Created {pegAndProps.localPeg.Name} - {record.cloudAnchorId} at {record.localPeg.GlobalPose.position.ToString("F3")}");
-
-            return record.cloudAnchorId;
+            return null;
         }
 
         public async Task<LocalPegAndProperties> Read(CloudAnchorId cloudAnchorId)
         {
-            SimpleConsole.AddLine(ConsoleMid, $"Read CID={cloudAnchorId}");
-            // mafinc - do we want an option here to force downloading, even if we already have it cached locally?
-            AnchorRecord record = GetRecord(cloudAnchorId);
-            Debug.Log($"GetRecord ca={cloudAnchorId}, record={(record == null ? "null" : record.localPeg.Name)}");
-            if (record == null)
+            if (AcquireBusy("Read"))
             {
-                Debug.Log($"Downloading record ca={cloudAnchorId}");
-                record = await DownloadRecord(cloudAnchorId);
+                SimpleConsole.AddLine(ConsoleMid, $"Read CID={cloudAnchorId}");
+                // mafinc - do we want an option here to force downloading, even if we already have it cached locally?
+                AnchorRecord record = GetRecord(cloudAnchorId);
+                Debug.Log($"GetRecord ca={cloudAnchorId}, record={(record == null ? "null" : record.localPeg.Name)}");
                 if (record == null)
                 {
-                    Debug.LogError($"Error downloading cloud anchor {cloudAnchorId}");
-                    return null;
+                    Debug.Log($"Downloading record ca={cloudAnchorId}");
+                    record = await DownloadRecord(cloudAnchorId);
+                    if (record == null)
+                    {
+                        Debug.LogError($"Error downloading cloud anchor {cloudAnchorId}");
+                        return null;
+                    }
+                    AddRecord(record.cloudAnchorId, record);
                 }
-                AddRecord(record.cloudAnchorId, record);
+                AnchorRecord.DebugLog(record, "Read: Got record");
+
+                SimpleConsole.AddLine(ConsoleMid, $"Got record p={record.localPeg.GlobalPose.position.ToString("F3")}");
+
+                
+                var ret = record.GetPegWithProperties();
+                ReleaseBusy();
+                return ret;
             }
-            AnchorRecord.DebugLog(record, "Read: Got record");
-
-            SimpleConsole.AddLine(ConsoleMid, $"Got record p={record.localPeg.GlobalPose.position.ToString("F3")}");
-
-            return record.GetPegWithProperties();
+            return null;
         }
 
         public async Task<CloudAnchorId> Modify(CloudAnchorId cloudAnchorId, LocalPegAndProperties peg)
@@ -360,70 +423,83 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         public async Task Delete(string cloudAnchorId)
         {
-            SimpleConsole.AddLine(ConsoleMid, $"Deleting {cloudAnchorId}");
-            AnchorRecord record = DeleteRecord(cloudAnchorId);
-            if (record == null)
+            if (AcquireBusy("Delete"))
             {
-                SimpleConsole.AddLine(11, $"No loaded record found for {cloudAnchorId}, downloading.");
-                record = await DownloadRecord(cloudAnchorId);
+                SimpleConsole.AddLine(ConsoleMid, $"Deleting {cloudAnchorId}");
+                AnchorRecord record = DeleteRecord(cloudAnchorId);
                 if (record == null)
                 {
-                    SimpleConsole.AddLine(11, $"Failed to download {cloudAnchorId}, not deleted.");
-                    return;
+                    SimpleConsole.AddLine(11, $"No loaded record found for {cloudAnchorId}, downloading.");
+                    record = await DownloadRecord(cloudAnchorId);
+                    if (record == null)
+                    {
+                        SimpleConsole.AddLine(11, $"Failed to download {cloudAnchorId}, not deleted.");
+                        return;
+                    }
                 }
-            }
-            Debug.Assert(record.cloudAnchor != null, $"Trying to un-publish an anchor that isn't published: {record.cloudAnchorId}");
-            if (record.cloudAnchor != null)
-            {
-                try
+                Debug.Assert(record.cloudAnchor != null, $"Trying to un-publish an anchor that isn't published: {record.cloudAnchorId}");
+                if (record.cloudAnchor != null)
                 {
-                    await asaManager.Session.DeleteAnchorAsync(record.cloudAnchor);
-                    SimpleConsole.AddLine(ConsoleMid, $"{cloudAnchorId} Deleted");
+                    try
+                    {
+                        await asaManager.Session.DeleteAnchorAsync(record.cloudAnchor);
+                        SimpleConsole.AddLine(ConsoleMid, $"{cloudAnchorId} Deleted");
+                    }
+                    catch (Exception e)
+                    {
+                        SimpleConsole.AddLine(11, $"Tried but failed to delete {cloudAnchorId}, {e.Message}");
+                    }
                 }
-                catch (Exception e)
-                {
-                    SimpleConsole.AddLine(11, $"Tried but failed to delete {cloudAnchorId}, {e.Message}");
-                }
+                ReleaseBusy();
             }
         }
 
         public async Task<Dictionary<CloudAnchorId, LocalPegAndProperties>> Find(float radiusFromDevice)
         {
-            if (locationProvider == null)
+            if (AcquireBusy("Find"))
             {
-                SimpleConsole.AddLine(11, $"Trying to search for records but location provider is null.");
-                return null;
-            }
-            List<AnchorRecord> locatedRecords = await SearchForRecords(radiusFromDevice);
+                if (locationProvider == null)
+                {
+                    SimpleConsole.AddLine(11, $"Trying to search for records but location provider is null.");
+                    return null;
+                }
+                List<AnchorRecord> locatedRecords = await SearchForRecords(radiusFromDevice);
 
-            SimpleConsole.AddLine(8, $"Found {locatedRecords.Count} records.");
-            Dictionary<CloudAnchorId, LocalPegAndProperties> found = new Dictionary<CloudAnchorId, LocalPegAndProperties>();
-            foreach (var record in locatedRecords)
-            {
-                AddRecord(record.cloudAnchorId, record);
-                var obj = record.GetPegWithProperties();
-                found[record.cloudAnchorId] = obj;
+                SimpleConsole.AddLine(8, $"Found {locatedRecords.Count} records.");
+                Dictionary<CloudAnchorId, LocalPegAndProperties> found = new Dictionary<CloudAnchorId, LocalPegAndProperties>();
+                foreach (var record in locatedRecords)
+                {
+                    AddRecord(record.cloudAnchorId, record);
+                    var obj = record.GetPegWithProperties();
+                    found[record.cloudAnchorId] = obj;
+                }
+                ReleaseBusy();
+                return found;
             }
-            return found;
+            return null;
         }
 
         public async Task PurgeArea(float radius)
         {
-            SimpleConsole.AddLine(ConsoleMid, $"Purging area of radius {radius} meters.");
-
-            var dict = await Find(radius);
-
-            SimpleConsole.AddLine(ConsoleMid, $"Found {dict.Count} anchors to delete.");
-
-            foreach (var keyval in dict)
+            if (AcquireBusy("Purge"))
             {
-                string cloudAnchorId = keyval.Key;
-                SimpleConsole.AddLine(ConsoleMid, $"Deleting {cloudAnchorId}");
+                SimpleConsole.AddLine(ConsoleMid, $"Purging area of radius {radius} meters.");
 
-                await Delete(cloudAnchorId);
+                var dict = await Find(radius);
+
+                SimpleConsole.AddLine(ConsoleMid, $"Found {dict.Count} anchors to delete.");
+
+                foreach (var keyval in dict)
+                {
+                    string cloudAnchorId = keyval.Key;
+                    SimpleConsole.AddLine(ConsoleMid, $"Deleting {cloudAnchorId}");
+
+                    await Delete(cloudAnchorId);
+                }
+
+                SimpleConsole.AddLine(ConsoleMid, "Purge finished.");
+                ReleaseBusy();
             }
-
-            SimpleConsole.AddLine(ConsoleMid, "Purge finished.");
         }
         #endregion // Public API
 
@@ -550,10 +626,10 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 double timeSearching = Time.timeAsDouble - startTime;
                 if (haveAnchors)
                 {
-                    int waitForMoreAnchorsTimeoutMS = 1000;
+                    int waitForMoreAnchorsTimeoutMS = (int)(MaxWaitForMoreAnchorsSeconds * 1000.0f + 0.5f);
                     await Task.Delay(waitForMoreAnchorsTimeoutMS);
                 }
-                else if (timeSearching > maxSearchSeconds)
+                else if (timeSearching > MaxSearchSeconds)
                 {
                     SimpleConsole.AddLine(ConsoleHigh, $"Searched {timeSearching}s,found no anchors, giving up.");
                     waiting = false;
@@ -706,7 +782,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             return provider;
         }
 
-        private bool LocationReady(NotReadyReason readyReason)
+        private bool LocationReady(IPublisher.Readiness status)
         {
             // If locationProvider is null, we aren't using location provider, so don't need to wait on it. I.e. ready.
             if (locationProvider == null)
@@ -715,7 +791,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
             if (locationProvider.GeoLocationStatus == GeoLocationStatusResult.Available)
             {
-                if (readyReason == NotReadyReason.NotReadyForLocate)
+                if (readiness == IPublisher.Readiness.NotReadyToLocate)
                 {
                     SimpleConsole.AddLine(ConsoleHigh, $"Ready: GeoLocationStatus={locationProvider.GeoLocationStatus}");
                 }
@@ -723,7 +799,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
             if (locationProvider.WifiStatus == WifiStatusResult.Available)
             {
-                if (readyReason == NotReadyReason.NotReadyForLocate)
+                if (readiness == IPublisher.Readiness.NotReadyToLocate)
                 {
                     SimpleConsole.AddLine(ConsoleHigh, $"Ready: WifiStatus={locationProvider.WifiStatus}");
                 }
@@ -731,13 +807,13 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
             if (locationProvider.BluetoothStatus == BluetoothStatusResult.Available)
             {
-                if (readyReason == NotReadyReason.NotReadyForLocate)
+                if (readiness == IPublisher.Readiness.NotReadyToLocate)
                 {
                     SimpleConsole.AddLine(ConsoleHigh, $"Ready: BluetoothStatus={locationProvider.BluetoothStatus}");
                 }
                 return true;
             }
-            if (readyReason != NotReadyReason.NotReadyForLocate)
+            if (readiness != IPublisher.Readiness.NotReadyToLocate)
             {
                 SimpleConsole.AddLine(ConsoleHigh, $"Not Ready: GeoLocationStatus={locationProvider.GeoLocationStatus}");
                 SimpleConsole.AddLine(ConsoleHigh, $"Not Ready: WifiStatus={locationProvider.WifiStatus}");
@@ -746,6 +822,22 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             return false;
         }
 
+        private bool busy = false;
+        private bool AcquireBusy(string msg)
+        {
+            if (busy)
+            {
+                SimpleConsole.AddLine(ConsoleHigh, $"{msg} failed because IPublisher already busy.");
+                return false;
+            }
+            busy = true;
+            return true;
+        }
+        private void ReleaseBusy()
+        {
+            Debug.Assert(busy);
+            busy = false;
+        }
         #endregion // Setup helpers
 
         #region Awful stuff

@@ -24,9 +24,43 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
     /// </remarks>
     public interface IPublisher
     {
-        public void Setup();
+        public enum Readiness
+        {
+            NotSetup,
+            NoManager,
+            Starting,
+            NotReadyToCreate,
+            NotReadyToLocate,
+            Ready,
+            Busy
+        };
 
-        public bool IsReady { get; }
+        public class ReadinessStatus
+        {
+            public Readiness readiness = Readiness.NotSetup;
+            public float recommendedForCreate = 0;
+            public float readyForCreate = 0;
+
+            public ReadinessStatus()
+            {
+            }
+
+            public ReadinessStatus(Readiness r)
+            {
+                readiness = r;
+            }
+
+            public ReadinessStatus(Readiness r, float recommended, float ready)
+            {
+                readiness = r;
+                recommendedForCreate = recommended;
+                readyForCreate = ready;
+            }
+        }
+
+        ReadinessStatus Status { get; }
+
+        public void Setup();
 
         public Task<ILocalPeg> CreateLocalPeg(string id, Pose lockedPose);
 

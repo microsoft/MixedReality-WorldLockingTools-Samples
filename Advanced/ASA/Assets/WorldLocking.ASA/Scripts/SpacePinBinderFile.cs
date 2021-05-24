@@ -15,6 +15,8 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         [SerializeField] 
         private string fileName = "BinderFile.txt";
 
+        public string Name { get { return name; } }
+
         public bool Get(IBinder binder)
         {
             return Load(binder);

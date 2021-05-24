@@ -87,6 +87,8 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
         }
 
+        public string Name { get { return name; } }
+
         [SerializeField]
         private List<SpacePinASA> spacePins = new List<SpacePinASA>();
 
@@ -134,11 +136,13 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         public bool IsReady
         {
-            get { return publisher.IsReady; }
+            get { return PublisherStatus.readiness == IPublisher.Readiness.Ready; }
         }
 
+        public IPublisher.ReadinessStatus PublisherStatus { get { return publisher != null ? publisher.Status : new IPublisher.ReadinessStatus(); } }
+
         // mafinc - this is a temp hack and needs to go away.
-        public IPublisher Publisher { get { return publisher; } }
+        private IPublisher Publisher { get { return publisher; } }
 
         #region Create and maintain bindings between space pins and cloud anchors
         public IReadOnlyList<SpacePinCloudBinding> GetBindings()
@@ -256,7 +260,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         public async Task<bool> Publish(SpacePinASA spacePin)
         {
-            if (!publisher.IsReady)
+            if (!IsReady)
             {
                 // mafinc - Should we wait until it is ready? Maybe as a binder option?
                 return false;
@@ -298,6 +302,11 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// </remarks>
         public async Task<bool> Download()
         {
+            if (!IsReady)
+            {
+                return false;
+            }
+
             bool allSuccessful = true;
             List<SpacePinPegAndProps> readObjects = new List<SpacePinPegAndProps>();
             foreach (var spacePin in spacePins)
@@ -335,6 +344,11 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         public async Task<bool> Search()
         {
+            if (!IsReady)
+            {
+                return false;
+            }
+
             Dictionary<CloudAnchorId, LocalPegAndProperties> found = await publisher.Find(searchRadius);
 
             var wltMgr = WorldLockingManager.GetInstance();
@@ -371,6 +385,10 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         public async Task<bool> Purge()
         {
+            if (!IsReady)
+            {
+                return false;
+            }
             await publisher.PurgeArea(searchRadius);
 
             return true;
@@ -378,6 +396,10 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         public async Task<bool> Clear()
         {
+            if (!IsReady)
+            {
+                return false;
+            }
             foreach(var binding in bindings)
             {
                 await publisher.Delete(binding.cloudAnchorId);

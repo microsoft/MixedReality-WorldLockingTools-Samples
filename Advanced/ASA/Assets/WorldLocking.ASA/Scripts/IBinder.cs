@@ -18,6 +18,12 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
     {
         string BinderName { get; }
 
+        string Name { get; }
+
+        bool IsReady { get; }
+
+        IPublisher.ReadinessStatus PublisherStatus { get; }
+
         IReadOnlyList<SpacePinCloudBinding> GetBindings();
 
         bool CreateBinding(string spacePinId, string cloudAnchorId);
@@ -31,5 +37,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         Task<bool> Search();
 
         Task<bool> Clear();
+
+        Task<bool> Purge();
     }
 }
