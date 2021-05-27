@@ -28,9 +28,6 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
     public class SpacePinPublisher : MonoBehaviour, IPublisher
     {
         #region Inspector fields
-        [SerializeField]
-        private List<string> beaconUuids = new List<string>();
-
         public List<string> BeaconUuids { get { return beaconUuids; } }
 
         [Tooltip("Enable coarse relocation")]
@@ -45,9 +42,30 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         public bool CoarseRelocationEnabled { get { return coarseRelocationEnabled; } set { coarseRelocationEnabled = value; } }
 
         [SerializeField]
-        private bool coarseRelocationCurationEnabled = true;
+        private bool coarseRelocPublishEnabled = true;
 
-        public bool CoarseRelocationCurationEnabled { get { return coarseRelocationCurationEnabled; } set { coarseRelocationCurationEnabled = value; } }
+        public bool CoarseRelocPublishEnabled { get { return coarseRelocPublishEnabled; } set { coarseRelocPublishEnabled = value; } }
+
+        [SerializeField]
+        private bool crUseWifi = true;
+
+        public bool CoarseRelocUseWifi { get { return crUseWifi; } set { crUseWifi = value; } }
+
+        [SerializeField]
+        private bool crUseGPS = true;
+
+        public bool CoarseRelocUseGPS { get { return crUseGPS; } set { crUseGPS = value; } }
+
+        [SerializeField]
+        private List<string> beaconUuids = new List<string>();
+
+        /// <summary>
+        /// Whether use of bluetooth beacons is to be used in coarse relocation.
+        /// </summary>
+        /// <remarks>
+        /// To enable use of bluetooth beacons, add some beacon uuids to BeaconUuids.
+        /// </remarks>
+        public bool CoarseRelocUseBluetooth { get { return BeaconUuids.Count > 0; } }
 
         [Tooltip("Transform to attach created anchors to. Should have identity global pose.")]
         [SerializeField]
@@ -204,16 +222,16 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 }
                 return WrapReadiness();
             }
-            if (busy)
+            if (IsBusy)
             {
                 if (readiness != Readiness.Busy)
                 {
                     readiness = Readiness.Busy;
-                    SimpleConsole.AddLine(ConsoleHigh, "Not ready: Already busy.");
+                    SimpleConsole.AddLine(ConsoleHigh, $"Not ready: Busy on task [{busy}].");
                 }
                 return WrapReadiness();
             }
-            if (CoarseRelocationCurationEnabled && !IsReadyForCreate(asaManager))
+            if (CoarseRelocPublishEnabled && !IsReadyForCreate(asaManager))
             {
                 if (readiness != IPublisher.Readiness.NotReadyToCreate)
                 {
@@ -255,10 +273,10 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         public async void Setup()
         {
-            if (CoarseRelocationCurationEnabled && !CoarseRelocationEnabled)
+            if (CoarseRelocPublishEnabled && !CoarseRelocationEnabled)
             {
                 SimpleConsole.AddLine(ConsoleHigh, $"Coarse Reloc Curation enabled, but not Coarse Reloc. Disabling Coarse Reloc Curation.");
-                CoarseRelocationCurationEnabled = false;
+                CoarseRelocPublishEnabled = false;
             }
 #if UNITY_ANDROID
             if (CoarseRelocationEnabled)
@@ -397,6 +415,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                     if (record == null)
                     {
                         Debug.LogError($"Error downloading cloud anchor {cloudAnchorId}");
+                        ReleaseBusy();
                         return null;
                     }
                     AddRecord(record.cloudAnchorId, record);
@@ -425,31 +444,8 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         {
             if (AcquireBusy("Delete"))
             {
-                SimpleConsole.AddLine(ConsoleMid, $"Deleting {cloudAnchorId}");
-                AnchorRecord record = DeleteRecord(cloudAnchorId);
-                if (record == null)
-                {
-                    SimpleConsole.AddLine(11, $"No loaded record found for {cloudAnchorId}, downloading.");
-                    record = await DownloadRecord(cloudAnchorId);
-                    if (record == null)
-                    {
-                        SimpleConsole.AddLine(11, $"Failed to download {cloudAnchorId}, not deleted.");
-                        return;
-                    }
-                }
-                Debug.Assert(record.cloudAnchor != null, $"Trying to un-publish an anchor that isn't published: {record.cloudAnchorId}");
-                if (record.cloudAnchor != null)
-                {
-                    try
-                    {
-                        await asaManager.Session.DeleteAnchorAsync(record.cloudAnchor);
-                        SimpleConsole.AddLine(ConsoleMid, $"{cloudAnchorId} Deleted");
-                    }
-                    catch (Exception e)
-                    {
-                        SimpleConsole.AddLine(11, $"Tried but failed to delete {cloudAnchorId}, {e.Message}");
-                    }
-                }
+                await DeleteById(cloudAnchorId);
+
                 ReleaseBusy();
             }
         }
@@ -458,21 +454,8 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         {
             if (AcquireBusy("Find"))
             {
-                if (locationProvider == null)
-                {
-                    SimpleConsole.AddLine(11, $"Trying to search for records but location provider is null.");
-                    return null;
-                }
-                List<AnchorRecord> locatedRecords = await SearchForRecords(radiusFromDevice);
+                var found = await SearchArea(radiusFromDevice);
 
-                SimpleConsole.AddLine(8, $"Found {locatedRecords.Count} records.");
-                Dictionary<CloudAnchorId, LocalPegAndProperties> found = new Dictionary<CloudAnchorId, LocalPegAndProperties>();
-                foreach (var record in locatedRecords)
-                {
-                    AddRecord(record.cloudAnchorId, record);
-                    var obj = record.GetPegWithProperties();
-                    found[record.cloudAnchorId] = obj;
-                }
                 ReleaseBusy();
                 return found;
             }
@@ -485,16 +468,23 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             {
                 SimpleConsole.AddLine(ConsoleMid, $"Purging area of radius {radius} meters.");
 
-                var dict = await Find(radius);
+                var dict = await SearchArea(radius);
 
-                SimpleConsole.AddLine(ConsoleMid, $"Found {dict.Count} anchors to delete.");
-
-                foreach (var keyval in dict)
+                if (dict != null)
                 {
-                    string cloudAnchorId = keyval.Key;
-                    SimpleConsole.AddLine(ConsoleMid, $"Deleting {cloudAnchorId}");
+                    SimpleConsole.AddLine(ConsoleMid, $"Found {dict.Count} anchors to delete.");
 
-                    await Delete(cloudAnchorId);
+                    foreach (var keyval in dict)
+                    {
+                        string cloudAnchorId = keyval.Key;
+                        SimpleConsole.AddLine(ConsoleMid, $"Deleting {cloudAnchorId}");
+
+                        await DeleteById(cloudAnchorId);
+                    }
+                }
+                else
+                {
+                    SimpleConsole.AddLine(ConsoleHigh, $"Search area failed!");
                 }
 
                 SimpleConsole.AddLine(ConsoleMid, "Purge finished.");
@@ -555,6 +545,27 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 AnchorRecord.DebugLog(record, $"Finished waiting, frame={Time.frameCount}");
             }
             return record;
+        }
+
+        private async Task<Dictionary<CloudAnchorId, LocalPegAndProperties>> SearchArea(float radiusFromDevice)
+        {
+            if (locationProvider == null)
+            {
+                SimpleConsole.AddLine(11, $"Trying to search for records but location provider is null.");
+                return null;
+            }
+            List<AnchorRecord> locatedRecords = await SearchForRecords(radiusFromDevice);
+
+            SimpleConsole.AddLine(8, $"Found {locatedRecords.Count} records.");
+            Dictionary<CloudAnchorId, LocalPegAndProperties> found = new Dictionary<CloudAnchorId, LocalPegAndProperties>();
+            foreach (var record in locatedRecords)
+            {
+                AddRecord(record.cloudAnchorId, record);
+                var obj = record.GetPegWithProperties();
+                found[record.cloudAnchorId] = obj;
+            }
+
+            return found;
         }
 
         /// <summary>
@@ -645,6 +656,36 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
             return locatedRecords;
         }
+
+        private async Task DeleteById(string cloudAnchorId)
+        {
+            SimpleConsole.AddLine(ConsoleMid, $"Deleting {cloudAnchorId}");
+            AnchorRecord record = DeleteRecord(cloudAnchorId);
+            if (record == null)
+            {
+                SimpleConsole.AddLine(11, $"No loaded record found for {cloudAnchorId}, downloading.");
+                record = await DownloadRecord(cloudAnchorId);
+                if (record == null)
+                {
+                    SimpleConsole.AddLine(11, $"Failed to download {cloudAnchorId}, not deleted.");
+                    return;
+                }
+            }
+            Debug.Assert(record.cloudAnchor != null, $"Trying to un-publish an anchor that isn't published: {record.cloudAnchorId}");
+            if (record.cloudAnchor != null)
+            {
+                try
+                {
+                    await asaManager.Session.DeleteAnchorAsync(record.cloudAnchor);
+                    SimpleConsole.AddLine(ConsoleMid, $"{cloudAnchorId} Deleted");
+                }
+                catch (Exception e)
+                {
+                    SimpleConsole.AddLine(11, $"Tried but failed to delete {cloudAnchorId}, {e.Message}");
+                }
+            }
+        }
+
 
         #endregion // Internal implementations
 
@@ -769,10 +810,10 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
             PlatformLocationProvider provider = new PlatformLocationProvider();
             // Allow GPS
-            provider.Sensors.GeoLocationEnabled = true;
+            provider.Sensors.GeoLocationEnabled = CoarseRelocUseGPS;
 
             // Allow WiFi scanning
-            provider.Sensors.WifiEnabled = true;
+            provider.Sensors.WifiEnabled = CoarseRelocUseWifi;
 
             // Allow a set of known BLE beacons
             provider.Sensors.BluetoothEnabled = (beaconUuids.Count > 0);
@@ -789,7 +830,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             {
                 return true;
             }
-            if (locationProvider.GeoLocationStatus == GeoLocationStatusResult.Available)
+            if (CoarseRelocUseGPS && locationProvider.GeoLocationStatus == GeoLocationStatusResult.Available)
             {
                 if (readiness == IPublisher.Readiness.NotReadyToLocate)
                 {
@@ -797,7 +838,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 }
                 return true;
             }
-            if (locationProvider.WifiStatus == WifiStatusResult.Available)
+            if (CoarseRelocUseWifi && locationProvider.WifiStatus == WifiStatusResult.Available)
             {
                 if (readiness == IPublisher.Readiness.NotReadyToLocate)
                 {
@@ -805,7 +846,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 }
                 return true;
             }
-            if (locationProvider.BluetoothStatus == BluetoothStatusResult.Available)
+            if (CoarseRelocUseBluetooth && locationProvider.BluetoothStatus == BluetoothStatusResult.Available)
             {
                 if (readiness == IPublisher.Readiness.NotReadyToLocate)
                 {
@@ -815,28 +856,32 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
             if (readiness != IPublisher.Readiness.NotReadyToLocate)
             {
-                SimpleConsole.AddLine(ConsoleHigh, $"Not Ready: GeoLocationStatus={locationProvider.GeoLocationStatus}");
-                SimpleConsole.AddLine(ConsoleHigh, $"Not Ready: WifiStatus={locationProvider.WifiStatus}");
-                SimpleConsole.AddLine(ConsoleHigh, $"Not Ready: BluetoothStatus={locationProvider.BluetoothStatus}");
+                SimpleConsole.AddLine(ConsoleHigh, $"Not Ready: GeoLocationStatus={locationProvider.GeoLocationStatus} {CoarseRelocUseGPS}");
+                SimpleConsole.AddLine(ConsoleHigh, $"Not Ready: WifiStatus={locationProvider.WifiStatus} {CoarseRelocUseWifi}");
+                SimpleConsole.AddLine(ConsoleHigh, $"Not Ready: BluetoothStatus={locationProvider.BluetoothStatus} {CoarseRelocUseBluetooth}");
             }
             return false;
         }
 
-        private bool busy = false;
+        private string busy = null;
+
+        private bool IsBusy { get { return busy != null; } }
+
         private bool AcquireBusy(string msg)
         {
-            if (busy)
+            Debug.Assert(msg != null);
+            if (busy != null)
             {
                 SimpleConsole.AddLine(ConsoleHigh, $"{msg} failed because IPublisher already busy.");
                 return false;
             }
-            busy = true;
+            busy = msg;
             return true;
         }
         private void ReleaseBusy()
         {
-            Debug.Assert(busy);
-            busy = false;
+            Debug.Assert(busy != null);
+            busy = null;
         }
         #endregion // Setup helpers
 
