@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 using UnityEngine;
 
-namespace WorldLocking.Trash
+namespace WorldLocking.XampleApp
 {
     public class ActionCube : MonoBehaviour
     {

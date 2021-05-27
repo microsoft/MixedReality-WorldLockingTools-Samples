@@ -15,6 +15,8 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
     /// Note that this implements spatial persistence locally across sessions.
     /// Also, the file can be transferred from device to device, allowing shared spaces
     /// between HoloLens, Android, and iOS.
+    /// A more sophisticated implementation would be very similar, but instead of saving to and loading from
+    /// a local file, would save to and load from a shared location in the cloud.
     /// </remarks>
     public class SpacePinBinderFile : MonoBehaviour, IBindingOracle
     {

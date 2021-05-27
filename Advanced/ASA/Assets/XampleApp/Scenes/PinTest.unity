@@ -181,7 +181,7 @@ PrefabInstance:
     - target: {fileID: 2070291447063185073, guid: 3f1f46cbecbe08e46a303ccfdb5b498a, type: 3}
       propertyPath: ButtonReleased.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
-      objectReference: {fileID: 813162287}
+      objectReference: {fileID: 972565597}
     - target: {fileID: 2070291447063185073, guid: 3f1f46cbecbe08e46a303ccfdb5b498a, type: 3}
       propertyPath: ButtonReleased.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
       value: 2
@@ -192,7 +192,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2070291447063185073, guid: 3f1f46cbecbe08e46a303ccfdb5b498a, type: 3}
       propertyPath: ButtonReleased.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
-      value: WorldLocking.Trash.ActionPublish, Assembly-CSharp
+      value: WorldLocking.XampleApp.ActionPublish, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 2070291447063185073, guid: 3f1f46cbecbe08e46a303ccfdb5b498a, type: 3}
       propertyPath: ButtonReleased.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgument
@@ -429,6 +429,8 @@ MonoBehaviour:
   spacePinBinderFile: {fileID: 1506107967}
   statusLine: {fileID: 1043518076}
   finishSeconds: 1
+  notReadyColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  workingColor: {r: 0.7, g: 0.7, b: 0.4, a: 1}
 --- !u!114 &270376707
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -586,6 +588,8 @@ MonoBehaviour:
   spacePinBinderFile: {fileID: 1506107967}
   statusLine: {fileID: 1043518076}
   finishSeconds: 1
+  notReadyColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  workingColor: {r: 0.7, g: 0.7, b: 0.4, a: 1}
 --- !u!114 &284635334
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1392,6 +1396,8 @@ MonoBehaviour:
   spacePinBinderFile: {fileID: 1506107967}
   statusLine: {fileID: 0}
   finishSeconds: 1
+  notReadyColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  workingColor: {r: 0.7, g: 0.7, b: 0.4, a: 1}
 --- !u!65 &719466512
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1724,6 +1730,8 @@ MonoBehaviour:
   spacePinBinderFile: {fileID: 1506107967}
   statusLine: {fileID: 1043518076}
   finishSeconds: 1
+  notReadyColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  workingColor: {r: 0.7, g: 0.7, b: 0.4, a: 1}
 --- !u!1 &840290103
 GameObject:
   m_ObjectHideFlags: 0
@@ -1819,6 +1827,8 @@ MonoBehaviour:
   spacePinBinderFile: {fileID: 1506107967}
   statusLine: {fileID: 0}
   finishSeconds: 1
+  notReadyColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  workingColor: {r: 0.7, g: 0.7, b: 0.4, a: 1}
 --- !u!65 &840290107
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1903,7 +1913,7 @@ PrefabInstance:
     - target: {fileID: 2070291447063185073, guid: 3f1f46cbecbe08e46a303ccfdb5b498a, type: 3}
       propertyPath: ButtonReleased.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
-      objectReference: {fileID: 813162287}
+      objectReference: {fileID: 270376706}
     - target: {fileID: 2070291447063185073, guid: 3f1f46cbecbe08e46a303ccfdb5b498a, type: 3}
       propertyPath: ButtonReleased.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
       value: 2
@@ -1914,7 +1924,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2070291447063185073, guid: 3f1f46cbecbe08e46a303ccfdb5b498a, type: 3}
       propertyPath: ButtonReleased.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
-      value: WorldLocking.Trash.ActionPublish, Assembly-CSharp
+      value: WorldLocking.XampleApp.ActionPublish, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 2070291447063185073, guid: 3f1f46cbecbe08e46a303ccfdb5b498a, type: 3}
       propertyPath: ButtonReleased.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgument
@@ -2172,6 +2182,7 @@ GameObject:
   - component: {fileID: 963194229}
   - component: {fileID: 963194231}
   - component: {fileID: 963194232}
+  - component: {fileID: 963194230}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2259,6 +2270,29 @@ MonoBehaviour:
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
+--- !u!114 &963194230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf98dd1206224111a38765365e98e207, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lockCursorWhenFocusLocked: 1
+  setCursorInvisibleWhenFocusLocked: 0
+  maxGazeCollisionDistance: 10
+  raycastLayerMasks:
+  - serializedVersion: 2
+    m_Bits: 4294967291
+  stabilizer:
+    storedStabilitySamples: 60
+  gazeTransform: {fileID: 0}
+  minHeadVelocityThreshold: 0.5
+  maxHeadVelocityThreshold: 2
 --- !u!114 &963194231
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2346,6 +2380,8 @@ MonoBehaviour:
   spacePinBinderFile: {fileID: 1506107967}
   statusLine: {fileID: 1043518076}
   finishSeconds: 1
+  notReadyColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  workingColor: {r: 0.7, g: 0.7, b: 0.4, a: 1}
 --- !u!114 &972565598
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3019,7 +3055,7 @@ PrefabInstance:
     - target: {fileID: 2070291447063185073, guid: 3f1f46cbecbe08e46a303ccfdb5b498a, type: 3}
       propertyPath: ButtonReleased.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
-      objectReference: {fileID: 813162287}
+      objectReference: {fileID: 284635333}
     - target: {fileID: 2070291447063185073, guid: 3f1f46cbecbe08e46a303ccfdb5b498a, type: 3}
       propertyPath: ButtonReleased.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
       value: 2
@@ -3030,7 +3066,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2070291447063185073, guid: 3f1f46cbecbe08e46a303ccfdb5b498a, type: 3}
       propertyPath: ButtonReleased.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
-      value: WorldLocking.Trash.ActionPublish, Assembly-CSharp
+      value: WorldLocking.XampleApp.ActionPublish, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 2070291447063185073, guid: 3f1f46cbecbe08e46a303ccfdb5b498a, type: 3}
       propertyPath: ButtonReleased.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgument
@@ -3474,6 +3510,8 @@ MonoBehaviour:
   spacePinBinderFile: {fileID: 1506107967}
   statusLine: {fileID: 1043518076}
   finishSeconds: 1
+  notReadyColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  workingColor: {r: 0.7, g: 0.7, b: 0.4, a: 1}
 --- !u!114 &1389853635
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3845,7 +3883,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27472b200b232f64297d5dda330efe35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  binderName: default
   spacePins:
   - {fileID: 751649970}
   - {fileID: 2147212414}
@@ -3895,10 +3932,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coarseRelocationEnabled: 1
-  coarseRelocPublishEnabled: 1
+  crPublishEnabled: 1
   crUseWifi: 1
   crUseGPS: 0
-  beaconUuids: []
+  crBeaconUuids: []
   anchorsParent: {fileID: 1506107964}
   maxSearchSeconds: 45
   maxWaitForMoreAnchorsSeconds: 0.25
@@ -4191,6 +4228,8 @@ MonoBehaviour:
   spacePinBinderFile: {fileID: 1506107967}
   statusLine: {fileID: 0}
   finishSeconds: 1
+  notReadyColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  workingColor: {r: 0.7, g: 0.7, b: 0.4, a: 1}
 --- !u!65 &1732941826
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4366,6 +4405,8 @@ MonoBehaviour:
   spacePinBinderFile: {fileID: 1506107967}
   statusLine: {fileID: 2114188957}
   finishSeconds: 1
+  notReadyColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  workingColor: {r: 0.7, g: 0.7, b: 0.4, a: 1}
 --- !u!114 &1755264366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4505,6 +4546,8 @@ MonoBehaviour:
   spacePinBinderFile: {fileID: 1506107967}
   statusLine: {fileID: 0}
   finishSeconds: 1
+  notReadyColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  workingColor: {r: 0.7, g: 0.7, b: 0.4, a: 1}
 --- !u!65 &1882563984
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -10,7 +10,7 @@ using Microsoft.MixedReality.WorldLocking.ASA;
 
 using TMPro;
 
-namespace WorldLocking.Trash
+namespace WorldLocking.XampleApp
 {
     public class ActionPublish : ActionCube
     {
@@ -26,8 +26,12 @@ namespace WorldLocking.Trash
 
         [Tooltip("Number seconds to change color at finish.")]
         public float finishSeconds = 1.0f;
-        
-        private bool isReady = false;
+
+        [Tooltip("Color when waiting for binder to be ready.")]
+        public Color notReadyColor = new Color(0.2f, 0.2f, 0.2f);
+
+        [Tooltip("Color when waiting on previous command")]
+        public Color workingColor = new Color(0.7f, 0.7f, 0.4f);
 
         private bool goodSetup = false;
 
@@ -65,20 +69,21 @@ namespace WorldLocking.Trash
             {
                 return;
             }
-            bool nowReady = binder.IsReady;
-            if (nowReady != isReady)
+            if (working)
             {
-                if (nowReady)
-                {
-                    RestoreColors();
-                }
-                else
-                {
-                    SetColors(Color.white);
-                }
-                isReady = nowReady;
+                SetColors(workingColor);
+            }
+            else if (binder.IsReady)
+            {
+                RestoreColors();
+            }
+            else
+            {
+                SetColors(notReadyColor);
             }
         }
+
+        private bool working = false;
 
         private void DisplayStatus()
         {
@@ -96,6 +101,7 @@ namespace WorldLocking.Trash
 
         public async void DoPublish()
         {
+            working = true;
             SetColors(Color.black);
 
             SimpleConsole.AddLine(8, $"Publish cube, binder is {(binder == null ? "null" : binder.Name)}");
@@ -112,10 +118,12 @@ namespace WorldLocking.Trash
             SimpleConsole.AddLine(8, $"Finished.");
 
             await ChangeColorForSeconds(finishSeconds, Color.green);
+            working = false;
         }
 
         public async void DoDownload()
         {
+            working = true;
             SetColors(Color.black);
 
             SimpleConsole.AddLine(8, $"Download cube, binder is {(binder == null ? "null" : binder.Name)}");
@@ -132,10 +140,12 @@ namespace WorldLocking.Trash
             SimpleConsole.AddLine(8, $"Finished.");
 
             await ChangeColorForSeconds(finishSeconds, Color.green);
+            working = false;
         }
 
         public async void DoSearch()
         {
+            working = true;
             SetColors(Color.black);
 
             SimpleConsole.AddLine(8, $"Search cube, binder is {(binder == null ? "null" : binder.Name)}");
@@ -154,10 +164,12 @@ namespace WorldLocking.Trash
             SimpleConsole.AddLine(8, $"Finished.");
 
             await ChangeColorForSeconds(finishSeconds, Color.green);
+            working = false;
         }
 
         public async void DoPurge()
         {
+            working = true;
             SetColors(Color.black);
 
             SimpleConsole.AddLine(8, $"Purge cube, binder is {(binder == null ? "null" : binder.Name)}");
@@ -176,10 +188,12 @@ namespace WorldLocking.Trash
             SimpleConsole.AddLine(8, $"Finished.");
 
             await ChangeColorForSeconds(finishSeconds, Color.green);
+            working = false;
         }
 
         public async void DoClear()
         {
+            working = true;
             SetColors(Color.black);
 
             SimpleConsole.AddLine(8, $"Clear cube, binder is {(binder == null ? "null" : binder.Name)}");
@@ -201,6 +215,7 @@ namespace WorldLocking.Trash
             SimpleConsole.AddLine(8, $"Finished.");
 
             await ChangeColorForSeconds(finishSeconds, Color.green);
+            working = true;
         }
     }
 }
