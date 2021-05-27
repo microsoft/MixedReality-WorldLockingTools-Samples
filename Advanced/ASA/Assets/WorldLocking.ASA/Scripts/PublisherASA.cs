@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+#define WLT_EXTRA_LOGGING
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -25,10 +27,15 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
     using Readiness = IPublisher.Readiness;
     using ReadinessStatus = IPublisher.ReadinessStatus;
 
-    public class SpacePinPublisher : MonoBehaviour, IPublisher
+    /// <summary>
+    /// Implementation of IPublisher using ASA to push anchors to and retrieve them from the cloud.
+    /// </summary>
+    /// <remarks>
+    /// PublisherASA is a Monobehaviour to allow exposing properties in the inspector.
+    /// </remarks>
+    public class PublisherASA : MonoBehaviour, IPublisher
     {
         #region Inspector fields
-        public List<string> BeaconUuids { get { return beaconUuids; } }
 
         [Tooltip("Enable coarse relocation")]
         [SerializeField]
@@ -41,23 +48,45 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// </remarks>
         public bool CoarseRelocationEnabled { get { return coarseRelocationEnabled; } set { coarseRelocationEnabled = value; } }
 
+        [Tooltip("Whether relocation data will be included in published cloud anchors.")]
         [SerializeField]
-        private bool coarseRelocPublishEnabled = true;
+        private bool crPublishEnabled = true;
 
-        public bool CoarseRelocPublishEnabled { get { return coarseRelocPublishEnabled; } set { coarseRelocPublishEnabled = value; } }
+        /// <summary>
+        /// Whether relocation data will be included in published cloud anchors.
+        /// </summary>
+        /// <remarks>
+        /// With this enabled, extra initialization will be done, and the readiness state will be less reliable. 
+        /// If cloud anchor ids will be explicitly shared via file or network communications, this should be disabled.
+        /// </remarks>
+        public bool CoarseRelocPublishEnabled { get { return crPublishEnabled; } set { crPublishEnabled = value; } }
 
+        [Tooltip("Augment cloud anchors with wifi data to allow them to be found via course relocation.")]
         [SerializeField]
         private bool crUseWifi = true;
 
+        /// <summary>
+        /// Augment cloud anchors with wifi data to allow them to be found via course relocation.
+        /// </summary>
         public bool CoarseRelocUseWifi { get { return crUseWifi; } set { crUseWifi = value; } }
 
+        [Tooltip("Augment cloud anchors with GPS data to allow them to be found via course relocation.")]
         [SerializeField]
         private bool crUseGPS = true;
 
+        /// <summary>
+        /// Augment cloud anchors with GPS data to allow them to be found via course relocation.
+        /// </summary>
         public bool CoarseRelocUseGPS { get { return crUseGPS; } set { crUseGPS = value; } }
 
+        [Tooltip("Beacon ids to use in coarse reloctaion.")]
         [SerializeField]
-        private List<string> beaconUuids = new List<string>();
+        private List<string> crBeaconUuids = new List<string>();
+
+        /// <summary>
+        /// Beacon ids to use in coarse reloctaion.
+        /// </summary>
+        public List<string> BeaconUuids { get { return crBeaconUuids; } }
 
         /// <summary>
         /// Whether use of bluetooth beacons is to be used in coarse relocation.
@@ -76,49 +105,112 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// </summary>
         public Transform AnchorsParent { get { return anchorsParent; } set { anchorsParent = value; } }
 
+        [Tooltip("Maximum number of seconds to search without finding any anchors before giving up.")]
         [SerializeField]
         private float maxSearchSeconds = 90.0f;
 
+        /// <summary>
+        /// Maximum number of seconds to search without finding any anchors before giving up.
+        /// </summary>
         public float MaxSearchSeconds { get { return maxSearchSeconds; } set { maxSearchSeconds = value; } }
 
+        [Tooltip("Max number seconds to wait for more anchors, after having found some.")]
         [SerializeField]
         private float maxWaitForMoreAnchorsSeconds = 0.25f;
 
+        /// <summary>
+        /// Max number seconds to wait for more anchors, after having found some.
+        /// </summary>
         public float MaxWaitForMoreAnchorsSeconds { get { return maxWaitForMoreAnchorsSeconds; } set { maxWaitForMoreAnchorsSeconds = value; } }
 
+        [Tooltip("The minimum value of the recommended-for-create-progress float before allowing creation of cloud anchors.")]
         [SerializeField]
         private float minRecommendedForCreateProgress = 1.0f;
 
+        /// <summary>
+        /// The minimum value of the recommended-for-create-progress float before allowing creation of cloud anchors.
+        /// </summary>
         public float MinRecommendedForCreateProgress { get { return minRecommendedForCreateProgress; } set { minRecommendedForCreateProgress = value; } }
 
         #endregion // Inspector fields
 
         #region Internal members
-
+        /// <summary>
+        /// The ASA manager
+        /// </summary>
         private SpatialAnchorManager asaManager = null;
 
-        protected AnchorLocateCriteria anchorLocateCriteria = null;
+        /// <summary>
+        /// Anchor location criteria, reused for each lookup.
+        /// </summary>
+        /// <remarks>
+        /// Note that ASA only currently (v2.9.0) supports one watcher (1 search) at a time.
+        /// </remarks>
+        private AnchorLocateCriteria anchorLocateCriteria = null;
 
+        /// <summary>
+        /// List of anchors currently known about. Only accessed from main thread.
+        /// </summary>
         private readonly List<AnchorRecord> records = new List<AnchorRecord>();
+
+        /// <summary>
+        /// Incoming ASA event anchors.
+        /// </summary>
+        /// <remarks>
+        /// Accessed from multiple threads, must be locked to access.
+        /// </remarks>
         private readonly List<AnchorLocatedEventArgs> locatedAnchors = new List<AnchorLocatedEventArgs>();
 
+        /// <summary>
+        /// Coarse relocation provider. Only created if coarse relocation is enabled.
+        /// </summary>
         private PlatformLocationProvider locationProvider = null;
 
+        /// <summary>
+        /// Current readiness status.
+        /// </summary>
         private Readiness readiness = Readiness.NotSetup;
 
+        /// <summary>
+        /// Constants for logging to the SimpleConsole (higher is more likely to get posted).
+        /// </summary>
         private int ConsoleHigh = 10;
         private int ConsoleMid = 8;
         private int ConsoleLow = 3;
 
+        /// <summary>
+        /// Non-null busy string indicates the current task busy on. Null busy string means not busy.
+        /// </summary>
+        private string busy = null;
+
+        private bool IsBusy { get { return busy != null; } }
+
         #endregion // Internal members
 
         #region Internal types
+
+        /// <summary>
+        /// All of the information we know about a cloud anchor.
+        /// </summary>
         private class AnchorRecord
         {
+            /// <summary>
+            /// The local peg. Note that this is a concrete type implementing the ILocalPeg interface.
+            /// </summary>
             public LocalPeg localPeg = null;
+            /// <summary>
+            /// The cloud anchor for this record.
+            /// </summary>
             public CloudSpatialAnchor cloudAnchor = null;
+            /// <summary>
+            /// The identifier for this record's cloud anchor.
+            /// </summary>
             public CloudAnchorId cloudAnchorId = null;
 
+            /// <summary>
+            /// Create a local peg with properties matching the AnchorRecord.
+            /// </summary>
+            /// <returns>The local peg with properties.</returns>
             public LocalPegAndProperties GetPegWithProperties()
             {
                 Debug.Assert(localPeg != null, "Missing localPeg on AnchorRecord.");
@@ -130,6 +222,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 return pegAndProps;
             }
 
+#if WLT_EXTRA_LOGGING
             public static string DebugString(AnchorRecord record, string msg)
             {
                 if (record == null)
@@ -145,17 +238,34 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                     + $"pose: p={record.localPeg.GlobalPose.position.ToString("F3")} r={record.localPeg.GlobalPose.rotation.ToString("F3")}\n"
                     + $"cldp: p={cloudPose.position.ToString("F3")} r={cloudPose.rotation.ToString("F3")}";
             }
+#endif // WLT_EXTRA_LOGGING
 
+            /// <summary>
+            /// If WLT_EXTRA_LOGGING is defined, dump this record to debug log.
+            /// </summary>
+            /// <param name="record">The record to dump.</param>
+            /// <param name="msg">A prefacing message.</param>
             public static void DebugLog(AnchorRecord record, string msg)
             {
+#if WLT_EXTRA_LOGGING
                 Debug.Log(DebugString(record, msg));
+#endif // WLT_EXTRA_LOGGING
             }
         };
 
+        /// <summary>
+        /// Concreate internal implementation of ILocalPeg.
+        /// </summary>
         private class LocalPeg : ILocalPeg
         {
+            /// <summary>
+            /// A GameObject to hang internal components off of.
+            /// </summary>
             public GameObject anchorHanger;
 
+            /// <summary>
+            /// Safe accessor for the NativeAnchor, may return null.
+            /// </summary>
             public NativeAnchor NativeAnchor
             {
                 get 
@@ -164,8 +274,10 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 }
             }
 
+            /// <inheritdocs />
             public string Name { get; set; }
 
+            /// <inheritdocs />
             public bool IsReadyForPublish 
             {
                 get
@@ -174,6 +286,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 }
             }
 
+            /// <inheritdocs />
             public Pose GlobalPose
             {
                 get
@@ -188,100 +301,24 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         #region Public API
 
-        public ReadinessStatus Status { get { return CheckReadiness(); } }
-
-        private ReadinessStatus WrapReadiness()
-        {
-            float recommended = 0;
-            float ready = 0;
-            if (asaManager != null && asaManager.SessionStatus != null)
-            {
-                recommended = asaManager.SessionStatus.RecommendedForCreateProgress;
-                ready = asaManager.SessionStatus.ReadyForCreateProgress;
-            }
-            var ret = new ReadinessStatus(readiness, recommended, ready);
-            return ret;
-        }
-        private ReadinessStatus CheckReadiness()
-        {
-            if (asaManager == null)
-            {
-                if (readiness != IPublisher.Readiness.NoManager)
-                {
-                    readiness = IPublisher.Readiness.NoManager;
-                    SimpleConsole.AddLine(ConsoleHigh, "Not ready: No ASA Manager.");
-                }
-                return WrapReadiness(); 
-            }
-            if (!asaManager.IsSessionStarted)
-            {
-                if (readiness != IPublisher.Readiness.Starting)
-                {
-                    readiness = IPublisher.Readiness.Starting;
-                    SimpleConsole.AddLine(ConsoleHigh, "Not ready: Not started.");
-                }
-                return WrapReadiness();
-            }
-            if (IsBusy)
-            {
-                if (readiness != Readiness.Busy)
-                {
-                    readiness = Readiness.Busy;
-                    SimpleConsole.AddLine(ConsoleHigh, $"Not ready: Busy on task [{busy}].");
-                }
-                return WrapReadiness();
-            }
-            if (CoarseRelocPublishEnabled && !IsReadyForCreate(asaManager))
-            {
-                if (readiness != IPublisher.Readiness.NotReadyToCreate)
-                {
-                    readiness = IPublisher.Readiness.NotReadyToCreate;
-                    SimpleConsole.AddLine(ConsoleHigh, "Not ready: Not ready for create.");
-                }
-                return WrapReadiness();
-            }
-            if (!LocationReady(readiness))
-            {
-                if (readiness != IPublisher.Readiness.NotReadyToLocate)
-                {
-                    readiness = IPublisher.Readiness.NotReadyToLocate;
-                    SimpleConsole.AddLine(ConsoleHigh, "Not ready: Location provider not ready.");
-                }
-                return WrapReadiness();
-            }
-            if (readiness != IPublisher.Readiness.Ready)
-            {
-                readiness = IPublisher.Readiness.Ready;
-                SimpleConsole.AddLine(ConsoleHigh, "Ready.");
-            }
-
-            return WrapReadiness();
-        }
-
-        private bool IsReadyForCreate(SpatialAnchorManager mgr)
-        {
-            if (mgr == null)
-            {
-                return false;
-            }
-            if (mgr.SessionStatus.RecommendedForCreateProgress < minRecommendedForCreateProgress)
-            {
-                return false;
-            }
-            return true;
-        }
-
+        /// <summary>
+        /// Initialization. 
+        /// </summary>
+        /// <remarks>
+        /// Note that this is asynchronous. Status.readiness will be Readiness.Ready when setup is complete.
+        /// </remarks>
         public async void Setup()
         {
             if (CoarseRelocPublishEnabled && !CoarseRelocationEnabled)
             {
-                SimpleConsole.AddLine(ConsoleHigh, $"Coarse Reloc Curation enabled, but not Coarse Reloc. Disabling Coarse Reloc Curation.");
+                SimpleConsole.AddLine(ConsoleHigh, $"Coarse Reloc Publish enabled, but not Coarse Reloc. Disabling Coarse Reloc Publish.");
                 CoarseRelocPublishEnabled = false;
             }
 #if UNITY_ANDROID
             if (CoarseRelocationEnabled)
             {
-                RequestLocationPermissions();
+                bool havePermissions = await RequestLocationPermissionsAsync();
+                SimpleConsole.AddLine(ConsoleHigh, $"Necessary coarse relocation permissions request {(havePermissions ? "Granted." : "Denied!!!")}");
             }
 #endif // UNITY_ANDROID
 
@@ -317,6 +354,11 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             SimpleConsole.AddLine(ConsoleHigh, $"Publisher setup complete S={asaManager.IsSessionStarted} Readiness={readiness}");
         }
 
+        #region Implementation of IPublisher
+        /// <inheritdocs />
+        public ReadinessStatus Status { get { return CheckReadiness(); } }
+
+        /// <inheritdocs />
         public async Task<ILocalPeg> CreateLocalPeg(string id, Pose lockedPose)
         {
             int waitForAnchor = 30;
@@ -325,6 +367,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             return InternalCreateLocalPeg(id, lockedPose);
         }
 
+        /// <inheritdocs />
         public void ReleaseLocalPeg(ILocalPeg peg)
         {
             LocalPeg localPeg = peg as LocalPeg;
@@ -335,6 +378,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             GameObject.Destroy(localPeg.anchorHanger);
         }
 
+        /// <inheritdocs />
         public async Task<CloudAnchorId> Create(LocalPegAndProperties pegAndProps)
         {
             if (AcquireBusy("Create"))
@@ -354,20 +398,6 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                     throw new System.ArgumentException("Invalid type of local peg", "pegAndProps.localPeg");
                 }
                 record.localPeg = localPeg;
-
-                // mafinc - this is a design flaw. Now is not the time to create the native anchor,
-                // as we are not necessarily in a good position to create a good native anchor.
-                // We should create the native anchor when we are as near as possible to the corresponding pose.
-                // Could we make the anchorHanger, with native anchor already on it, the input?
-                // I hate pusing that responsibility out to the caller, but the caller is in a much better
-                // position to make good anchors. For example, a SpacePin could create an anchor in SetLockedPose(),
-                // under the assumption that the camera is in vicinity when SetLockedPose is invoked, either from 
-                //
-                // Refactored to accept anchorHanger as input parameter. Should we throw an invalid argument exception
-                // if it doesn't already have a native anchor?
-
-                // manipulation or QR code read or whatever.
-                // Create the native anchor.
 
                 AnchorRecord.DebugLog(record, "Pre ToCloud");
 
@@ -400,6 +430,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             return null;
         }
 
+        /// <inheritdocs />
         public async Task<LocalPegAndProperties> Read(CloudAnchorId cloudAnchorId)
         {
             if (AcquireBusy("Read"))
@@ -432,6 +463,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             return null;
         }
 
+        /// <inheritdocs />
         public async Task<CloudAnchorId> Modify(CloudAnchorId cloudAnchorId, LocalPegAndProperties peg)
         {
             /// This might be more efficiently implemented with ASA update API.
@@ -440,6 +472,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             return await Create(peg);
         }
 
+        /// <inheritdocs />
         public async Task Delete(string cloudAnchorId)
         {
             if (AcquireBusy("Delete"))
@@ -450,6 +483,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
         }
 
+        /// <inheritdocs />
         public async Task<Dictionary<CloudAnchorId, LocalPegAndProperties>> Find(float radiusFromDevice)
         {
             if (AcquireBusy("Find"))
@@ -462,6 +496,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             return null;
         }
 
+        /// <inheritdocs />
         public async Task PurgeArea(float radius)
         {
             if (AcquireBusy("Purge"))
@@ -491,9 +526,17 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 ReleaseBusy();
             }
         }
+        #endregion // Implementation of IPublisher
+
         #endregion // Public API
 
         #region Internal implementations
+
+        /// <summary>
+        /// Implementation of downloading a cloud anchor by its cloud anchor id.
+        /// </summary>
+        /// <param name="cloudAnchorId">Id of anchor to download.</param>
+        /// <returns>Awaitable internal <see cref="AnchorRecord"/> created from cloud anchor.</returns>
         private async Task<AnchorRecord> DownloadRecord(CloudAnchorId cloudAnchorId)
         {
             Debug.Log($"Criteria.Identifiers to [{cloudAnchorId}]");
@@ -547,6 +590,11 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             return record;
         }
 
+        /// <summary>
+        /// Retrieve cloud anchors near the device.
+        /// </summary>
+        /// <param name="radiusFromDevice">Area (roughly) to search.</param>
+        /// <returns>Awaitable dictionary of local pegs with properties by cloud anchor id</returns>
         private async Task<Dictionary<CloudAnchorId, LocalPegAndProperties>> SearchArea(float radiusFromDevice)
         {
             if (locationProvider == null)
@@ -569,10 +617,10 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         }
 
         /// <summary>
-        /// 
+        /// Invoke a search for cloud anchors, and process them as they come in.
         /// </summary>
-        /// <param name="radius"></param>
-        /// <returns></returns>
+        /// <param name="radius">The area to search.</param>
+        /// <returns>Awaitable list of records, one for each cloud anchor found.</returns>
         /// <remarks>
         /// We initiate a search, and then at some point we need to know to stop waiting. 
         /// The LocateAnchorsCompleted event seems just the thing, but it doesn't seem to ever fire
@@ -582,6 +630,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// so we assume not. So the basic idea is that when we get a batch of anchors in, we start a timer,
         /// and if no other anchors come in before the timer goes off, we give up. If any anchors do come in,
         /// we restart the timer.
+        /// There's also a second timer for if we never get any anchors at all.
         /// </remarks>
         private async Task<List<AnchorRecord>> SearchForRecords(float radius)
         {
@@ -657,6 +706,11 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             return locatedRecords;
         }
 
+        /// <summary>
+        /// Delete a cloud anchor from the cloud database.
+        /// </summary>
+        /// <param name="cloudAnchorId">Which anchor to delete.</param>
+        /// <returns>Awaitable task.</returns>
         private async Task DeleteById(string cloudAnchorId)
         {
             SimpleConsole.AddLine(ConsoleMid, $"Deleting {cloudAnchorId}");
@@ -691,7 +745,111 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         #region Internal helpers
 
-        private ILocalPeg InternalCreateLocalPeg(string id, Pose lockedPose)
+        /// <summary>
+        /// Package the current readiness with the current progress to creates (if applicable).
+        /// </summary>
+        /// <returns>Wrapped ReadinessStatus.</returns>
+        /// <remarks>
+        /// This doesn't compute the current readiness, just uses the currently computed value.
+        /// </remarks>
+        private ReadinessStatus WrapReadiness()
+        {
+            float recommended = 0;
+            float ready = 0;
+            if (asaManager != null && asaManager.SessionStatus != null)
+            {
+                recommended = asaManager.SessionStatus.RecommendedForCreateProgress;
+                ready = asaManager.SessionStatus.ReadyForCreateProgress;
+            }
+            var ret = new ReadinessStatus(readiness, recommended, ready);
+            return ret;
+        }
+
+        /// <summary>
+        /// Compute the current readiness, and package it with progress to create floats.
+        /// </summary>
+        /// <returns>The computed packaged ReadinessStatus.</returns>
+        private ReadinessStatus CheckReadiness()
+        {
+            if (asaManager == null)
+            {
+                if (readiness != IPublisher.Readiness.NoManager)
+                {
+                    readiness = IPublisher.Readiness.NoManager;
+                    SimpleConsole.AddLine(ConsoleHigh, "Not ready: No ASA Manager.");
+                }
+                return WrapReadiness();
+            }
+            if (!asaManager.IsSessionStarted)
+            {
+                if (readiness != IPublisher.Readiness.Starting)
+                {
+                    readiness = IPublisher.Readiness.Starting;
+                    SimpleConsole.AddLine(ConsoleHigh, "Not ready: Not started.");
+                }
+                return WrapReadiness();
+            }
+            if (IsBusy)
+            {
+                if (readiness != Readiness.Busy)
+                {
+                    readiness = Readiness.Busy;
+                    SimpleConsole.AddLine(ConsoleHigh, $"Not ready: Busy on task [{busy}].");
+                }
+                return WrapReadiness();
+            }
+            if (CoarseRelocPublishEnabled && !IsReadyForCreate(asaManager))
+            {
+                if (readiness != IPublisher.Readiness.NotReadyToCreate)
+                {
+                    readiness = IPublisher.Readiness.NotReadyToCreate;
+                    SimpleConsole.AddLine(ConsoleHigh, "Not ready: Not ready for create.");
+                }
+                return WrapReadiness();
+            }
+            if (!LocationReady(readiness))
+            {
+                if (readiness != IPublisher.Readiness.NotReadyToLocate)
+                {
+                    readiness = IPublisher.Readiness.NotReadyToLocate;
+                    SimpleConsole.AddLine(ConsoleHigh, "Not ready: Location provider not ready.");
+                }
+                return WrapReadiness();
+            }
+            if (readiness != IPublisher.Readiness.Ready)
+            {
+                readiness = IPublisher.Readiness.Ready;
+                SimpleConsole.AddLine(ConsoleHigh, "Ready.");
+            }
+
+            return WrapReadiness();
+        }
+
+        /// <summary>
+        /// Determine if the ASA manager is ready to create cloud anchors.
+        /// </summary>
+        /// <param name="mgr">The manager to evaluate.</param>
+        /// <returns>True if ready to create.</returns>
+        private bool IsReadyForCreate(SpatialAnchorManager mgr)
+        {
+            if (mgr == null || mgr.SessionStatus == null)
+            {
+                return false;
+            }
+            if (mgr.SessionStatus.RecommendedForCreateProgress < minRecommendedForCreateProgress)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Helper to create an LocalPeg around the indicated id and pose.
+        /// </summary>
+        /// <param name="id">Name of the peg.</param>
+        /// <param name="lockedPose">Pose of the peg.</param>
+        /// <returns>Fully instantiated LocalPeg.</returns>
+        private LocalPeg InternalCreateLocalPeg(string id, Pose lockedPose)
         {
             LocalPeg peg = new LocalPeg();
             peg.Name = id;
@@ -707,7 +865,12 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             return peg;
         }
 
-
+        /// <summary>
+        /// If cloud anchor id is unknown, add the record, else update the record.
+        /// </summary>
+        /// <param name="id">Cloud anchor id.</param>
+        /// <param name="record">Record to put into internal database.</param>
+        /// <returns>True if id was unknown and record added, false if id was known and record updated.</returns>
         private bool AddRecord(CloudAnchorId id, AnchorRecord record)
         {
             Debug.Assert(id == record.cloudAnchorId, $"Adding record under inconsistent id {id} vs {record.cloudAnchorId}");
@@ -724,6 +887,11 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             return false;
         }
 
+        /// <summary>
+        /// Find a record by its cloud anchor id.
+        /// </summary>
+        /// <param name="id">id to search for.</param>
+        /// <returns>The record, if found, else null.</returns>
         private AnchorRecord GetRecord(CloudAnchorId id)
         {
             int idx = records.FindIndex(x => x.cloudAnchorId == id);
@@ -734,6 +902,14 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             return null;
         }
 
+        /// <summary>
+        /// Remove a record from internal database, deleting its resources, and return it.
+        /// </summary>
+        /// <param name="id">id of record to delete.</param>
+        /// <returns>Deleted record.</returns>
+        /// <remarks>
+        /// The record's cloudAnchor and cloudAnchorId will be intact, but the localPeg will be cleaned up.
+        /// </remarks>
         private AnchorRecord DeleteRecord(CloudAnchorId id)
         {
             AnchorRecord ret = null;
@@ -747,12 +923,15 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             return ret;
         }
 
-
+        /// <summary>
+        /// Fill out the rest of an AnchorRecord from its cloud anchor and id.
+        /// </summary>
+        /// <param name="record">Source record.</param>
+        /// <returns>Same record, but fully filled out.</returns>
         private AnchorRecord RecordFromCloud(AnchorRecord record)
         {
             Debug.Assert(record.cloudAnchor != null, $"Trying to create native resources from a null cloud anchor");
-            record.localPeg = InternalCreateLocalPeg(record.cloudAnchorId, record.cloudAnchor.GetPose()) as LocalPeg;
-            Debug.Log($"RecordFromCloud: ah={record.localPeg.GlobalPose.ToString("F3")} ca={record.cloudAnchor.GetPose().ToString("F3")}");
+            record.localPeg = InternalCreateLocalPeg(record.cloudAnchorId, record.cloudAnchor.GetPose());
             SimpleConsole.AddLine(ConsoleMid, $"Got record={record.cloudAnchorId} with {record.cloudAnchor.AppProperties.Count} properties.");
             foreach (var prop in record.cloudAnchor.AppProperties)
             {
@@ -765,39 +944,75 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         #region ASA events
 
-        //  Rather than locking the list, we could put the Add action onto the main thread. 
+        /// <summary>
+        /// Put incoming cloud anchors (from ASA thread) into a list for processing on main thread.
+        /// </summary>
+        /// <param name="sender">ignored</param>
+        /// <param name="args">Anchor event arguments.</param>
+        /// <remarks>
+        ///  Rather than locking the list, we could put the Add action onto the main thread. 
+        /// </remarks>
         private void OnAnchorLocated(object sender, AnchorLocatedEventArgs args)
         {
+#if WLT_EXTRA_LOGGING
             UnityDispatcher.InvokeOnAppThread(() =>
                 SimpleConsole.AddLine(ConsoleHigh,
                     $"OnAnchorLocated: {args.Status}, {args.Identifier}, {args.Anchor?.Identifier}, {args.Anchor?.GetPose().ToString("F3")}"
                 ));
+#endif // WLT_EXTRA_LOGGING
             lock (locatedAnchors)
             {
                 locatedAnchors.Add(args);
             }
         }
 
+        /// <summary>
+        /// Handle the anchor location completed event. This is not currently (ASA v2.9.0) an interesting event.
+        /// </summary>
+        /// <param name="sender">ignored</param>
+        /// <param name="args">Location completed event arguments.</param>
         private void OnAnchorLocateCompleted(object sender, LocateAnchorsCompletedEventArgs args)
         {
+#if WLT_EXTRA_LOGGING
             UnityDispatcher.InvokeOnAppThread(() =>
                 SimpleConsole.AddLine(ConsoleHigh,
                     $"OnAnchorLocateCompleted: {args.Watcher.Identifier} cancelled={args.Cancelled}"
                 ));
-        }
-        private void OnASALog(object sender, OnLogDebugEventArgs args)
-        {
-            SimpleConsole.AddLine(ConsoleLow, args.Message);
+#endif // WLT_EXTRA_LOGGING
         }
 
+        /// <summary>
+        /// Emit ASA logging events to SimpleConsole with low priority.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void OnASALog(object sender, OnLogDebugEventArgs args)
+        {
+            UnityDispatcher.InvokeOnAppThread(() =>
+                SimpleConsole.AddLine(ConsoleLow, args.Message)
+                );
+        }
+
+        /// <summary>
+        /// Emit ASA error events to SimpleConsole with high priority.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         private void OnASAError(object sender, SessionErrorEventArgs args)
         {
-            SimpleConsole.AddLine(ConsoleHigh, args.ErrorMessage);
+            UnityDispatcher.InvokeOnAppThread(() =>
+                SimpleConsole.AddLine(ConsoleHigh, args.ErrorMessage)
+                );
         }
 
         #endregion // ASA events
 
         #region Setup helpers
+
+        /// <summary>
+        /// Create a location provider if coarse relocation is enabled.
+        /// </summary>
+        /// <returns>Location provider or null.</returns>
         private PlatformLocationProvider CreateLocationProvider()
         {
             Debug.Log($"To create location provider");
@@ -816,13 +1031,18 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             provider.Sensors.WifiEnabled = CoarseRelocUseWifi;
 
             // Allow a set of known BLE beacons
-            provider.Sensors.BluetoothEnabled = (beaconUuids.Count > 0);
+            provider.Sensors.BluetoothEnabled = (crBeaconUuids.Count > 0);
             // mafinc - todo, add api for adding list of blutooth beacon uuids.
-            provider.Sensors.KnownBeaconProximityUuids = beaconUuids.ToArray();
+            provider.Sensors.KnownBeaconProximityUuids = crBeaconUuids.ToArray();
 
             return provider;
         }
 
+        /// <summary>
+        /// Evaluate if coarse relocation is ready to create and search for records.
+        /// </summary>
+        /// <param name="status">Current readiness status.</param>
+        /// <returns>True if coarse relocation is disabled, or system is ready to search and create.</returns>
         private bool LocationReady(IPublisher.Readiness status)
         {
             // If locationProvider is null, we aren't using location provider, so don't need to wait on it. I.e. ready.
@@ -863,10 +1083,11 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             return false;
         }
 
-        private string busy = null;
-
-        private bool IsBusy { get { return busy != null; } }
-
+        /// <summary>
+        /// Attempt to get the busy token. 
+        /// </summary>
+        /// <param name="msg">Identifier for the task which wants the token.</param>
+        /// <returns>True if token acquired, false if already busy on another task.</returns>
         private bool AcquireBusy(string msg)
         {
             Debug.Assert(msg != null);
@@ -878,6 +1099,10 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             busy = msg;
             return true;
         }
+
+        /// <summary>
+        /// Release the busy token. It's an error to release it if it wasn't successfully acquired.
+        /// </summary>
         private void ReleaseBusy()
         {
             Debug.Assert(busy != null);
@@ -897,11 +1122,6 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 "android.permission.BLUETOOTH",
                 "android.permission.BLUETOOTH_ADMIN"
             };
-
-        const string androidWifiAccessPermission = "android.permission.ACCESS_WIFI_STATE";
-        const string androidWifiChangePermission = "android.permission.CHANGE_WIFI_STATE";
-        const string androidBluetoothPermission = "android.permission.BLUETOOTH";
-        const string androidBluetoothAdminPermission = "android.permission.BLUETOOTH_ADMIN";
 
         private static bool RequestLocationPermissions()
         {
@@ -924,6 +1144,65 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
             SimpleConsole.AddLine(8, $"{permission} {(Permission.HasUserAuthorizedPermission(permission) ? "granted" : "denied")}");
             return Permission.HasUserAuthorizedPermission(permission);
+        }
+
+        private async Task<bool> RequestLocationPermissionsAsync()
+        {
+            bool haveAll = true;
+            for (int i = 0; i < androidPermissions.Length; ++i)
+            {
+                if (!await RequstLocationPermissionAsync(androidPermissions[i]))
+                {
+                    haveAll = false;
+                }
+            }
+            return haveAll;
+        }
+
+        private async Task<bool> RequstLocationPermissionAsync(string permission)
+        {
+            bool granted = Permission.HasUserAuthorizedPermission(permission);
+            if (!granted)
+            {
+                var cb = new PermissionCallbacks();
+                cb.PermissionDenied += PermissionCallback_Denied;
+                cb.PermissionDeniedAndDontAskAgain += PermissionCallback_Denied;
+                cb.PermissionGranted += PermissionCallback_Granted;
+                waitingState = PermissionWaiting.Waiting;
+                Permission.RequestUserPermission(permission, cb);
+
+                int permissionWaitMS = 100;
+                while (waitingState == PermissionWaiting.Waiting)
+                {
+                    await Task.Delay(permissionWaitMS);
+                }
+                Debug.Assert(waitingState == PermissionWaiting.Granted || waitingState == PermissionWaiting.Denied);
+                granted = waitingState == PermissionWaiting.Granted;
+                waitingState = PermissionWaiting.Idle;
+            }
+
+            return granted;
+        }
+
+        private enum PermissionWaiting
+        {
+            Idle,
+            Waiting,
+            Denied,
+            Granted
+        };
+        private PermissionWaiting waitingState = PermissionWaiting.Idle;
+
+        private void PermissionCallback_Granted(string permission)
+        {
+            Debug.Assert(waitingState == PermissionWaiting.Waiting);
+            waitingState = PermissionWaiting.Granted;
+        }
+
+        private void PermissionCallback_Denied(string permission)
+        {
+            Debug.Assert(waitingState == PermissionWaiting.Waiting);
+            waitingState = PermissionWaiting.Denied;
         }
 #endif
         #endregion // Awful stuff

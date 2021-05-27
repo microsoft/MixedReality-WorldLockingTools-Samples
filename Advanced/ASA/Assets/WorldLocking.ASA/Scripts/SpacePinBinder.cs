@@ -21,53 +21,13 @@ using Microsoft.MixedReality.WorldLocking.Tools;
 ///    Then later FW issues a refreeze correction suitable for previous cloud anchor pose
 ///       FW correction will be applied to already corrected cloud anchor pose.
 /// </summary>
-// mafish - SpacePinCloudBinder???
 
-/// Communication pattern between binder and publisher.
-/// Binder keeps list of AnchoredSpacePins anchoredPins.
-/// AnchoredSpacePin is protected (or private) type.
-/// SpacePinPublisher is class private to SpacePinBinder, so has access to AnchoredSpacePin.
-/// SpacePinBinder makes async calls to SpacePinPublisher, but doesn't await them.
-/// Instead, when the SpacePinPublisher finishes creating, updating, or destroying something,
-/// it puts the new version of the thing in List<AnchoredSpacePin> completedTasks (or some other name).
-/// Appending to completedTasks is protected by a lock.
-/// Then every update, the SpacePinBinder goes through the completedTasks list (protected by a lock)
-/// and replaces the matching thing in anchoredPins with the element in completedTasks, then 
-/// clears the completedTasks list.
-/// Note that anchoredPins is only ever accessed on main thread, so doesn't need lock protection.
-/// 
-/// PROBLEM: We care what has been changed about this AnchoredSpacePin.
-///   Published: Do nothing, we've just broadcast local SpacePin to everyone else. So by
-///        definition, local SpacePin is already correct.
-///   Downloaded: Push new Pose to appropriate SpacePin (via SetLockedPose())
-///   Deleted: Reset associated SpacePin, its backing Pose is no more.
-/// So, maybe an enum accompanying the updated AnchoredSpacePin? 
-/// enum CompletionType
-/// {
-///    Published,
-///    Downloaded,
-///    Deleted
-/// };
-/// struct CompletedTask
-/// {
-///     CompletionType type;
-///     AnchoredSpacePin newState;
-/// };
-/// 
-///
-/// SpacePin states:
-///    SpacePin + anchorHolder(nativeAnchor) => ready to be published.
-///    SpacePin + cloudAnchorId => ready to be downloaded.
-///    SpacePin + anchorHolder + cloudAnchorId => has been published or has been downloaded. 
-///        Ready to be unpublished.
-///        If unpublished, goes to state SpacePin + anchorHolder(nativeAnchor), i.e. ready to be published.
-///    SpacePin + nothing => Can't do anything with it.
 namespace Microsoft.MixedReality.WorldLocking.ASA
 {
     using AnchorProperties = Dictionary<string, string>;
     using CloudAnchorId = System.String;
 
-    [RequireComponent(typeof(SpacePinPublisher))]
+    [RequireComponent(typeof(PublisherASA))]
     public partial class SpacePinBinder : MonoBehaviour, IBinder
     {
         #region Inspector members
@@ -429,10 +389,10 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         #region Unity
         private void Awake()
         {
-            publisher = GetComponent<SpacePinPublisher>();
+            var publisherASA = GetComponent<PublisherASA>();
             // When Setup is complete, publisher.IsReady will be true.
-            publisher.Setup();
-            SetSpacePinsPublisher();
+            publisherASA.Setup();
+            SetSpacePinsPublisher(publisherASA);
         }
 
         // Start is called before the first frame update
@@ -449,8 +409,9 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         #region Internal helpers
 
-        private void SetSpacePinsPublisher()
+        private void SetSpacePinsPublisher(PublisherASA publisherASA)
         {
+            publisher = publisherASA;
             foreach (var spacePin in spacePins)
             {
                 spacePin.Publisher = publisher;
