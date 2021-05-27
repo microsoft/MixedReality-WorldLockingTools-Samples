@@ -19,12 +19,25 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 {
     public class SpacePinASA : SpacePinOrientable
     {
-
+        /// <summary>
+        /// The local peg created (hopefully) when the camera was close to this pin.
+        /// </summary>
         private ILocalPeg localPeg = null;
 
+        /// <summary>
+        /// Accessor for local peg.
+        /// </summary>
         public ILocalPeg LocalPeg { get { return localPeg; } }
 
+        /// <summary>
+        /// Accessor for publisher. This is managed by the binder.
+        /// </summary>
         public IPublisher Publisher { get; set; }
+
+        /// <summary>
+        /// Unique identifier for this space pin.
+        /// </summary>
+        public string SpacePinId { get { return name; } }
 
         [Serializable]
         public class KeyValPair
@@ -33,13 +46,23 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             public string val;
         };
 
+        [Tooltip("Key value pairs become property list on any cloud anchor generated from this space pin.")]
         [SerializeField]
         private List<KeyValPair> propertyList = new List<KeyValPair>();
         
+        /// <summary>
+        /// <see cref="propertyList"/> will autopopulate this dictionary at Awake, getting around inability to serialize Dictionary.
+        /// </summary>
         private readonly Dictionary<string, string> properties = new Dictionary<string, string>();
 
+        /// <summary>
+        /// Runtime access of properties.
+        /// </summary>
         public Dictionary<string, string> Properties => properties;
 
+        /// <summary>
+        /// Populate the properties dictionary from the serialized list.
+        /// </summary>
         private void Awake()
         {
             foreach (var keyval in propertyList)
@@ -50,37 +73,17 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
             if (!properties.ContainsKey(SpacePinBinder.SpacePinIdKey))
             {
-                properties[SpacePinBinder.SpacePinIdKey] = name;
+                properties[SpacePinBinder.SpacePinIdKey] = SpacePinId;
             }
         }
 
-        private Pose lastPose = new Pose(new Vector3(1000.0f, 1000.0f, 1000.0f), Quaternion.identity);
         protected void DebugSpew()
         {
-#if false
-            if (NativeAnchor != null)
-            {
-                Debug.Log($"{name} Frame:{Time.frameCount} {anchorHolder.transform.GetGlobalPose().ToString("F3")} nonident:{anchorHolder.transform.position.x != 0}");
-            }
-            else
-            {
-                Debug.Log($"{name} {Time.frameCount}:{name}: anchorHolder={(anchorHolder == null ? "null" : anchorHolder.name)}, NativeAnchor={(NativeAnchor == null ? "null" : NativeAnchor.name)}");
-            }
-#endif
-#if false
-            if (AnchorHolder != null)
-            {
-                float dist = Vector3.Distance(lastPose.position, AnchorHolder.transform.position);
-                float distanceCutoff = 0.005f; // 5mm
-                if (dist > distanceCutoff)
-                {
-                    SimpleConsole.AddLine(8, $"{name} moved {lastPose.position.ToString("F3")} -> {AnchorHolder.transform.position.ToString("F3")}");
-                    lastPose = anchorHolder.transform.GetGlobalPose();
-                }
-            }
-#endif
         }
 
+        /// <summary>
+        /// Ready to publish when we have a local peg and it is ready to publish.
+        /// </summary>
         public bool IsReadyForPublish
         {
             get
@@ -92,19 +95,11 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 return LocalPeg.IsReadyForPublish;
             }
         }
-#if false
-        public void SetLocalPeg(GameObject holder)
-        {
-            Debug.Assert(holder.FindNativeAnchor() != null, "Anchor holder must be provisioned with a NativeAnchor.");
-            if (anchorHolder != null)
-            {
-                GameObject.Destroy(anchorHolder);
-            }
-            anchorHolder = holder;
-            Debug.Log($"SetAnchorHolder:{name}: anchorHolder={(anchorHolder == null ? "null" : anchorHolder.name)}, NativeAnchor={(NativeAnchor == null ? "null" : NativeAnchor.name)}");
-            SimpleConsole.AddLine(8, $"SetAH: {name} p={anchorHolder.transform.position.ToString("F3")}");
-        }
-#else
+
+        /// <summary>
+        /// Accept the local peg assigned by the binder after it's been downloaded from the cloud.
+        /// </summary>
+        /// <param name="peg">The local peg to take.</param>
         public void SetLocalPeg(ILocalPeg peg)
         {
             if (localPeg != null)
@@ -113,30 +108,15 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
             localPeg = peg;
         }
-#endif
 
+        /// <summary>
+        /// Create a local peg based on current state (LockedPose).
+        /// </summary>
+        /// <remarks>
+        /// This typically happens when the SpacePinASA is locally manipulated into a new pose.
+        /// </remarks>
         public async void ConfigureLocalPeg()
         {
-#if false
-            SimpleConsole.AddLine(8, $"ConfigAH: {Time.frameCount}");
-            int waitForAnchor = 30;
-            await Task.Delay(waitForAnchor);
-            SimpleConsole.AddLine(8, $"Waited {waitForAnchor}ms: {Time.frameCount}");
-            if (anchorHolder == null)
-            {
-                anchorHolder = new GameObject($"{name}_anchorHolder");
-            }
-            anchorHolder.DeleteNativeAnchor();
-            Debug.Log($"SfL: {WorldLockingManager.GetInstance().SpongyFromLocked.ToString("F3")}");
-            Pose spongyPose = WorldLockingManager.GetInstance().SpongyFromLocked.Multiply(LockedPose);
-            Pose anchorPose = WorldLockingManager.GetInstance().AnchorManager.AnchorFromSpongy.Multiply(spongyPose);
-            Debug.Log($"ConfigureAnchor: lo={LockedPose.ToString("F3")}, sp={spongyPose.ToString("F3")} an={anchorPose.ToString("F3")}");
-            SimpleConsole.AddLine(8, $"ConfigAH: {name} lo={LockedPose.position.ToString("F3")}, sp={spongyPose.position.ToString("F3")} ah={anchorPose.position.ToString("F3")}");
-            anchorHolder.transform.SetGlobalPose(anchorPose);
-            anchorHolder.CreateNativeAnchor();
-            Debug.Log($"ConfigureAnchorHolder:{name}: anchorHolder={(anchorHolder == null ? "null" : anchorHolder.name)}, NativeAnchor={(NativeAnchor == null ? "null" : NativeAnchor.name)}");
-            SimpleConsole.AddLine(8, $"ConfigAH: {name} p={anchorHolder.transform.position.ToString("F3")}");
-#else
             if (Publisher == null)
             {
                 SimpleConsole.AddLine(8, $"Publisher hasn't been set on SpacePin={name}");
@@ -146,8 +126,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             {
                 Publisher.ReleaseLocalPeg(localPeg);
             }
-            localPeg = await Publisher.CreateLocalPeg($"{name}_peg", LockedPose);
-#endif
+            localPeg = await Publisher.CreateLocalPeg($"{SpacePinId}_peg", LockedPose);
         }
     }
 }

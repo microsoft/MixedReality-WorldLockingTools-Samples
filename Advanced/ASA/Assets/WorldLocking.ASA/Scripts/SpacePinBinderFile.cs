@@ -36,7 +36,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             var bindings = binder.GetBindings();
             using (StreamWriter writer = new StreamWriter(GetFullPath()))
             {
-                writer.WriteLine($"BinderName - {binder.BinderName}");
+                writer.WriteLine($"Binder Name - {binder.Name}");
                 foreach (var binding in bindings)
                 {
                     writer.WriteLine($"{binding.spacePinId}, {binding.cloudAnchorId}");

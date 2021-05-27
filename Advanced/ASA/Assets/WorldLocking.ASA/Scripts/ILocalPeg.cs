@@ -25,6 +25,9 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         public Pose GlobalPose { get; }
     }
 
+    /// <summary>
+    /// A local peg, with an associated properties dictionary.
+    /// </summary>
     public class LocalPegAndProperties
     {
         public ILocalPeg localPeg;

@@ -24,56 +24,34 @@ using Microsoft.MixedReality.WorldLocking.Tools;
 
 namespace Microsoft.MixedReality.WorldLocking.ASA
 {
-    using AnchorProperties = Dictionary<string, string>;
     using CloudAnchorId = System.String;
 
+    /// <summary>
+    /// Implementation of the IBinder interface, managing the relationship between space pins and cloud anchors.
+    /// </summary>
     [RequireComponent(typeof(PublisherASA))]
     public partial class SpacePinBinder : MonoBehaviour, IBinder
     {
         #region Inspector members
-        [SerializeField]
-        private string binderName = "default";
-
-        public string BinderName
-        {
-            get { return binderName; }
-            set
-            {
-                // mafish - assert value is valid name;
-
-                // mafish - reset
-
-                binderName = value;
-            }
-        }
-
-        public string Name { get { return name; } }
-
+        [Tooltip("List of space pins to manage. These may also be added from script using AddSpacePin()")]
         [SerializeField]
         private List<SpacePinASA> spacePins = new List<SpacePinASA>();
 
+        [Tooltip("Distance (roughly) to search from device when looking for cloud anchors using coarse relocation.")]
         [SerializeField]
         private float searchRadius = 25.0f; // meters
 
+        /// <summary>
+        /// Distance (roughly) to search from device when looking for cloud anchors using coarse relocation.
+        /// </summary>
         public float SearchRadius { get { return searchRadius; } set { searchRadius = value; } }
 
         #endregion // Inspector members
 
-        #region Public types
-
-        // mafinc - interesting events
-        // 1. We've sent a pose to the cloud, notify when cloud anchor has been published.
-        //    Really? Why does the client want to know? 
-        // 2. We've requested an anchor from the cloud by cloudId. Notify when recieved.
-        //    Callback should include (frozen space?) pose of cloud anchor. Anything else?
-        // 3. We've received a correction on a cloud anchor's pose. Notify of new pose.
-        //
-        // 
-
-        #endregion // Public types
-
         #region Internal types
-
+        /// <summary>
+        /// Convenience bundle of a space pin and associated local peg and its properties. Some redundancy there.
+        /// </summary>
         private class SpacePinPegAndProps
         {
             public SpacePinASA spacePin;
@@ -84,41 +62,45 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         #region Internal members
 
+        /// <summary>
+        /// The list of bindings. Could be a Dictionary or something.
+        /// </summary>
         private readonly List<SpacePinCloudBinding> bindings = new List<SpacePinCloudBinding>();
 
+        /// <summary>
+        /// The publisher used to access cloud anchors.
+        /// </summary>
         private IPublisher publisher = null;
 
         #endregion // Internal members
 
         #region Public APIs
 
+        /// <inheritdoc/>
+        public string Name { get { return name; } }
+
+        /// <summary>
+        /// The key for the key-value pair in the space pin/cloud anchor properties identifying the space pin id in the value.
+        /// </summary>
         public static readonly string SpacePinIdKey = "SpacePinId";
 
+        /// <inheritdoc/>
         public bool IsReady
         {
             get { return PublisherStatus.readiness == IPublisher.Readiness.Ready; }
         }
 
+        /// <inheritdoc/>
         public IPublisher.ReadinessStatus PublisherStatus { get { return publisher != null ? publisher.Status : new IPublisher.ReadinessStatus(); } }
 
-        // mafinc - this is a temp hack and needs to go away.
-        private IPublisher Publisher { get { return publisher; } }
-
         #region Create and maintain bindings between space pins and cloud anchors
+        /// <inheritdoc/>
         public IReadOnlyList<SpacePinCloudBinding> GetBindings()
         {
             return bindings;
         }
 
-        /// <summary>
-        /// Set the cloud anchor id associated with this space pin.
-        /// </summary>
-        /// <param name="spacePinId">Name of the space pin to be bound to this cloud id.</param>
-        /// <param name="cloudAnchorId">Cloud id to be bound to the space pin.</param>
-        /// <returns>False if space pin is unknown. Space pin must be registered via inspector or <see cref="AddSpacePin(SpacePin)"/> before being bound.</returns>
-        /// <remarks>
-        /// A space pin must be bound to a cloud anchor id before it can be downloaded.
-        /// </remarks>
+        /// <inheritdoc/>
         public bool CreateBinding(string spacePinId, string cloudAnchorId)
         {
             int spacePinIdx = FindSpacePinById(spacePinId);
@@ -131,6 +113,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             return true;
         }
 
+        /// <inheritdoc/>
         public bool RemoveBinding(string spacePinId)
         {
             int bindingIdx = FindBindingBySpacePinId(spacePinId);
@@ -145,6 +128,11 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         #endregion // Create and maintain bindings between space pins and cloud anchors
 
         #region Space pin list control from script
+        /// <summary>
+        /// Add a space pin to the list of managed pins.
+        /// </summary>
+        /// <param name="spacePin">Pin to add.</param>
+        /// <returns>True if not already there but added.</returns>
         public bool AddSpacePin(SpacePinASA spacePin)
         {
             // mafish - make sure it's not already in there.
@@ -158,6 +146,14 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             return false;
         }
 
+        /// <summary>
+        /// Remove the space pin binding associated with this SpacePin.
+        /// </summary>
+        /// <param name="spacePinId">Space pin id of binding to remove.</param>
+        /// <returns>True if found and removed.</returns>
+        /// <remarks>
+        /// Any binding between this pin and a cloud anchor is also severed.
+        /// </remarks>
         public bool RemoveSpacePin(string spacePinId)
         {
             int idx = FindSpacePinById(spacePinId);
@@ -178,30 +174,9 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         #endregion Space pin list control from script
 
         #region Publish to cloud
-        /// <summary>
-        /// For each unpublished space pin, create a new CloudSpatialAnchor.
-        /// </summary>
-        /// <returns>Task true if anything got uploaded.</returns>
-        /// <remarks>
-        /// Unpublished means it doesn't already have a CloudSpatialAnchor.
-        /// </remarks>
+        /// <inheritdoc/>
         public async Task<bool> Publish()
         {
-            //List<SpacePin> toPublish = FindUnpublishedSpacePins();
-            //if (toPublish.Count == 0)
-            //{
-            //    // mafish - found nothing to publish. 
-            //    // 3 possibilities:
-            //    //   1. There are no SpacePins to publish. Probably an error.
-            //    //   2. All SpacePins are already published. Might be okay, might be calling Publish too often.
-            //    //   3. Neither of the above. Definitely unexpected error.
-
-            //    return;
-            //}
-            //foreach(var spacePin in toPublish)
-            //{
-            //    Publish(spacePin);
-            //}
             bool allSuccessful = true;
             foreach (var spacePin in spacePins)
             {
@@ -210,7 +185,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                     bool success = await Publish(spacePin);
                     if (!success)
                     {
-                        Debug.LogError($"Failed to publish {spacePin.name}, continuing.");
+                        Debug.LogError($"Failed to publish {spacePin.SpacePinId}, continuing.");
                         allSuccessful = false;
                     }
                 }
@@ -218,6 +193,14 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             return allSuccessful;
         }
 
+        /// <summary>
+        /// Publish the spacePin.
+        /// </summary>
+        /// <param name="spacePin">SpacePinASA to publish</param>
+        /// <returns>True on success.</returns>
+        /// <remarks>
+        /// It may be this should be a private member.
+        /// </remarks>
         public async Task<bool> Publish(SpacePinASA spacePin)
         {
             if (!IsReady)
@@ -233,6 +216,14 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 return false;
             }
 
+            int cloudIdx = FindBindingBySpacePinId(spacePin.SpacePinId);
+            if (cloudIdx >= 0)
+            {
+                SimpleConsole.AddLine(8, $"Publishing previously published space pin={spacePin.SpacePinId}, deleting from cloud first.");
+                await publisher.Delete(bindings[cloudIdx].cloudAnchorId);
+                RemoveBinding(spacePin.SpacePinId);
+            }
+
             var obj = ExtractForPublisher(spacePin);
             if (obj == null)
             {
@@ -241,25 +232,17 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             CloudAnchorId cloudAnchorId = await publisher.Create(obj);
             if (string.IsNullOrEmpty(cloudAnchorId))
             {
-                Debug.LogError($"Failed to create cloud anchor for {spacePin.name}");
+                Debug.LogError($"Failed to create cloud anchor for {spacePin.SpacePinId}");
                 return false;
             }
-            SetBinding(spacePin.name, cloudAnchorId);
+            SetBinding(spacePin.SpacePinId, cloudAnchorId);
             return true;
         }
 
         #endregion // Publish to cloud
 
         #region Download from cloud
-        /// <summary>
-        /// For each SpacePin which has a cloud anchor id, 
-        /// kick off a request to asynchronously download the pose from the cloud.
-        /// These will be processed and the SpacePins positioned as they come in.
-        /// </summary>
-        /// <remarks>
-        /// The <see cref="anchoredPins"/> list has all the SpacePins we are aware of, either from inspector or added from script using <see cref="AddSpacePin(SpacePin)"/>.
-        /// To be downloaded, the space pin must have a cloud anchor id (set from <see cref="CreateBinding(string, string)"/>.
-        /// </remarks>
+        /// <inheritdoc/>
         public async Task<bool> Download()
         {
             if (!IsReady)
@@ -271,7 +254,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             List<SpacePinPegAndProps> readObjects = new List<SpacePinPegAndProps>();
             foreach (var spacePin in spacePins)
             {
-                int bindingIdx = FindBindingBySpacePinId(spacePin.name);
+                int bindingIdx = FindBindingBySpacePinId(spacePin.SpacePinId);
                 if (bindingIdx >= 0)
                 {
                     string cloudAnchorId = bindings[bindingIdx].cloudAnchorId;
@@ -302,6 +285,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             return allSuccessful;
         }
 
+        /// <inheritdoc/>
         public async Task<bool> Search()
         {
             if (!IsReady)
@@ -343,6 +327,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         #region Cleanup
 
+        /// <inheritdoc/>
         public async Task<bool> Purge()
         {
             if (!IsReady)
@@ -354,6 +339,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             return true;
         }
 
+        /// <inheritdoc/>
         public async Task<bool> Clear()
         {
             if (!IsReady)
@@ -382,11 +368,10 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         #endregion // Public APIs
 
-        #region Internal 
-
-        #endregion // Internal
-
         #region Unity
+        /// <summary>
+        /// Establish relationship with the publisher.
+        /// </summary>
         private void Awake()
         {
             var publisherASA = GetComponent<PublisherASA>();
@@ -395,20 +380,17 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             SetSpacePinsPublisher(publisherASA);
         }
 
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-        }
         #endregion // Unity
 
         #region Internal helpers
 
+        /// <summary>
+        /// Capture the publisher we'll be using, and pass it on to all managed space pins.
+        /// </summary>
+        /// <param name="publisherASA">The publisher to capture.</param>
+        /// <remarks>
+        /// SpacePinASA needs a reference to the publisher for the management of its ILocalPeg.
+        /// </remarks>
         private void SetSpacePinsPublisher(PublisherASA publisherASA)
         {
             publisher = publisherASA;
@@ -418,6 +400,11 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
         }
 
+        /// <summary>
+        /// Determine whether a space pin has necessary setup to be published.
+        /// </summary>
+        /// <param name="spacePin">The space pin to check.</param>
+        /// <returns>True if the space pin can be published.</returns>
         private bool IsReadyForPublish(SpacePinASA spacePin)
         {
             if (spacePin == null)
@@ -427,22 +414,17 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
             if (spacePin.Publisher != publisher)
             {
-                SimpleConsole.AddLine(11, $"SpacePin={spacePin.name} has different publisher than binder={name}.");
+                SimpleConsole.AddLine(11, $"SpacePin={spacePin.SpacePinId} has different publisher than binder={name}.");
                 return false;
             }
             return spacePin.IsReadyForPublish;
         }
 
-        private bool IsReadyForDownload(SpacePinASA spacePin)
-        {
-            int bindingIdx = FindBindingBySpacePinId(spacePin.name);
-            if (bindingIdx < 0)
-            {
-                return false;
-            }
-            return true;
-        }
-
+        /// <summary>
+        /// Create or update (by space pin id) a binding to a cloud anchor.
+        /// </summary>
+        /// <param name="spacePinId">Id of the space pin.</param>
+        /// <param name="cloudAnchorId">Id of the cloud anchor.</param>
         private void SetBinding(string spacePinId, CloudAnchorId cloudAnchorId)
         {
             Debug.Log($"Setting binding between sp={spacePinId} ca={cloudAnchorId}");
@@ -460,6 +442,11 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
         }
 
+        /// <summary>
+        /// Pull generic data from a space pin to pass to a publisher.
+        /// </summary>
+        /// <param name="spacePin">The space pin to extract from.</param>
+        /// <returns>Null on failure, else a valid local peg and associated properties.</returns>
         private LocalPegAndProperties ExtractForPublisher(SpacePinASA spacePin)
         {
             if (!spacePin.IsReadyForPublish)
@@ -475,26 +462,53 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             return ret;
         }
 
+        /// <summary>
+        /// Find the index in the spacePins list to a managed space pin by its id.
+        /// </summary>
+        /// <param name="spacePinId">Id of the pin to find.</param>
+        /// <returns>The index of the pin if found, else -1.</returns>
         private int FindSpacePinById(string spacePinId)
         {
-            return FindByPredicate(spacePins, x => x.name == spacePinId);
+            return FindByPredicate(spacePins, x => x.SpacePinId == spacePinId);
         }
 
+        /// <summary>
+        /// Find the index of a space pin in the space pins list.
+        /// </summary>
+        /// <param name="spacePin">The pin to find.</param>
+        /// <returns>Index in the list if found, else -1.</returns>
         private int FindSpacePin(SpacePin spacePin)
         {
             return FindByPredicate(spacePins, x => x == spacePin);
         }
 
+        /// <summary>
+        /// Find the index of a binding by its cloud anchor id.
+        /// </summary>
+        /// <param name="cloudAnchorId">Cloud anchor id to search for.</param>
+        /// <returns>Index if found, else -1.</returns>
         private int FindBindingByCloudAnchorId(string cloudAnchorId)
         {
             return FindByPredicate(bindings, x => x.cloudAnchorId == cloudAnchorId);
         }
 
+        /// <summary>
+        /// Find the index of a binding by its space pin id.
+        /// </summary>
+        /// <param name="spacePinId">Space pin id to search for.</param>
+        /// <returns>Index if found, else -1.</returns>
         private int FindBindingBySpacePinId(string spacePinId)
         {
             return FindByPredicate(bindings, x => x.spacePinId == spacePinId);
         }
 
+        /// <summary>
+        /// Search a list according to predicate.
+        /// </summary>
+        /// <typeparam name="T">Type of elements in the list.</typeparam>
+        /// <param name="searchList">List to search.</param>
+        /// <param name="pred">Predicate to search by.</param>
+        /// <returns></returns>
         private static int FindByPredicate<T>(List<T> searchList, Predicate<T> pred)
         {
             int idx = searchList.FindIndex(x => pred(x));
