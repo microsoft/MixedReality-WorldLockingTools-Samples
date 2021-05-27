@@ -1123,29 +1123,10 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 "android.permission.BLUETOOTH_ADMIN"
             };
 
-        private static bool RequestLocationPermissions()
-        {
-            bool haveAll = true;
-            for (int i = 0; i < androidPermissions.Length; ++i)
-            {
-                if (!RequestPermissionIfNotGiven(androidPermissions[i]))
-                {
-                    haveAll = false;
-                }
-            }
-            return haveAll;
-        }
-
-        private static bool RequestPermissionIfNotGiven(string permission)
-        {
-            if (!Permission.HasUserAuthorizedPermission(permission))
-            {
-                Permission.RequestUserPermission(permission);
-            }
-            SimpleConsole.AddLine(8, $"{permission} {(Permission.HasUserAuthorizedPermission(permission) ? "granted" : "denied")}");
-            return Permission.HasUserAuthorizedPermission(permission);
-        }
-
+        /// <summary>
+        /// Go through the list of permissions needed and request any we don't have.
+        /// </summary>
+        /// <returns>Awaitable true if all permissions have been granted.</returns>
         private async Task<bool> RequestLocationPermissionsAsync()
         {
             bool haveAll = true;
@@ -1159,6 +1140,11 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             return haveAll;
         }
 
+        /// <summary>
+        /// Request a permission and wait until the user has granted or denied it.
+        /// </summary>
+        /// <param name="permission">The permission to request.</param>
+        /// <returns>Awaitable true if granted.</returns>
         private async Task<bool> RequstLocationPermissionAsync(string permission)
         {
             bool granted = Permission.HasUserAuthorizedPermission(permission);
@@ -1184,6 +1170,9 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             return granted;
         }
 
+        /// <summary>
+        /// Current state of wait for permissions. Should be Idle almost all the time.
+        /// </summary>
         private enum PermissionWaiting
         {
             Idle,
@@ -1193,12 +1182,20 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         };
         private PermissionWaiting waitingState = PermissionWaiting.Idle;
 
+        /// <summary>
+        /// Set waiting state to Granted.
+        /// </summary>
+        /// <param name="permission">The name of the requested permission.</param>
         private void PermissionCallback_Granted(string permission)
         {
             Debug.Assert(waitingState == PermissionWaiting.Waiting);
             waitingState = PermissionWaiting.Granted;
         }
 
+        /// <summary>
+        /// Set the waiting state to denied.
+        /// </summary>
+        /// <param name="permission">The permission being requested.</param>
         private void PermissionCallback_Denied(string permission)
         {
             Debug.Assert(waitingState == PermissionWaiting.Waiting);
