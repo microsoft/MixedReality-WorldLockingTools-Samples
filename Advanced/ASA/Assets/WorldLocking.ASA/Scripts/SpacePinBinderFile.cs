@@ -93,14 +93,20 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
             using (StreamReader reader = new StreamReader(GetFullPath()))
             {
-                string binderName = reader.ReadLine(); // mafinc - do something with this?
-
-                char[] separators = new char[] { ' ', ',' };
-                string line;
-                while ((line = reader.ReadLine()) != null)
+                string binderName;
+                while ((binderName = reader.ReadLine()) != null)
                 {
-                    string[] tokens = line.Split(separators, System.StringSplitOptions.RemoveEmptyEntries);
-                    binder.CreateBinding(tokens[0], tokens[1]);
+                    bool isCorrectBinder = binderName == binder.Name;
+                    char[] separators = new char[] { ' ', ',' };
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        if (isCorrectBinder)
+                        {
+                            string[] tokens = line.Split(separators, System.StringSplitOptions.RemoveEmptyEntries);
+                            binder.CreateBinding(tokens[0], tokens[1]);
+                        }
+                    }
                 }
             }
             return true;
