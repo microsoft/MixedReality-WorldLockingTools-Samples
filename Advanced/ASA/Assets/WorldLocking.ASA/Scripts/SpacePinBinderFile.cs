@@ -24,6 +24,9 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         [SerializeField] 
         private string fileName = "BinderFile.txt";
 
+        [SerializeField]
+        private string binderKey = "Binder Name - ";
+
         /// <summary>
         /// Name of this oracle.
         /// </summary>
@@ -64,7 +67,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             var bindings = binder.GetBindings();
             using (StreamWriter writer = new StreamWriter(GetFullPath()))
             {
-                writer.WriteLine($"Binder Name - {binder.Name}");
+                writer.WriteLine($"{binderKey}{binder.Name}");
                 foreach (var binding in bindings)
                 {
                     writer.WriteLine($"{binding.spacePinId}, {binding.cloudAnchorId}");
@@ -93,14 +96,19 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
             using (StreamReader reader = new StreamReader(GetFullPath()))
             {
-                string binderName;
-                while ((binderName = reader.ReadLine()) != null)
+                string line = reader.ReadLine();
+                while (line != null)
                 {
+                    string binderName = line.Replace(binderKey, "");
                     bool isCorrectBinder = binderName == binder.Name;
+                    Tools.SimpleConsole.AddLine(8, $"Got:{binderName}, Want:{binder.Name}, Math={isCorrectBinder}");
                     char[] separators = new char[] { ' ', ',' };
-                    string line;
                     while ((line = reader.ReadLine()) != null)
                     {
+                        if (line.StartsWith(binderKey))
+                        {
+                            break;
+                        }
                         if (isCorrectBinder)
                         {
                             string[] tokens = line.Split(separators, System.StringSplitOptions.RemoveEmptyEntries);

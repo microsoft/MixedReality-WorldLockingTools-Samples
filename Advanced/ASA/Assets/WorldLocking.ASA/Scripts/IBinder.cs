@@ -57,7 +57,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// </summary>
         /// <param name="spacePinId">Name of the space pin to be bound to this cloud id.</param>
         /// <param name="cloudAnchorId">Cloud id to be bound to the space pin.</param>
-        /// <returns>False if space pin is unknown. Space pin must be registered via inspector or <see cref="AddSpacePin(SpacePin)"/> before being bound.</returns>
+        /// <returns>False if space pin is unknown. Space pin must be registered before being bound.</returns>
         /// <remarks>
         /// A space pin must be bound to a cloud anchor id before it can be downloaded.
         /// </remarks>
@@ -89,10 +89,6 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// Pull down cloud anchors for all known bindings, and apply them to the bound space pins.
         /// </summary>
         /// <returns>True on success.</returns>
-        /// <remarks>
-        /// The <see cref="anchoredPins"/> list has all the SpacePins we are aware of, either from inspector or added from script using <see cref="AddSpacePin(SpacePin)"/>.
-        /// To be downloaded, the space pin must have a cloud anchor id (set from <see cref="CreateBinding(string, string)"/>.
-        /// </remarks>
         Task<bool> Download();
 
         /// <summary>

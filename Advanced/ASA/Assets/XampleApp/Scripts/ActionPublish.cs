@@ -37,8 +37,6 @@ namespace WorldLocking.XampleApp
 
         private void Start()
         {
-            Screen.sleepTimeout = SleepTimeout.NeverSleep;
-
             SetColors(Color.grey);
 
             goodSetup = CheckSetup();
@@ -97,6 +95,27 @@ namespace WorldLocking.XampleApp
                 statusLine.faceColor = status.readiness == IPublisher.Readiness.Ready ? Color.white : Color.red;
                 statusLine.text = $"Status: {status.readiness.ToString()}, Create={status.recommendedForCreate.ToString("0.00")}, {status.readyForCreate.ToString("0.00")}";
             }
+        }
+
+        public async void DoTogglePin()
+        {
+            working = true;
+            SetColors(Color.black);
+            SimpleConsole.AddLine(8, $"Toggle pins, binder is {(binder == null ? "null" : binder.Name)}");
+            var spacePinBinder = binder as SpacePinBinder;
+            if (spacePinBinder != null)
+            {
+                var spacePins = spacePinBinder.SpacePins;
+                foreach (var spacePin in spacePins)
+                {
+                    spacePin.gameObject.SetActive(!spacePin.gameObject.activeSelf);
+                    SimpleConsole.AddLine(8, $"Setting spacePin={spacePin.SpacePinId} active={spacePin.gameObject.activeSelf}");
+                }
+            }
+            SimpleConsole.AddLine(8, $"Finished.");
+
+            await ChangeColorForSeconds(finishSeconds, Color.green);
+            working = false;
         }
 
         public async void DoPublish()
@@ -216,6 +235,28 @@ namespace WorldLocking.XampleApp
 
             await ChangeColorForSeconds(finishSeconds, Color.green);
             working = true;
+        }
+
+        public async void DoReset()
+        {
+            working = true;
+            SetColors(Color.black);
+            SimpleConsole.AddLine(8, $"Reset pins, binder is {(binder == null ? "null" : binder.Name)}");
+            var spacePinBinder = binder as SpacePinBinder;
+            if (spacePinBinder != null)
+            {
+                var spacePins = spacePinBinder.SpacePins;
+                foreach (var spacePin in spacePins)
+                {
+                    spacePin.Reset();
+                    SimpleConsole.AddLine(8, $"Reseting spacePin={spacePin.SpacePinId}");
+                }
+            }
+            SimpleConsole.AddLine(8, $"Finished.");
+
+            await ChangeColorForSeconds(finishSeconds, Color.green);
+            working = false;
+
         }
     }
 }

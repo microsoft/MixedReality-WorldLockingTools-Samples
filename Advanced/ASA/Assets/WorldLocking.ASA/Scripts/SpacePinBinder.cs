@@ -37,6 +37,8 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         [SerializeField]
         private List<SpacePinASA> spacePins = new List<SpacePinASA>();
 
+        public IReadOnlyCollection<SpacePinASA> SpacePins { get { return spacePins; } }
+
         [Tooltip("Distance (roughly) to search from device when looking for cloud anchors using coarse relocation.")]
         [SerializeField]
         private float searchRadius = 25.0f; // meters
