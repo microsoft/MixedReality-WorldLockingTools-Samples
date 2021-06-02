@@ -76,9 +76,15 @@ To enable Coarse Relocation on HoloLens2, you must add a permission to the Packa
 
 For more information, see [this post on github](https://github.com/Azure/azure-spatial-anchors-samples/issues/98#issuecomment-574235197).
 
+The MRTK profile `XAmple XRSDK ToolkitConfigurationProfile` in XAmpleApp/CustomProfiles is suitable for running on HoloLens2.
+
 #### Additional setup steps for Android
 
-To enable Coarse Relocation on Android, follow [these instructions](https://docs.microsoft.com/azure/spatial-anchors/how-tos/setup-unity-project?tabs=unity-package-web-ui#android-only-configure-the-maintemplategradle-file) to configure the mainTemplate.gradle file.
+To enable Coarse Relocation on Android, follow [these instructions](https://docs.microsoft.com/azure/spatial-anchors/how-tos/setup-unity-project?tabs=unity-package-web-ui#android-only-configure-the-maintemplategradle-file) to configure the Assets/Plugins/Android/mainTemplate.gradle file. This should be included in the project already, but is worth checking. For your own project, you would have to configure that yourself.
+
+Also, in the Assets/Plugins/Android/AndroidManifest.xml included in the project, a lot of permissions are enabled in order to allow access to Wi-Fi on Android. Again, if incorporating elements of this project into your own project, you need to follow these steps as well in order to use Coarse Relocation. More details on required permissions to access Wi-Fi on Android are in [this post](https://answers.unity.com/questions/1543095/cant-enable-wifi-in-unity-on-android-device-duplic.html), and the post it links to.
+
+The MRTK profile `XAmple AR ToolkitConfigurationProfile` is suitable for running on mobile. Don't forget to run the script `Mixed Reality Toolkit/Utilities/UnityAR/Update Scripting Defines` after switching to Android or iOS. 
 
 ## Video walkthrough
 
