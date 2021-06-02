@@ -82,12 +82,12 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="qr-space-pins-sample">QR Space Pins sample</h1>
 
-<h2 id="summary">Summary:</h2>
+<h2 id="summary">Summary</h2>
 <p>The Space Pins feature of World Locking Tools is combined with QR code scanning to provide automatic snapping of a Unity scene to a physical environment. As the QR codes are physical features, this is an intrinsically shared experience.</p>
 <p><img src="../../DocGen/Images/Screens/QRScanCabinet.jpg" alt=""></p>
 <h2 id="project-source-assets">Project source assets</h2>
 <p><a href="https://github.com/microsoft/MixedReality-WorldLockingTools-Samples/tree/master/Advanced/QRSpacePins">https://github.com/microsoft/MixedReality-WorldLockingTools-Samples/tree/master/Advanced/QRSpacePins</a></p>
-<h2 id="dependencies">Dependencies:</h2>
+<h2 id="dependencies">Dependencies</h2>
 <ul>
 <li>Built on WLT v1.3.4.</li>
 <li>Built with MRTK v2.6.1.</li>
@@ -96,24 +96,24 @@
 <li>Built with Unity 2019.4.2f1.</li>
 </ul>
 <p>Requires <strong>HoloLens2</strong> for QR code scanning.</p>
-<h2 id="additional-setup">Additional setup:</h2>
+<h2 id="additional-setup">Additional setup</h2>
 <p>The QR code placement in the physical environment should match the QR code placement within the scene. For the virtual markers, look at objects &quot;HouseHold &gt; BarnMarkers &gt; Markers &gt; QRCode_N&quot;, where N is the integers 1 through 4.</p>
 <p>For example, consider the following configuration.</p>
-<h3 id="unity-scene">Unity scene:</h3>
+<h3 id="unity-scene">Unity scene</h3>
 <p>The position of QRCode_1 is (0,0,0), and its orientation is horizontal with the top pointed along positive X.</p>
-<h3 id="physical-environment">Physical environment:</h3>
+<h3 id="physical-environment">Physical environment</h3>
 <p>The printed QR code is at your feet, with the top pointed north.</p>
-<h3 id="result">Result:</h3>
+<h3 id="result">Result</h3>
 <p>The Unity scene will appear with the origin at your feet, and the positive X axis pointed north.</p>
-<h2 id="running-the-sample">Running the sample:</h2>
+<h2 id="running-the-sample">Running the sample</h2>
 <p>Deploy the scene QRSpacePins.unity and start the application. Scan your printed QR codes by walking to them. The smaller the printed QR code the closer you'll need to get to it to scan it. A 5x5cm printed code will need to be within about 20 cm to scan.</p>
 <p>The codes can be scanned in any order.</p>
 <p>The scanned codes can be cleared at any time with the voice command &quot;Clear Space Pins&quot;. You can then start over scanning.</p>
 <h3 id="the-2nd-scene">The 2nd scene</h3>
 <p>QRSubScene is identical to QRSpacePins, with one significant exception. Whereas QRSpacePins aligns the entire Unity coordinate space to put the virtual QR codes at the physical QR markers, QRSubScene applies that transformation only to the root of the Household subtree of the scene graph.</p>
-<p>It accomplishes this using the AlignSubtree script placed on the Household node. See the <a href="../AlignSubScene/AlignSubScene.html">AlignSubScene sample</a>, which explores alignment of independent coordinate spaces with the physical world in greater detail. For further details on the AlignSubtree script, consult the <a href="https://microsoft.github.io/MixedReality-WorldLockingTools-Unity/DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Examples.AlignSubtree.html?q=alignsubtree">World Locking Tools for Unity documentaton</a>.</p>
-<h2 id="special-controls">Special controls:</h2>
-<h3 id="speech-commands">Speech commands:</h3>
+<p>It accomplishes this using the AlignSubtree script placed on the Household node. See the <a href="../AlignSubScene/AlignSubScene.html">AlignSubScene sample</a>, which explores alignment of independent coordinate spaces with the physical world in greater detail. For further details on the AlignSubtree script, consult the <a href="https://microsoft.github.io/MixedReality-WorldLockingTools-Unity/DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.Examples.AlignSubtree.html?q=alignsubtree">World Locking Tools for Unity documentation</a>.</p>
+<h2 id="special-controls">Special controls</h2>
+<h3 id="speech-commands">Speech commands</h3>
 <table>
 <thead>
 <tr>
