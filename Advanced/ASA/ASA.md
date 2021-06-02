@@ -164,17 +164,17 @@ It should be noted that the IPublisher, and the PublisherASA, don't know anythin
 
 #### Read versus Find
 
-If a cloud anchor's id is known, the cloud anchor may be retrieved by its id. This is the most robust way to retrieve a cloud anchor. This is [Read](xref:Microsoft.MixedReality.WorldLocking.ASA.IPublisher.Read).
+If a cloud anchor's id is known, the cloud anchor may be retrieved by its id. This is the most robust way to retrieve a cloud anchor. This is [Read](xref:Microsoft.MixedReality.WorldLocking.ASA.IPublisher.Read*).
 
 However, there are interesting scenarios in which the ids for the cloud anchors within an area aren't known by a device, but if they cloud anchors could be retrieved, their spatial data and properties would combine to provide enough information to make them useful.
 
-[Find](xref:Microsoft.MixedReality.WorldLocking.ASA.IPublisher.Find) searches the area around a device for cloud anchors, and returns any that it was able to identify. This process is known as [coarse relocation](https://docs.microsoft.com/azure/spatial-anchors/how-tos/set-up-coarse-reloc-unity).
+[Find](xref:Microsoft.MixedReality.WorldLocking.ASA.IPublisher.Find*) searches the area around a device for cloud anchors, and returns any that it was able to identify. This process is known as [coarse relocation](https://docs.microsoft.com/azure/spatial-anchors/how-tos/set-up-coarse-reloc-unity).
 
 ### IBindingOracle - sharing cloud anchor ids
 
 The [IBindingOracle interface](xref:Microsoft.MixedReality.WorldLocking.ASA.IBindingOracle) provides a means of persisting and sharing bindings between SpacePins and specific cloud anchors. Specifically, it persists space-pin-id/cloud-anchor-id pairs, along with the name of the IBinder.
 
-The oracle's interface is extremely simple. Given an IBinder, it can either [Put](xref:Microsoft.MixedReality.WorldLocking.ASA.IBindingOracle.Put) the IBinder's bindings, or it can [Get](xref:Microsoft.MixedReality.WorldLocking.ASA.IBindingOracle.Get) them. Put stores them, and Get retrieves them. The mechanism of storage and retrieval is left to the implementation of the concrete class implementing the IBindingOracle interface.
+The oracle's interface is extremely simple. Given an IBinder, it can either [Put](xref:Microsoft.MixedReality.WorldLocking.ASA.IBindingOracle.Put*) the IBinder's bindings, or it can [Get](xref:Microsoft.MixedReality.WorldLocking.ASA.IBindingOracle.Get*) them. Put stores them, and Get retrieves them. The mechanism of storage and retrieval is left to the implementation of the concrete class implementing the IBindingOracle interface.
 
 This sample implements possibly the simplest possible IBindingOracle, in the form of the [SpacePinBinderFile class](xref:Microsoft.MixedReality.WorldLocking.ASA.SpacePinBinder). On Put, it writes the IBinder's bindings to a text file. On Get, it reads them from the text file (if available) and feeds them into the IBinder.
 
@@ -182,9 +182,9 @@ This sample implements possibly the simplest possible IBindingOracle, in the for
 
 The [ILocalPeg interface](xref:Microsoft.MixedReality.WorldLocking.ASA.ILocalPeg) is an abstraction of a device local anchor. In a more perfect world, the required ILocalPegs would be internally managed by the IPublisher. However, device local anchors work much better when created while the device is in the vicinity of the anchor's pose. The IPublisher only knows where the device local anchors should be placed when they are needed, not at the optimal time of creating them.
 
-The [SpacePinASA](xref:Microsoft.MixedReality.WorldLocking.ASA.SpacePinASA) does know when the best time to create its local anchor is. When the manipulation of the SpacePin ends and its pose set, the SpacePinASA requests the IPublisher to [create an opaque local peg](xref:Microsoft.MixedReality.WorldLocking.ASA.ILocalPeg.IPublisher.CreateLocalPeg) at the desired pose. The SpacePinBinder then pulls the ILocalPeg off the SpacePinASA, and passes it to the IPublisher to be used in [creating a cloud spatial anchor](xref:Microsoft.MixedReality.WorldLocking.ASA.ILocalPeg.IPublisher.Create).
+The [SpacePinASA](xref:Microsoft.MixedReality.WorldLocking.ASA.SpacePinASA) does know when the best time to create its local anchor is. When the manipulation of the SpacePin ends and its pose set, the SpacePinASA requests the IPublisher to [create an opaque local peg](xref:Microsoft.MixedReality.WorldLocking.ASA.IPublisher.CreateLocalPeg*) at the desired pose. The SpacePinBinder then pulls the ILocalPeg off the SpacePinASA, and passes it to the IPublisher to be used in [creating a cloud spatial anchor](xref:Microsoft.MixedReality.WorldLocking.ASA.IPublisher.Create*).
 
 ## See also
 
-* [Azure Spatial Anchors Quick Start](https://docs.microsoft.com/en-us/azure/spatial-anchors/unity-overview)
+* [Azure Spatial Anchors Quick Start](https://docs.microsoft.com/azure/spatial-anchors/unity-overview)
 * [World Locking Tools for Unity](https://microsoft.github.io/MixedReality-WorldLockingTools-Unity/README.html)
