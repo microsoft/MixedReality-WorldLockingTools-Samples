@@ -13,4 +13,6 @@ The following samples are currently available.
 
 [Align Sub Scene](AlignSubScene/AlignSubScene.md) - Multiple subspaces aligned independently.
 
-[QR Space Pins](QRSpacePins/QRSpacePins.md) - Printed QR codes used as external markers to align the Unity coordinate space with the physical world. 
+[QR Space Pins](QRSpacePins/QRSpacePins.md) - Printed QR codes used as external markers to align the Unity coordinate space with the physical world.
+
+[WLT + ASA](ASA/ASA.md) - Manipulating the global coordinate system using World Locking Tools, and then sharing that coordinate space across sessions and devices via Azure Spatial Anchors.
