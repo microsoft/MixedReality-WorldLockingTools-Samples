@@ -60,7 +60,7 @@ When using Coarse Relocation, additional setup is required when deploying to And
 
 #### What is Coarse Relocation?
 
-Coarse Relocation is a technology which allows you to search for previously created cloud anchors within your current vicinity.
+Coarse Relocation is a technology which allows you to search for previously created cloud anchors within your current vicinity. Additional details on Course Relocation can be found in the [Course Relocation section of the Azure Spatial Anchors documentation](https://docs.microsoft.com/azure/spatial-anchors/concepts/coarse-reloc).
 
 This sample demonstrates finding cloud anchors either by Coarse Relocation, or explicitly by cloud anchor id (GUID). If Coarse Relocation is enabled, the following additional setup steps are required. If you aren't interested in Coarse Relocation, you can disable it in the "Publisher ASA" component on the SpacePinBinder object.
 
@@ -68,7 +68,13 @@ This sample demonstrates finding cloud anchors either by Coarse Relocation, or e
 
 #### Additional setup steps for HoloLens2
 
-To enable Coarse Relocation on HoloLens2, you must add a permission to the Package.appxmanifest file generated into ARM/WLT_ASA/Package.appxmanifest (assuming you selected the folder ARM as your build target). For more information, see [this post](https://github.com/Azure/azure-spatial-anchors-samples/issues/98#issuecomment-574235197).
+To enable Coarse Relocation on HoloLens2, you must add a permission to the Package.appxmanifest file generated into ARM/WLT_ASA/Package.appxmanifest (assuming you selected the folder ARM as your build target). Add the following line into the Capabilities section:
+
+```xml
+    <DeviceCapability Name="wiFiControl"/>
+```
+
+For more information, see [this post on github](https://github.com/Azure/azure-spatial-anchors-samples/issues/98#issuecomment-574235197).
 
 #### Additional setup steps for Android
 
