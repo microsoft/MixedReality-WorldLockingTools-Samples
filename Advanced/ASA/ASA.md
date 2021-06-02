@@ -84,6 +84,8 @@ To enable Coarse Relocation on Android, follow [these instructions](https://docs
 
 Also, in the Assets/Plugins/Android/AndroidManifest.xml included in the project, a lot of permissions are enabled in order to allow access to Wi-Fi on Android. Again, if incorporating elements of this project into your own project, you need to follow these steps as well in order to use Coarse Relocation. More details on required permissions to access Wi-Fi on Android are in [this post](https://answers.unity.com/questions/1543095/cant-enable-wifi-in-unity-on-android-device-duplic.html), and the post it links to.
 
+When you hit Build & Run, if your build fails with a Shader error in the MRTK_Standard material, just try Build & Run again. It works second try for me. There is some info on that in the MRTK issues, but as far as I can tell all the info there is incorrect.
+
 The MRTK profile `XAmple AR ToolkitConfigurationProfile` is suitable for running on mobile. Don't forget to run the script `Mixed Reality Toolkit/Utilities/UnityAR/Update Scripting Defines` after switching to Android or iOS. 
 
 ## Video walkthrough
