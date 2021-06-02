@@ -7,6 +7,10 @@ ASA + WLT
 
 World Locking Tools for Unity (WLT) provides a stable coordinate system based on local tracking. When combined with Azure Spatial Anchors (ASA), that stable coordinate system can be persisted across sessions, and shared across devices.
 
+## Project source assets
+
+https://github.com/microsoft/MixedReality-WorldLockingTools-Samples/tree/master/Advanced/ASA
+
 ## What is in this sample?
 
 This sample provides assets and scripts to:
@@ -14,6 +18,13 @@ This sample provides assets and scripts to:
 1. Configure Unity's global coordinate system with respect to the physical environment.
 2. Publish that coordinate system configuration to Azure using Azure Spatial Anchors.
 3. Retrieve the data from Azure to restore the coordinate system in later sessions or on other devices.
+
+### Structure of this document
+
+1. Setup - How to install and deploy the sample application.
+2. A video walkthrough.
+3. Notes on running the application, along with suggested steps.
+4. Architectural description of the supporting scripts.
 
 ## Setup and tested versions
 
@@ -40,7 +51,8 @@ This [Quick Start Guide](https://docs.microsoft.com/en-us/azure/spatial-anchors/
 ![Credentials fields](~/DocGen/Images/ASA/InspectorAccount.jpg)
 
 #### Install the SDK
-Next, install Azure Spatial Anchors v2.9.0 using one of the methods described in [these instructions](https://docs.microsoft.com/en-us/azure/spatial-anchors/how-tos/setup-unity-project?tabs=unity-package-web-ui). I used the MR Feature Tool method.
+
+Next, install Azure Spatial Anchors v2.9.0 using one of the methods described in [these instructions](https://docs.microsoft.com/azure/spatial-anchors/how-tos/setup-unity-project?tabs=unity-package-web-ui). I used the MR Feature Tool method.
 
 ### Additional setup for Coarse Relocation
 
@@ -56,17 +68,29 @@ This sample demonstrates finding cloud anchors either by Coarse Relocation, or e
 
 #### Additional setup steps for HoloLens2
 
-To enable Coarse Relocation on HoloLens2, you must add a permission to the Package.appxmanifest file generated into ARM/WLT_ASA/Package.appxmanifest (assuming you selected the folder ARM as your build target). For more information, see [this post](https://github.com/Azure/azure-spatial-anchors-samples/issues/98#issuecomment-574235197). 
+To enable Coarse Relocation on HoloLens2, you must add a permission to the Package.appxmanifest file generated into ARM/WLT_ASA/Package.appxmanifest (assuming you selected the folder ARM as your build target). For more information, see [this post](https://github.com/Azure/azure-spatial-anchors-samples/issues/98#issuecomment-574235197).
 
 #### Additional setup steps for Android
 
-To enable Coarse Relocation on Android, follow [these instructions](https://docs.microsoft.com/en-us/azure/spatial-anchors/how-tos/setup-unity-project?tabs=unity-package-web-ui#android-only-configure-the-maintemplategradle-file) to configure the mainTemplate.gradle file.
+To enable Coarse Relocation on Android, follow [these instructions](https://docs.microsoft.com/azure/spatial-anchors/how-tos/setup-unity-project?tabs=unity-package-web-ui#android-only-configure-the-maintemplategradle-file) to configure the mainTemplate.gradle file.
 
 ## Video walkthrough
 
-This video might give you an idea what to expect when running the sample. Further details follow.
+[This video](https://youtu.be/28lYjbQh8RA) might give you an idea what to expect when running the sample. Further details follow.
 
-mafinc - Link to YouTube video
+## What the buttons do
+
+![Ready](~/DocGen/Images/ASA/ReadyHL2.jpg)
+
+* Toggle Pins - When the SpacePins are not active, their manipulation handles may be hidden.
+* Publish - Save the current configuration, enabling its retrieval in later session or on other devices.
+* Load from File - Use previously stored bindings to restore a spatial configuration.
+* Clear File - Delete all backing resources, especially Azure spatial anchors, and clear the bindings file.
+* Load from Search - Find all Azure spatial anchors in the immediate vicinity, and restore the spatial configuration from them.
+* Purge from Search - Find all Azure spatial anchors in the immediate vicinity, and clear them.
+* Reset Pins - Undo any Space Pin manipulations. Does not clear any Azure spatial anchors.
+
+The menu on mobile is slightly different in form, but button positions and meanings are the same.
 
 ## Walkthrough - Publish from HoloLens2
 
@@ -83,6 +107,8 @@ Having built and deployed the application to a HoloLens2 device, wait until the 
 One at a time, grab each of the SpacePin handles (the white wireframe spheres) and drag it into position relative to your reference markers.
 
 After releasing each of the markers into position, the scene should have shifted to restore the back of the sofa relative to the SpacePin. The objects in the scene aren't being moved, the entire coordinate space is adjusted so that the original coordinates of the SpacePins are at the location in the physical world that you dragged them to.
+
+### Publish the coordinate space
 
 Having established the space that you want, you can now Publish that space to make it available in later sessions and on other devices.
 
@@ -120,6 +146,45 @@ HoloLens2: User Folders/LocalAppData/WLT-ASA/LocalState/BinderFile.txt
 
 Android: Internal shared storage/Android/data/com.WorldLockingTools.WLTASA/files/BinderFile.txt
 
+## Software overview
+
+### IBinder - binding SpacePins to Azure Spatial Anchors
+
+The [IBinding](xref:Microsoft.MixedReality.WorldLocking.ASA.IBinder) interface is at the center. It is implemented here by the [SpacePinBinder class](xref:Microsoft.MixedReality.WorldLocking.ASA.SpacePinBinder). It is a Unity Monobehaviour, and may be configured either from Unity's Inspector or from script.
+
+Each IBinder is [named](xref:Microsoft.MixedReality.WorldLocking.ASA.IBinder.Name), so a single [IBindingOracle](xref:Microsoft.MixedReality.WorldLocking.ASA.IBindingOracle) can manage bindings for multiple IBindings.
+
+### IPublisher - reading and writing spatial anchors to the cloud
+
+The [IPublisher](xref:Microsoft.MixedReality.WorldLocking.ASA.IPublisher) interface handles publishing spatial anchors to the cloud, and then retrieving them in later sessions or on other devices. It is implemented here with the [PublisherASA class](xref:Microsoft.MixedReality.WorldLocking.ASA.PublisherASA). Pose data in the current physical space is captured and retrieved using Azure Spatial Anchors.
+
+When a spatial anchor is published, a cloud anchor id is obtained. This id may be used in later sessions or on other devices to retrieve the cloud anchor's pose in the current coordinate system, along with any properties stored with it. The system always adds a property identifying the cloud anchor's associated SpacePin.
+
+It should be noted that the IPublisher, and the PublisherASA, don't know anything about SpacePins. IPublisher doesn't know or care what will be done with the cloud anchor data. It simply provides a simplified awaitable interface for publishing and retrieving cloud anchors.
+
+#### Read versus Find
+
+If a cloud anchor's id is known, the cloud anchor may be retrieved by its id. This is the most robust way to retrieve a cloud anchor. This is [Read](xref:Microsoft.MixedReality.WorldLocking.ASA.IPublisher.Read).
+
+However, there are interesting scenarios in which the ids for the cloud anchors within an area aren't known by a device, but if they cloud anchors could be retrieved, their spatial data and properties would combine to provide enough information to make them useful.
+
+[Find](xref:Microsoft.MixedReality.WorldLocking.ASA.IPublisher.Find) searches the area around a device for cloud anchors, and returns any that it was able to identify. This process is known as [coarse relocation](https://docs.microsoft.com/azure/spatial-anchors/how-tos/set-up-coarse-reloc-unity).
+
+### IBindingOracle - sharing cloud anchor ids
+
+The [IBindingOracle interface](xref:Microsoft.MixedReality.WorldLocking.ASA.IBindingOracle) provides a means of persisting and sharing bindings between SpacePins and specific cloud anchors. Specifically, it persists space-pin-id/cloud-anchor-id pairs, along with the name of the IBinder.
+
+The oracle's interface is extremely simple. Given an IBinder, it can either [Put](xref:Microsoft.MixedReality.WorldLocking.ASA.IBindingOracle.Put) the IBinder's bindings, or it can [Get](xref:Microsoft.MixedReality.WorldLocking.ASA.IBindingOracle.Get) them. Put stores them, and Get retrieves them. The mechanism of storage and retrieval is left to the implementation of the concrete class implementing the IBindingOracle interface.
+
+This sample implements possibly the simplest possible IBindingOracle, in the form of the [SpacePinBinderFile class](xref:Microsoft.MixedReality.WorldLocking.ASA.SpacePinBinder). On Put, it writes the IBinder's bindings to a text file. On Get, it reads them from the text file (if available) and feeds them into the IBinder.
+
+### ILocalPeg - blob marking a position in physical space
+
+The [ILocalPeg interface](xref:Microsoft.MixedReality.WorldLocking.ASA.ILocalPeg) is an abstraction of a device local anchor. In a more perfect world, the required ILocalPegs would be internally managed by the IPublisher. However, device local anchors work much better when created while the device is in the vicinity of the anchor's pose. The IPublisher only knows where the device local anchors should be placed when they are needed, not at the optimal time of creating them.
+
+The [SpacePinASA](xref:Microsoft.MixedReality.WorldLocking.ASA.SpacePinASA) does know when the best time to create its local anchor is. When the manipulation of the SpacePin ends and its pose set, the SpacePinASA requests the IPublisher to [create an opaque local peg](xref:Microsoft.MixedReality.WorldLocking.ASA.ILocalPeg.IPublisher.CreateLocalPeg) at the desired pose. The SpacePinBinder then pulls the ILocalPeg off the SpacePinASA, and passes it to the IPublisher to be used in [creating a cloud spatial anchor](xref:Microsoft.MixedReality.WorldLocking.ASA.ILocalPeg.IPublisher.Create).
+
 ## See also
 
-* [ASA Quick start]()
+* [Azure Spatial Anchors Quick Start](https://docs.microsoft.com/en-us/azure/spatial-anchors/unity-overview)
+* [World Locking Tools for Unity](https://microsoft.github.io/MixedReality-WorldLockingTools-Unity/README.html)
