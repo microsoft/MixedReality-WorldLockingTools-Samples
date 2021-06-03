@@ -130,11 +130,13 @@
 <pre><code class="lang-xml">    &lt;DeviceCapability Name=&quot;wiFiControl&quot;/&gt;
 </code></pre>
 <p>For more information, see <a href="https://github.com/Azure/azure-spatial-anchors-samples/issues/98#issuecomment-574235197">this post on github</a>.</p>
+<p>In Project Settings/XR Plugin Management, make sure that Windows Mixed Reality is the selected Plugin-Provider under the UWP tab (OpenXR is also supported for WLT, but not tested yet with ASA).</p>
 <p>The MRTK profile <code>XAmple XRSDK ToolkitConfigurationProfile</code> in XAmpleApp/CustomProfiles is suitable for running on HoloLens2.</p>
 <h4 id="additional-setup-steps-for-android">Additional setup steps for Android</h4>
 <p>To enable Coarse Relocation on Android, follow <a href="https://docs.microsoft.com/azure/spatial-anchors/how-tos/setup-unity-project?tabs=unity-package-web-ui#android-only-configure-the-maintemplategradle-file">these instructions</a> to configure the Assets/Plugins/Android/mainTemplate.gradle file. This should be included in the project already, but is worth checking. For your own project, you would have to configure that yourself.</p>
 <p>Also, in the Assets/Plugins/Android/AndroidManifest.xml included in the project, a lot of permissions are enabled in order to allow access to Wi-Fi on Android. Again, if incorporating elements of this project into your own project, you need to follow these steps as well in order to use Coarse Relocation. More details on required permissions to access Wi-Fi on Android are in <a href="https://answers.unity.com/questions/1543095/cant-enable-wifi-in-unity-on-android-device-duplic.html">this post</a>, and the post it links to.</p>
 <p>When you hit Build &amp; Run, if your build fails with a Shader error in the MRTK_Standard material, just try Build &amp; Run again. It works second try for me. There is some info on that in the MRTK issues, but as far as I can tell all the info there is incorrect.</p>
+<p>In Project Settings/XR Plugin Management, make sure that ARCore is the selected Plugin-Provider under the Android tab.</p>
 <p>The MRTK profile <code>XAmple AR ToolkitConfigurationProfile</code> is suitable for running on mobile. Don't forget to run the script <code>Mixed Reality Toolkit/Utilities/UnityAR/Update Scripting Defines</code> after switching to Android or iOS.</p>
 <h2 id="video-walkthrough">Video walkthrough</h2>
 <p><a href="https://youtu.be/28lYjbQh8RA">This video</a> might give you an idea what to expect when running the sample. Further details follow.</p>
@@ -143,10 +145,10 @@
 <ul>
 <li>Toggle Pins - When the SpacePins are not active, their manipulation handles may be hidden.</li>
 <li>Publish - Save the current configuration, enabling its retrieval in later session or on other devices.</li>
-<li>Load from File - Use previously stored bindings to restore a spatial configuration.</li>
-<li>Clear File - Delete all backing resources, especially Azure spatial anchors, and clear the bindings file.</li>
-<li>Load from Search - Find all Azure spatial anchors in the immediate vicinity, and restore the spatial configuration from them.</li>
-<li>Purge from Search - Find all Azure spatial anchors in the immediate vicinity, and clear them.</li>
+<li>Load Oracle - Use previously stored bindings to restore a spatial configuration.</li>
+<li>Clear Oracle - Delete all backing resources, especially Azure spatial anchors, and clear the bindings oracle.</li>
+<li>Search - Find all Azure spatial anchors in the immediate vicinity, and restore the spatial configuration from them.</li>
+<li>Purge - Find all Azure spatial anchors in the immediate vicinity, and clear them.</li>
 <li>Reset Pins - Undo any Space Pin manipulations. Does not clear any Azure spatial anchors.</li>
 </ul>
 <p>The menu on mobile is slightly different in form, but button positions and meanings are the same.</p>
