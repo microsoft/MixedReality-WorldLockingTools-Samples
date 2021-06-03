@@ -102,10 +102,10 @@ The MRTK profile `XAmple AR ToolkitConfigurationProfile` is suitable for running
 
 * Toggle Pins - When the SpacePins are not active, their manipulation handles may be hidden.
 * Publish - Save the current configuration, enabling its retrieval in later session or on other devices.
-* Load from File - Use previously stored bindings to restore a spatial configuration.
-* Clear File - Delete all backing resources, especially Azure spatial anchors, and clear the bindings file.
-* Load from Search - Find all Azure spatial anchors in the immediate vicinity, and restore the spatial configuration from them.
-* Purge from Search - Find all Azure spatial anchors in the immediate vicinity, and clear them.
+* Load Oracle - Use previously stored bindings to restore a spatial configuration.
+* Clear Oracle - Delete all backing resources, especially Azure spatial anchors, and clear the bindings oracle.
+* Search - Find all Azure spatial anchors in the immediate vicinity, and restore the spatial configuration from them.
+* Purge - Find all Azure spatial anchors in the immediate vicinity, and clear them.
 * Reset Pins - Undo any Space Pin manipulations. Does not clear any Azure spatial anchors.
 
 The menu on mobile is slightly different in form, but button positions and meanings are the same.
