@@ -76,6 +76,8 @@ To enable Coarse Relocation on HoloLens2, you must add a permission to the Packa
 
 For more information, see [this post on github](https://github.com/Azure/azure-spatial-anchors-samples/issues/98#issuecomment-574235197).
 
+In Project Settings/XR Plugin Management, make sure that Windows Mixed Reality is the selected Plugin-Provider under the UWP tab (OpenXR is also supported for WLT, but not tested yet with ASA). 
+
 The MRTK profile `XAmple XRSDK ToolkitConfigurationProfile` in XAmpleApp/CustomProfiles is suitable for running on HoloLens2.
 
 #### Additional setup steps for Android
@@ -85,6 +87,8 @@ To enable Coarse Relocation on Android, follow [these instructions](https://docs
 Also, in the Assets/Plugins/Android/AndroidManifest.xml included in the project, a lot of permissions are enabled in order to allow access to Wi-Fi on Android. Again, if incorporating elements of this project into your own project, you need to follow these steps as well in order to use Coarse Relocation. More details on required permissions to access Wi-Fi on Android are in [this post](https://answers.unity.com/questions/1543095/cant-enable-wifi-in-unity-on-android-device-duplic.html), and the post it links to.
 
 When you hit Build & Run, if your build fails with a Shader error in the MRTK_Standard material, just try Build & Run again. It works second try for me. There is some info on that in the MRTK issues, but as far as I can tell all the info there is incorrect.
+
+In Project Settings/XR Plugin Management, make sure that ARCore is the selected Plugin-Provider under the Android tab.
 
 The MRTK profile `XAmple AR ToolkitConfigurationProfile` is suitable for running on mobile. Don't forget to run the script `Mixed Reality Toolkit/Utilities/UnityAR/Update Scripting Defines` after switching to Android or iOS. 
 
@@ -98,10 +102,10 @@ The MRTK profile `XAmple AR ToolkitConfigurationProfile` is suitable for running
 
 * Toggle Pins - When the SpacePins are not active, their manipulation handles may be hidden.
 * Publish - Save the current configuration, enabling its retrieval in later session or on other devices.
-* Load from File - Use previously stored bindings to restore a spatial configuration.
-* Clear File - Delete all backing resources, especially Azure spatial anchors, and clear the bindings file.
-* Load from Search - Find all Azure spatial anchors in the immediate vicinity, and restore the spatial configuration from them.
-* Purge from Search - Find all Azure spatial anchors in the immediate vicinity, and clear them.
+* Load Oracle - Use previously stored bindings to restore a spatial configuration.
+* Clear Oracle - Delete all backing resources, especially Azure spatial anchors, and clear the bindings oracle.
+* Search - Find all Azure spatial anchors in the immediate vicinity, and restore the spatial configuration from them.
+* Purge - Find all Azure spatial anchors in the immediate vicinity, and clear them.
 * Reset Pins - Undo any Space Pin manipulations. Does not clear any Azure spatial anchors.
 
 The menu on mobile is slightly different in form, but button positions and meanings are the same.
