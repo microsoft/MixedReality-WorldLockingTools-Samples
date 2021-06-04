@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 #define WLT_EXTRA_LOGGING
+#undef WLT_ASA_INCLUDED
 
 using System;
 using System.Collections;
@@ -392,7 +393,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             return InternalCreateLocalPeg(id, lockedPose);
 #else // WLT_ASA_INCLUDED
             await Task.CompletedTask;
-            return null;
+            throw new NotSupportedException("Trying to use PublisherASA without Azure Spatial Anchors installed.");
 #endif // WLT_ASA_INCLUDED
         }
 
@@ -405,7 +406,9 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             {
                 throw new ArgumentException("ILocalPeg argument should be of type LocalPeg. Gotten from invalid source?");
             }
-            GameObject.Destroy(localPeg.anchorHanger);            
+            GameObject.Destroy(localPeg.anchorHanger);    
+#else // WLT_ASA_INCLUDED
+            throw new NotSupportedException("Trying to use PublisherASA without Azure Spatial Anchors installed.");
 #endif // WLT_ASA_INCLUDED
         }
 
@@ -459,10 +462,11 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 ReleaseBusy();
                 return record.cloudAnchorId;
             }
+            return null;
 #else // WLT_ASA_INCLUDED
             await Task.CompletedTask;
+            throw new NotSupportedException("Trying to use PublisherASA without Azure Spatial Anchors installed.");
 #endif // WLT_ASA_INCLUDED
-            return null;
         }
 
         /// <inheritdocs />
@@ -496,10 +500,11 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 ReleaseBusy();
                 return ret;
             }
+            return null;
 #else // WLT_ASA_INCLUDED
             await Task.CompletedTask;
+            throw new NotSupportedException("Trying to use PublisherASA without Azure Spatial Anchors installed.");
 #endif // WLT_ASA_INCLUDED
-            return null;
         }
 
         /// <inheritdocs />
@@ -523,6 +528,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
 #else // WLT_ASA_INCLUDED
             await Task.CompletedTask;
+            throw new NotSupportedException("Trying to use PublisherASA without Azure Spatial Anchors installed.");
 #endif // WLT_ASA_INCLUDED
         }
 
@@ -537,10 +543,11 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 ReleaseBusy();
                 return found;
             }
+            return null;
 #else // WLT_ASA_INCLUDED
             await Task.CompletedTask;
+            throw new NotSupportedException("Trying to use PublisherASA without Azure Spatial Anchors installed.");
 #endif // WLT_ASA_INCLUDED
-            return null;
         }
 
         /// <inheritdocs />
@@ -575,15 +582,16 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
 #else // WLT_ASA_INCLUDED
             await Task.CompletedTask;
+            throw new NotSupportedException("Trying to use PublisherASA without Azure Spatial Anchors installed.");
 #endif // WLT_ASA_INCLUDED
         }
-#endregion // Implementation of IPublisher
+        #endregion // Implementation of IPublisher
 
-#endregion // Public API
+        #endregion // Public API
 
 #if WLT_ASA_INCLUDED
 
-#region Internal implementations
+        #region Internal implementations
 
         /// <summary>
         /// Implementation of downloading a cloud anchor by its cloud anchor id.
@@ -794,9 +802,9 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         }
 
 
-#endregion // Internal implementations
+        #endregion // Internal implementations
 
-#region Internal helpers
+        #region Internal helpers
 
         /// <summary>
         /// Package the current readiness with the current progress to creates (if applicable).
@@ -993,9 +1001,9 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             return record;
         }
 
-#endregion // Internal helpers
+        #endregion // Internal helpers
 
-#region ASA events
+        #region ASA events
 
         /// <summary>
         /// Put incoming cloud anchors (from ASA thread) into a list for processing on main thread.
@@ -1058,9 +1066,9 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 );
         }
 
-#endregion // ASA events
+        #endregion // ASA events
 
-#region Setup helpers
+        #region Setup helpers
 
         /// <summary>
         /// Create a location provider if coarse relocation is enabled.
@@ -1161,9 +1169,9 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             Debug.Assert(busy != null);
             busy = null;
         }
-#endregion // Setup helpers
+        #endregion // Setup helpers
 
-#region Awful stuff
+        #region Awful stuff
 
 #if UNITY_ANDROID
         private static readonly string[] androidPermissions = new string[]
@@ -1255,7 +1263,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             waitingState = PermissionWaiting.Denied;
         }
 #endif
-#endregion // Awful stuff
+        #endregion // Awful stuff
 
 #endif // WLT_ASA_INCLUDED
     }
