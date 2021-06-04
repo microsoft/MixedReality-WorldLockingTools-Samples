@@ -9,9 +9,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
+#if WLT_ASA_INCLUDED
 using Microsoft.Azure.SpatialAnchors;
 using Microsoft.Azure.SpatialAnchors.Unity;
 using NativeAnchor = Microsoft.Azure.SpatialAnchors.Unity.ARFoundation.UnityARFoundationAnchorComponent;
+#endif // WLT_ASA_INCLUDED
 
 using Microsoft.MixedReality.WorldLocking.Core;
 using Microsoft.MixedReality.WorldLocking.Tools;
@@ -134,6 +136,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         #endregion // Inspector fields
 
+#if WLT_ASA_INCLUDED
         #region Internal members
         /// <summary>
         /// The ASA manager
@@ -149,11 +152,6 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         private AnchorLocateCriteria anchorLocateCriteria = null;
 
         /// <summary>
-        /// List of anchors currently known about. Only accessed from main thread.
-        /// </summary>
-        private readonly List<AnchorRecord> records = new List<AnchorRecord>();
-
-        /// <summary>
         /// Incoming ASA event anchors.
         /// </summary>
         /// <remarks>
@@ -165,6 +163,11 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// Coarse relocation provider. Only created if coarse relocation is enabled.
         /// </summary>
         private PlatformLocationProvider locationProvider = null;
+
+        /// <summary>
+        /// List of anchors currently known about. Only accessed from main thread.
+        /// </summary>
+        private readonly List<AnchorRecord> records = new List<AnchorRecord>();
 
         /// <summary>
         /// Current readiness status.
@@ -198,10 +201,12 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             /// The local peg. Note that this is a concrete type implementing the ILocalPeg interface.
             /// </summary>
             public LocalPeg localPeg = null;
+
             /// <summary>
             /// The cloud anchor for this record.
             /// </summary>
             public CloudSpatialAnchor cloudAnchor = null;
+
             /// <summary>
             /// The identifier for this record's cloud anchor.
             /// </summary>
@@ -278,7 +283,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             public string Name { get; set; }
 
             /// <inheritdocs />
-            public bool IsReadyForPublish 
+            public bool IsReadyForPublish
             {
                 get
                 {
@@ -298,6 +303,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         }
 
         #endregion // Internal types
+#endif // WLT_ASA_INCLUDED
 
         #region Public API
 
@@ -309,6 +315,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// </remarks>
         public async void Setup()
         {
+#if WLT_ASA_INCLUDED
             if (CoarseRelocPublishEnabled && !CoarseRelocationEnabled)
             {
                 SimpleConsole.AddLine(ConsoleHigh, $"Coarse Reloc Publish enabled, but not Coarse Reloc. Disabling Coarse Reloc Publish.");
@@ -352,35 +359,60 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
             CheckReadiness();
             SimpleConsole.AddLine(ConsoleHigh, $"Publisher setup complete S={asaManager.IsSessionStarted} Readiness={readiness}");
+#else // WLT_ASA_INCLUDED
+            SimpleConsole.AddLine(10, $"Trying to start ASA Publisher with no Azure Spatial Anchors installed!");
+
+            await Task.CompletedTask;
+
+            throw new NotSupportedException($"Trying to start ASA Publisher with no Azure Spatial Anchors installed!");
+#endif // WLT_ASA_INCLUDED
         }
 
         #region Implementation of IPublisher
         /// <inheritdocs />
-        public ReadinessStatus Status { get { return CheckReadiness(); } }
+        public ReadinessStatus Status 
+        { 
+            get 
+            {
+#if WLT_ASA_INCLUDED
+                return CheckReadiness(); 
+#else // WLT_ASA_INCLUDED
+                return new ReadinessStatus();
+#endif // WLT_ASA_INCLUDED
+            }
+        }
 
         /// <inheritdocs />
         public async Task<ILocalPeg> CreateLocalPeg(string id, Pose lockedPose)
         {
+#if WLT_ASA_INCLUDED
             int waitForAnchor = 30;
             await Task.Delay(waitForAnchor);
 
             return InternalCreateLocalPeg(id, lockedPose);
+#else // WLT_ASA_INCLUDED
+            await Task.CompletedTask;
+            return null;
+#endif // WLT_ASA_INCLUDED
         }
 
         /// <inheritdocs />
         public void ReleaseLocalPeg(ILocalPeg peg)
         {
+#if WLT_ASA_INCLUDED
             LocalPeg localPeg = peg as LocalPeg;
             if (localPeg == null)
             {
                 throw new ArgumentException("ILocalPeg argument should be of type LocalPeg. Gotten from invalid source?");
             }
-            GameObject.Destroy(localPeg.anchorHanger);
+            GameObject.Destroy(localPeg.anchorHanger);            
+#endif // WLT_ASA_INCLUDED
         }
 
         /// <inheritdocs />
         public async Task<CloudAnchorId> Create(LocalPegAndProperties pegAndProps)
         {
+#if WLT_ASA_INCLUDED
             if (AcquireBusy("Create"))
             {
                 SimpleConsole.AddLine(ConsoleMid, $"Create for AH={pegAndProps.localPeg.Name}, {pegAndProps.properties.Count} props.");
@@ -427,12 +459,16 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 ReleaseBusy();
                 return record.cloudAnchorId;
             }
+#else // WLT_ASA_INCLUDED
+            await Task.CompletedTask;
+#endif // WLT_ASA_INCLUDED
             return null;
         }
 
         /// <inheritdocs />
         public async Task<LocalPegAndProperties> Read(CloudAnchorId cloudAnchorId)
         {
+#if WLT_ASA_INCLUDED
             if (AcquireBusy("Read"))
             {
                 SimpleConsole.AddLine(ConsoleMid, $"Read CID={cloudAnchorId}");
@@ -460,6 +496,9 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 ReleaseBusy();
                 return ret;
             }
+#else // WLT_ASA_INCLUDED
+            await Task.CompletedTask;
+#endif // WLT_ASA_INCLUDED
             return null;
         }
 
@@ -475,17 +514,22 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// <inheritdocs />
         public async Task Delete(string cloudAnchorId)
         {
+#if WLT_ASA_INCLUDED
             if (AcquireBusy("Delete"))
             {
                 await DeleteById(cloudAnchorId);
 
                 ReleaseBusy();
             }
+#else // WLT_ASA_INCLUDED
+            await Task.CompletedTask;
+#endif // WLT_ASA_INCLUDED
         }
 
         /// <inheritdocs />
         public async Task<Dictionary<CloudAnchorId, LocalPegAndProperties>> Find(float radiusFromDevice)
         {
+#if WLT_ASA_INCLUDED
             if (AcquireBusy("Find"))
             {
                 var found = await SearchArea(radiusFromDevice);
@@ -493,12 +537,16 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 ReleaseBusy();
                 return found;
             }
+#else // WLT_ASA_INCLUDED
+            await Task.CompletedTask;
+#endif // WLT_ASA_INCLUDED
             return null;
         }
 
         /// <inheritdocs />
         public async Task PurgeArea(float radius)
         {
+#if WLT_ASA_INCLUDED
             if (AcquireBusy("Purge"))
             {
                 SimpleConsole.AddLine(ConsoleMid, $"Purging area of radius {radius} meters.");
@@ -525,12 +573,17 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 SimpleConsole.AddLine(ConsoleMid, "Purge finished.");
                 ReleaseBusy();
             }
+#else // WLT_ASA_INCLUDED
+            await Task.CompletedTask;
+#endif // WLT_ASA_INCLUDED
         }
-        #endregion // Implementation of IPublisher
+#endregion // Implementation of IPublisher
 
-        #endregion // Public API
+#endregion // Public API
 
-        #region Internal implementations
+#if WLT_ASA_INCLUDED
+
+#region Internal implementations
 
         /// <summary>
         /// Implementation of downloading a cloud anchor by its cloud anchor id.
@@ -741,9 +794,9 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         }
 
 
-        #endregion // Internal implementations
+#endregion // Internal implementations
 
-        #region Internal helpers
+#region Internal helpers
 
         /// <summary>
         /// Package the current readiness with the current progress to creates (if applicable).
@@ -940,9 +993,9 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             return record;
         }
 
-        #endregion // Internal helpers
+#endregion // Internal helpers
 
-        #region ASA events
+#region ASA events
 
         /// <summary>
         /// Put incoming cloud anchors (from ASA thread) into a list for processing on main thread.
@@ -1005,9 +1058,9 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 );
         }
 
-        #endregion // ASA events
+#endregion // ASA events
 
-        #region Setup helpers
+#region Setup helpers
 
         /// <summary>
         /// Create a location provider if coarse relocation is enabled.
@@ -1108,9 +1161,9 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             Debug.Assert(busy != null);
             busy = null;
         }
-        #endregion // Setup helpers
+#endregion // Setup helpers
 
-        #region Awful stuff
+#region Awful stuff
 
 #if UNITY_ANDROID
         private static readonly string[] androidPermissions = new string[]
@@ -1202,6 +1255,8 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             waitingState = PermissionWaiting.Denied;
         }
 #endif
-        #endregion // Awful stuff
+#endregion // Awful stuff
+
+#endif // WLT_ASA_INCLUDED
     }
 }
