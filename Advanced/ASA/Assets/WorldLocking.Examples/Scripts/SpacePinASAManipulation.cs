@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Microsoft.MixedReality.WorldLocking.Core;
-using Microsoft.MixedReality.WorldLocking.Examples;
+using Microsoft.MixedReality.WorldLocking.ASA;
 
-namespace Microsoft.MixedReality.WorldLocking.ASA
+namespace Microsoft.MixedReality.WorldLocking.Examples
 {
     /// <summary>
     /// Component that adds MRTK object manipulation capabilities on top of the auto-orienting SpacePinOrientable.
