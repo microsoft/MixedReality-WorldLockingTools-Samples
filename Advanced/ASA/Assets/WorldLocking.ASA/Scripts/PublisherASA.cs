@@ -2,7 +2,6 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 #define WLT_EXTRA_LOGGING
-#undef WLT_ASA_INCLUDED
 
 using System;
 using System.Collections;
