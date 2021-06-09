@@ -10,11 +10,6 @@ using UnityEngine;
 using Microsoft.MixedReality.WorldLocking.Core;
 using Microsoft.MixedReality.WorldLocking.Tools;
 
-// mafinc - All ASA needs to be hidden on the other side of the IPublisher interface. 
-using Microsoft.Azure.SpatialAnchors;
-using Microsoft.Azure.SpatialAnchors.Unity;
-using NativeAnchor = Microsoft.Azure.SpatialAnchors.Unity.ARFoundation.UnityARFoundationAnchorComponent;
-
 namespace Microsoft.MixedReality.WorldLocking.ASA
 {
     public class SpacePinASA : SpacePinOrientable

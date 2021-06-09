@@ -9,9 +9,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
+#if WLT_ASA_INCLUDED
 using Microsoft.Azure.SpatialAnchors;
 using Microsoft.Azure.SpatialAnchors.Unity;
 using NativeAnchor = Microsoft.Azure.SpatialAnchors.Unity.ARFoundation.UnityARFoundationAnchorComponent;
+#endif // WLT_ASA_INCLUDED
 
 using Microsoft.MixedReality.WorldLocking.Core;
 using Microsoft.MixedReality.WorldLocking.Tools;
@@ -134,6 +136,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         #endregion // Inspector fields
 
+#if WLT_ASA_INCLUDED
         #region Internal members
         /// <summary>
         /// The ASA manager
@@ -149,11 +152,6 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         private AnchorLocateCriteria anchorLocateCriteria = null;
 
         /// <summary>
-        /// List of anchors currently known about. Only accessed from main thread.
-        /// </summary>
-        private readonly List<AnchorRecord> records = new List<AnchorRecord>();
-
-        /// <summary>
         /// Incoming ASA event anchors.
         /// </summary>
         /// <remarks>
@@ -165,6 +163,11 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// Coarse relocation provider. Only created if coarse relocation is enabled.
         /// </summary>
         private PlatformLocationProvider locationProvider = null;
+
+        /// <summary>
+        /// List of anchors currently known about. Only accessed from main thread.
+        /// </summary>
+        private readonly List<AnchorRecord> records = new List<AnchorRecord>();
 
         /// <summary>
         /// Current readiness status.
@@ -198,10 +201,12 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             /// The local peg. Note that this is a concrete type implementing the ILocalPeg interface.
             /// </summary>
             public LocalPeg localPeg = null;
+
             /// <summary>
             /// The cloud anchor for this record.
             /// </summary>
             public CloudSpatialAnchor cloudAnchor = null;
+
             /// <summary>
             /// The identifier for this record's cloud anchor.
             /// </summary>
@@ -278,7 +283,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             public string Name { get; set; }
 
             /// <inheritdocs />
-            public bool IsReadyForPublish 
+            public bool IsReadyForPublish
             {
                 get
                 {
@@ -298,6 +303,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         }
 
         #endregion // Internal types
+#endif // WLT_ASA_INCLUDED
 
         #region Public API
 
@@ -309,6 +315,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// </remarks>
         public async void Setup()
         {
+#if WLT_ASA_INCLUDED
             if (CoarseRelocPublishEnabled && !CoarseRelocationEnabled)
             {
                 SimpleConsole.AddLine(ConsoleHigh, $"Coarse Reloc Publish enabled, but not Coarse Reloc. Disabling Coarse Reloc Publish.");
@@ -352,115 +359,173 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
             CheckReadiness();
             SimpleConsole.AddLine(ConsoleHigh, $"Publisher setup complete S={asaManager.IsSessionStarted} Readiness={readiness}");
+#else // WLT_ASA_INCLUDED
+            SimpleConsole.AddLine(10, $"Trying to start ASA Publisher with no Azure Spatial Anchors installed!");
+
+            await Task.CompletedTask;
+
+            throw new NotSupportedException($"Trying to start ASA Publisher with no Azure Spatial Anchors installed!");
+#endif // WLT_ASA_INCLUDED
         }
 
         #region Implementation of IPublisher
         /// <inheritdocs />
-        public ReadinessStatus Status { get { return CheckReadiness(); } }
+        public ReadinessStatus Status 
+        { 
+            get 
+            {
+#if WLT_ASA_INCLUDED
+                return CheckReadiness(); 
+#else // WLT_ASA_INCLUDED
+                return new ReadinessStatus();
+#endif // WLT_ASA_INCLUDED
+            }
+        }
 
         /// <inheritdocs />
         public async Task<ILocalPeg> CreateLocalPeg(string id, Pose lockedPose)
         {
+#if WLT_ASA_INCLUDED
             int waitForAnchor = 30;
             await Task.Delay(waitForAnchor);
 
             return InternalCreateLocalPeg(id, lockedPose);
+#else // WLT_ASA_INCLUDED
+            await Task.CompletedTask;
+            throw new NotSupportedException("Trying to use PublisherASA without Azure Spatial Anchors installed.");
+#endif // WLT_ASA_INCLUDED
         }
 
         /// <inheritdocs />
         public void ReleaseLocalPeg(ILocalPeg peg)
         {
+#if WLT_ASA_INCLUDED
             LocalPeg localPeg = peg as LocalPeg;
             if (localPeg == null)
             {
                 throw new ArgumentException("ILocalPeg argument should be of type LocalPeg. Gotten from invalid source?");
             }
-            GameObject.Destroy(localPeg.anchorHanger);
+            GameObject.Destroy(localPeg.anchorHanger);    
+#else // WLT_ASA_INCLUDED
+            throw new NotSupportedException("Trying to use PublisherASA without Azure Spatial Anchors installed.");
+#endif // WLT_ASA_INCLUDED
         }
 
         /// <inheritdocs />
         public async Task<CloudAnchorId> Create(LocalPegAndProperties pegAndProps)
         {
+#if WLT_ASA_INCLUDED
             if (AcquireBusy("Create"))
             {
-                SimpleConsole.AddLine(ConsoleMid, $"Create for AH={pegAndProps.localPeg.Name}, {pegAndProps.properties.Count} props.");
-
-                AnchorRecord record = new AnchorRecord();
-
-                if (!pegAndProps.localPeg.IsReadyForPublish)
+                try
                 {
-                    throw new System.ArgumentNullException("pegAndProps.localPeg", "Local Peg not ready for create in Create");
-                }
+                    SimpleConsole.AddLine(ConsoleMid, $"Create for AH={pegAndProps.localPeg.Name}, {pegAndProps.properties.Count} props.");
 
-                LocalPeg localPeg = pegAndProps.localPeg as LocalPeg;
-                if (localPeg == null)
+                    AnchorRecord record = new AnchorRecord();
+
+                    if (!pegAndProps.localPeg.IsReadyForPublish)
+                    {
+                        throw new System.ArgumentNullException("pegAndProps.localPeg", "Local Peg not ready for create in Create");
+                    }
+
+                    LocalPeg localPeg = pegAndProps.localPeg as LocalPeg;
+                    if (localPeg == null)
+                    {
+                        throw new System.ArgumentException("Invalid type of local peg", "pegAndProps.localPeg");
+                    }
+                    record.localPeg = localPeg;
+
+                    AnchorRecord.DebugLog(record, "Pre ToCloud");
+
+                    // Now get the cloud spatial anchor
+                    record.cloudAnchor = await record.localPeg.NativeAnchor.ToCloud();
+
+                    foreach (var prop in pegAndProps.properties)
+                    {
+                        record.cloudAnchor.AppProperties[prop.Key] = prop.Value;
+                        SimpleConsole.AddLine(8, $"Add prop {prop.Key}: {prop.Value}");
+                    }
+
+                    AnchorRecord.DebugLog(record, "Past ToCloud");
+
+                    Debug.Log($"asaMgr:{(asaManager != null ? "valid" : "null")}, session:{(asaManager != null && asaManager.Session != null ? "valid" : "null")}");
+
+                    await asaManager.Session.CreateAnchorAsync(record.cloudAnchor);
+
+                    AnchorRecord.DebugLog(record, "Past CreateAnchorAsync");
+
+                    record.cloudAnchorId = record.cloudAnchor.Identifier;
+
+                    AddRecord(record.cloudAnchorId, record);
+
+                    SimpleConsole.AddLine(ConsoleMid, $"Created {pegAndProps.localPeg.Name} - {record.cloudAnchorId} at {record.localPeg.GlobalPose.position.ToString("F3")}");
+
+                    return record.cloudAnchorId;
+                }
+                catch (Exception e)
                 {
-                    throw new System.ArgumentException("Invalid type of local peg", "pegAndProps.localPeg");
+                    SimpleConsole.AddLine(ConsoleHigh, $"Create exception: {e.Message}");
+                    throw e;
                 }
-                record.localPeg = localPeg;
-
-                AnchorRecord.DebugLog(record, "Pre ToCloud");
-
-                // Now get the cloud spatial anchor
-                record.cloudAnchor = await record.localPeg.NativeAnchor.ToCloud();
-
-                foreach (var prop in pegAndProps.properties)
+                finally
                 {
-                    record.cloudAnchor.AppProperties[prop.Key] = prop.Value;
-                    SimpleConsole.AddLine(8, $"Add prop {prop.Key}: {prop.Value}");
+                    ReleaseBusy();
                 }
-
-                AnchorRecord.DebugLog(record, "Past ToCloud");
-
-                Debug.Log($"asaMgr:{(asaManager != null ? "valid" : "null")}, session:{(asaManager != null && asaManager.Session != null ? "valid" : "null")}");
-
-                await asaManager.Session.CreateAnchorAsync(record.cloudAnchor);
-
-                AnchorRecord.DebugLog(record, "Past CreateAnchorAsync");
-
-                record.cloudAnchorId = record.cloudAnchor.Identifier;
-
-                AddRecord(record.cloudAnchorId, record);
-
-                SimpleConsole.AddLine(ConsoleMid, $"Created {pegAndProps.localPeg.Name} - {record.cloudAnchorId} at {record.localPeg.GlobalPose.position.ToString("F3")}");
-
-                ReleaseBusy();
-                return record.cloudAnchorId;
             }
             return null;
+#else // WLT_ASA_INCLUDED
+            await Task.CompletedTask;
+            throw new NotSupportedException("Trying to use PublisherASA without Azure Spatial Anchors installed.");
+#endif // WLT_ASA_INCLUDED
         }
 
         /// <inheritdocs />
         public async Task<LocalPegAndProperties> Read(CloudAnchorId cloudAnchorId)
         {
+#if WLT_ASA_INCLUDED
             if (AcquireBusy("Read"))
             {
-                SimpleConsole.AddLine(ConsoleMid, $"Read CID={cloudAnchorId}");
-                // mafinc - do we want an option here to force downloading, even if we already have it cached locally?
-                AnchorRecord record = GetRecord(cloudAnchorId);
-                Debug.Log($"GetRecord ca={cloudAnchorId}, record={(record == null ? "null" : record.localPeg.Name)}");
-                if (record == null)
+                try
                 {
-                    Debug.Log($"Downloading record ca={cloudAnchorId}");
-                    record = await DownloadRecord(cloudAnchorId);
+                    SimpleConsole.AddLine(ConsoleMid, $"Read CID={cloudAnchorId}");
+                    // mafinc - do we want an option here to force downloading, even if we already have it cached locally?
+                    AnchorRecord record = GetRecord(cloudAnchorId);
+                    Debug.Log($"GetRecord ca={cloudAnchorId}, record={(record == null ? "null" : record.localPeg.Name)}");
                     if (record == null)
                     {
-                        Debug.LogError($"Error downloading cloud anchor {cloudAnchorId}");
-                        ReleaseBusy();
-                        return null;
+                        Debug.Log($"Downloading record ca={cloudAnchorId}");
+                        record = await DownloadRecord(cloudAnchorId);
+                        if (record == null)
+                        {
+                            Debug.LogError($"Error downloading cloud anchor {cloudAnchorId}");
+                            ReleaseBusy();
+                            return null;
+                        }
+                        AddRecord(record.cloudAnchorId, record);
                     }
-                    AddRecord(record.cloudAnchorId, record);
+                    AnchorRecord.DebugLog(record, "Read: Got record");
+
+                    SimpleConsole.AddLine(ConsoleMid, $"Got record p={record.localPeg.GlobalPose.position.ToString("F3")}");
+
+
+                    var ret = record.GetPegWithProperties();
+                    return ret;
                 }
-                AnchorRecord.DebugLog(record, "Read: Got record");
-
-                SimpleConsole.AddLine(ConsoleMid, $"Got record p={record.localPeg.GlobalPose.position.ToString("F3")}");
-
-                
-                var ret = record.GetPegWithProperties();
-                ReleaseBusy();
-                return ret;
+                catch (Exception e)
+                {
+                    SimpleConsole.AddLine(ConsoleHigh, $"Read exception: {e.Message}");
+                    throw e;
+                }
+                finally
+                {
+                    ReleaseBusy();
+                }
             }
             return null;
+#else // WLT_ASA_INCLUDED
+            await Task.CompletedTask;
+            throw new NotSupportedException("Trying to use PublisherASA without Azure Spatial Anchors installed.");
+#endif // WLT_ASA_INCLUDED
         }
 
         /// <inheritdocs />
@@ -475,60 +540,108 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// <inheritdocs />
         public async Task Delete(string cloudAnchorId)
         {
+#if WLT_ASA_INCLUDED
             if (AcquireBusy("Delete"))
             {
-                await DeleteById(cloudAnchorId);
-
-                ReleaseBusy();
+                try
+                {
+                    await DeleteById(cloudAnchorId);
+                }
+                catch (Exception e)
+                {
+                    SimpleConsole.AddLine(ConsoleHigh, $"Delete exception: {e.Message}");
+                    throw e;
+                }
+                finally
+                {
+                    ReleaseBusy();
+                }
             }
+#else // WLT_ASA_INCLUDED
+            await Task.CompletedTask;
+            throw new NotSupportedException("Trying to use PublisherASA without Azure Spatial Anchors installed.");
+#endif // WLT_ASA_INCLUDED
         }
 
         /// <inheritdocs />
         public async Task<Dictionary<CloudAnchorId, LocalPegAndProperties>> Find(float radiusFromDevice)
         {
+#if WLT_ASA_INCLUDED
             if (AcquireBusy("Find"))
             {
-                var found = await SearchArea(radiusFromDevice);
-
-                ReleaseBusy();
-                return found;
+                try
+                {
+                    var found = await SearchArea(radiusFromDevice);
+                    return found;
+                }
+                catch (Exception e)
+                {
+                    SimpleConsole.AddLine(ConsoleHigh, $"Find exception: {e.Message}");
+                    throw e;
+                }
+                finally
+                {
+                    ReleaseBusy();
+                }
             }
             return null;
+#else // WLT_ASA_INCLUDED
+            await Task.CompletedTask;
+            throw new NotSupportedException("Trying to use PublisherASA without Azure Spatial Anchors installed.");
+#endif // WLT_ASA_INCLUDED
         }
 
         /// <inheritdocs />
         public async Task PurgeArea(float radius)
         {
+#if WLT_ASA_INCLUDED
             if (AcquireBusy("Purge"))
             {
-                SimpleConsole.AddLine(ConsoleMid, $"Purging area of radius {radius} meters.");
-
-                var dict = await SearchArea(radius);
-
-                if (dict != null)
+                try
                 {
-                    SimpleConsole.AddLine(ConsoleMid, $"Found {dict.Count} anchors to delete.");
+                    SimpleConsole.AddLine(ConsoleMid, $"Purging area of radius {radius} meters.");
 
-                    foreach (var keyval in dict)
+                    var dict = await SearchArea(radius);
+
+                    if (dict != null)
                     {
-                        string cloudAnchorId = keyval.Key;
-                        SimpleConsole.AddLine(ConsoleMid, $"Deleting {cloudAnchorId}");
+                        SimpleConsole.AddLine(ConsoleMid, $"Found {dict.Count} anchors to delete.");
 
-                        await DeleteById(cloudAnchorId);
+                        foreach (var keyval in dict)
+                        {
+                            string cloudAnchorId = keyval.Key;
+                            SimpleConsole.AddLine(ConsoleMid, $"Deleting {cloudAnchorId}");
+
+                            await DeleteById(cloudAnchorId);
+                        }
                     }
-                }
-                else
-                {
-                    SimpleConsole.AddLine(ConsoleHigh, $"Search area failed!");
-                }
+                    else
+                    {
+                        SimpleConsole.AddLine(ConsoleHigh, $"Search area failed!");
+                    }
 
-                SimpleConsole.AddLine(ConsoleMid, "Purge finished.");
-                ReleaseBusy();
+                    SimpleConsole.AddLine(ConsoleMid, "Purge finished.");
+                }
+                catch(Exception e)
+                {
+                    SimpleConsole.AddLine(ConsoleHigh, $"Purge exception: {e.Message}");
+                    throw e;
+                }
+                finally
+                {
+                    ReleaseBusy();
+                }
             }
+#else // WLT_ASA_INCLUDED
+            await Task.CompletedTask;
+            throw new NotSupportedException("Trying to use PublisherASA without Azure Spatial Anchors installed.");
+#endif // WLT_ASA_INCLUDED
         }
         #endregion // Implementation of IPublisher
 
         #endregion // Public API
+
+#if WLT_ASA_INCLUDED
 
         #region Internal implementations
 
@@ -1203,5 +1316,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         }
 #endif
         #endregion // Awful stuff
+
+#endif // WLT_ASA_INCLUDED
     }
 }

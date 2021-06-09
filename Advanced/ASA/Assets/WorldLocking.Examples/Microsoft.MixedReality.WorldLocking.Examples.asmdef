@@ -1,12 +1,14 @@
 {
     "name": "Microsoft.MixedReality.WorldLocking.Examples",
+    "rootNamespace": "",
     "references": [
         "Microsoft.MixedReality.WorldLocking.Core",
         "Microsoft.MixedReality.WorldLocking.Tools",
         "Microsoft.MixedReality.Toolkit",
         "Microsoft.MixedReality.Toolkit.SDK",
         "Microsoft.MixedReality.Toolkit.Services.InputSystem",
-        "Microsoft.MixedReality.WorldLocking.Engine"
+        "Microsoft.MixedReality.WorldLocking.Engine",
+        "Microsoft.MixedReality.WorldLocking.ASA"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
