@@ -107,6 +107,18 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// </summary>
         public Transform AnchorsParent { get { return anchorsParent; } set { anchorsParent = value; } }
 
+        [Tooltip("Object to instantiate wherever native anchors are created to visualize their placement.")]
+        [SerializeField]
+        private GameObject anchorsPrefab = null;
+
+        /// <summary>
+        /// Object to instantiate wherever native anchors are created to visualize their placement.
+        /// </summary>
+        /// <remarks>
+        /// These are intended for debugging and development.
+        /// </remarks>
+        public GameObject AnchorsPrefab { get { return anchorsPrefab; } set { anchorsPrefab = value; } }
+
         [Tooltip("Maximum number of seconds to search without finding any anchors before giving up.")]
         [SerializeField]
         private float maxSearchSeconds = 90.0f;
@@ -241,6 +253,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                     + $"cloudAnchorId: {(!string.IsNullOrEmpty(record.cloudAnchorId) ? record.cloudAnchorId : "null")}\n"
                     + $"hanger: {(record.localPeg.anchorHanger == null ? "null" : record.localPeg.anchorHanger.name)}\n"
                     + $"pose: p={record.localPeg.GlobalPose.position.ToString("F3")} r={record.localPeg.GlobalPose.rotation.ToString("F3")}\n"
+                    + $"hpos: p={record.localPeg.anchorHanger.transform.position.ToString("F3")} r={record.localPeg.anchorHanger.transform.rotation.ToString("F3")}\n"
                     + $"cldp: p={cloudPose.position.ToString("F3")} r={cloudPose.rotation.ToString("F3")}";
             }
 #endif // WLT_EXTRA_LOGGING
@@ -273,9 +286,9 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             /// </summary>
             public NativeAnchor NativeAnchor
             {
-                get 
-                { 
-                    return anchorHanger?.FindNativeAnchor(); 
+                get
+                {
+                    return anchorHanger?.FindNativeAnchor();
                 }
             }
 
@@ -360,7 +373,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             CheckReadiness();
             SimpleConsole.AddLine(ConsoleHigh, $"Publisher setup complete S={asaManager.IsSessionStarted} Readiness={readiness}");
 #else // WLT_ASA_INCLUDED
-            SimpleConsole.AddLine(10, $"Trying to start ASA Publisher with no Azure Spatial Anchors installed!");
+            SimpleConsole.AddLine(ConsoleHigh, $"Trying to start ASA Publisher with no Azure Spatial Anchors installed!");
 
             await Task.CompletedTask;
 
@@ -370,12 +383,12 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
         #region Implementation of IPublisher
         /// <inheritdocs />
-        public ReadinessStatus Status 
-        { 
-            get 
+        public ReadinessStatus Status
+        {
+            get
             {
 #if WLT_ASA_INCLUDED
-                return CheckReadiness(); 
+                return CheckReadiness();
 #else // WLT_ASA_INCLUDED
                 return new ReadinessStatus();
 #endif // WLT_ASA_INCLUDED
@@ -386,10 +399,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         public async Task<ILocalPeg> CreateLocalPeg(string id, Pose lockedPose)
         {
 #if WLT_ASA_INCLUDED
-            int waitForAnchor = 30;
-            await Task.Delay(waitForAnchor);
-
-            return InternalCreateLocalPeg(id, lockedPose);
+            return await InternalCreateLocalPeg(id, lockedPose);
 #else // WLT_ASA_INCLUDED
             await Task.CompletedTask;
             throw new NotSupportedException("Trying to use PublisherASA without Azure Spatial Anchors installed.");
@@ -400,12 +410,18 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         public void ReleaseLocalPeg(ILocalPeg peg)
         {
 #if WLT_ASA_INCLUDED
+            if (peg == null)
+            {
+                // Nothing to do.
+                return;
+            }
             LocalPeg localPeg = peg as LocalPeg;
             if (localPeg == null)
             {
                 throw new ArgumentException("ILocalPeg argument should be of type LocalPeg. Gotten from invalid source?");
             }
-            GameObject.Destroy(localPeg.anchorHanger);    
+            SimpleConsole.AddLine(ConsoleHigh, $"Releasing: {localPeg.anchorHanger.name}");
+            GameObject.Destroy(localPeg.anchorHanger);
 #else // WLT_ASA_INCLUDED
             throw new NotSupportedException("Trying to use PublisherASA without Azure Spatial Anchors installed.");
 #endif // WLT_ASA_INCLUDED
@@ -443,7 +459,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                     foreach (var prop in pegAndProps.properties)
                     {
                         record.cloudAnchor.AppProperties[prop.Key] = prop.Value;
-                        SimpleConsole.AddLine(8, $"Add prop {prop.Key}: {prop.Value}");
+                        SimpleConsole.AddLine(ConsoleMid, $"Add prop {prop.Key}: {prop.Value}");
                     }
 
                     AnchorRecord.DebugLog(record, "Past ToCloud");
@@ -622,7 +638,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
                     SimpleConsole.AddLine(ConsoleMid, "Purge finished.");
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     SimpleConsole.AddLine(ConsoleHigh, $"Purge exception: {e.Message}");
                     throw e;
@@ -669,36 +685,37 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             {
                 int DownloadCheckDelayMS = 100;
                 await Task.Delay(DownloadCheckDelayMS);
+                List<AnchorLocatedEventArgs> locatedCopy = null;
                 lock (locatedAnchors)
                 {
-                    if (locatedAnchors.Count > 0)
+                    locatedCopy = new List<AnchorLocatedEventArgs>(locatedAnchors);
+                    locatedAnchors.Clear();
+                }
+                if (locatedCopy != null && locatedCopy.Count > 0)
+                {
+                    Debug.Log($"Got {locatedCopy.Count} located anchors");
+                    int idx = locatedCopy.FindIndex(x => x.Identifier == cloudAnchorId);
+                    if (idx >= 0)
                     {
-                        Debug.Log($"Got {locatedAnchors.Count} located anchors");
-                        int idx = locatedAnchors.FindIndex(x => x.Identifier == cloudAnchorId);
-                        if (idx >= 0)
+                        Debug.Log($"Found located anchor {cloudAnchorId}, status={locatedCopy[idx].Status}");
+                        if (locatedCopy[idx].Status == LocateAnchorStatus.Located)
                         {
-                            Debug.Log($"Found located anchor {cloudAnchorId}, status={locatedAnchors[idx].Status}");
-                            if (locatedAnchors[idx].Status == LocateAnchorStatus.Located)
-                            {
-                                record = new AnchorRecord();
-                                record.cloudAnchor = locatedAnchors[idx].Anchor;
-                                record.cloudAnchorId = locatedAnchors[idx].Identifier;
-                                record = RecordFromCloud(record);
-                            }
-                            locatedAnchors.RemoveAt(idx);
-                            haveAnchor = true;
-                            SimpleConsole.AddLine(8, $"Have anchor {cloudAnchorId}");
+                            record = new AnchorRecord();
+                            record.cloudAnchor = locatedCopy[idx].Anchor;
+                            record.cloudAnchorId = locatedCopy[idx].Identifier;
+                            record = await RecordFromCloud(record);
                         }
+                        locatedCopy.RemoveAt(idx);
+                        haveAnchor = true;
+                        SimpleConsole.AddLine(ConsoleMid, $"Have anchor {cloudAnchorId}");
                     }
                     waiting = !haveAnchor;
+
                 }
             }
             if (record != null)
             {
-                int anchorWaitMS = 100;
-                AnchorRecord.DebugLog(record, $"Waiting {anchorWaitMS}ms from frame={Time.frameCount} to give new anchor time to fix itself.");
-                await Task.Delay(anchorWaitMS);
-                AnchorRecord.DebugLog(record, $"Finished waiting, frame={Time.frameCount}");
+                AnchorRecord.DebugLog(record, $"Finished, frame={Time.frameCount}");
             }
             return record;
         }
@@ -712,12 +729,12 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         {
             if (locationProvider == null)
             {
-                SimpleConsole.AddLine(11, $"Trying to search for records but location provider is null.");
+                SimpleConsole.AddLine(ConsoleHigh, $"Trying to search for records but location provider is null.");
                 return null;
             }
             List<AnchorRecord> locatedRecords = await SearchForRecords(radiusFromDevice);
 
-            SimpleConsole.AddLine(8, $"Found {locatedRecords.Count} records.");
+            SimpleConsole.AddLine(ConsoleMid, $"Found {locatedRecords.Count} records.");
             Dictionary<CloudAnchorId, LocalPegAndProperties> found = new Dictionary<CloudAnchorId, LocalPegAndProperties>();
             foreach (var record in locatedRecords)
             {
@@ -770,32 +787,36 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 // If any records are found, then we give up waiting for more after waitForMoreAnchorsTimeoutMS.
                 int DownloadCheckDelayMS = 100;
                 await Task.Delay(DownloadCheckDelayMS);
+                List<AnchorLocatedEventArgs> locatedCopy = null;
                 lock (locatedAnchors)
                 {
-                    if (locatedAnchors.Count > 0)
-                    {
-                        Debug.Log($"Got {locatedAnchors.Count} located anchors");
-                        foreach (var located in locatedAnchors)
-                        {
-                            SimpleConsole.AddLine(ConsoleMid, $"Found located anchor {located.Identifier}, status={located.Status}");
-                            if (located.Status == LocateAnchorStatus.Located)
-                            {
-                                AnchorRecord record = new AnchorRecord();
-                                record.cloudAnchor = located.Anchor;
-                                record.cloudAnchorId = located.Identifier;
-                                record = RecordFromCloud(record);
-                                locatedRecords.Add(record);
-                            }
-                        }
-                        locatedAnchors.Clear();
-                        haveAnchors = true;
-                    }
-                    else
-                    {
-                        // We have some anchors, but didn't get any more while waiting, so give up and go with what we have.
-                        waiting = !haveAnchors;
-                    }
+                    locatedCopy = new List<AnchorLocatedEventArgs>(locatedAnchors);
+                    locatedAnchors.Clear();
                 }
+                if (locatedCopy != null && locatedCopy.Count > 0)
+                {
+                    Debug.Log($"Got {locatedCopy.Count} located anchors");
+                    foreach (var located in locatedCopy)
+                    {
+                        SimpleConsole.AddLine(ConsoleMid, $"Found located anchor {located.Identifier}, status={located.Status}");
+                        if (located.Status == LocateAnchorStatus.Located)
+                        {
+                            AnchorRecord record = new AnchorRecord();
+                            record.cloudAnchor = located.Anchor;
+                            record.cloudAnchorId = located.Identifier;
+                            record = await RecordFromCloud(record);
+                            locatedRecords.Add(record);
+                        }
+                    }
+                    locatedCopy.Clear();
+                    haveAnchors = true;
+                }
+                else
+                {
+                    // We have some anchors, but didn't get any more while waiting, so give up and go with what we have.
+                    waiting = !haveAnchors;
+                }
+
                 double timeSearching = Time.timeAsDouble - startTime;
                 if (haveAnchors)
                 {
@@ -809,6 +830,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 }
             }
             watcher.Stop();
+            // mafinc - this wait obsolete with wait in InternalCreateLocalPeg?
             if (locatedRecords.Count > 0)
             {
                 int anchorWaitMS = 100;
@@ -830,11 +852,11 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             AnchorRecord record = DeleteRecord(cloudAnchorId);
             if (record == null)
             {
-                SimpleConsole.AddLine(11, $"No loaded record found for {cloudAnchorId}, downloading.");
+                SimpleConsole.AddLine(ConsoleMid, $"No loaded record found for {cloudAnchorId}, downloading.");
                 record = await DownloadRecord(cloudAnchorId);
                 if (record == null)
                 {
-                    SimpleConsole.AddLine(11, $"Failed to download {cloudAnchorId}, not deleted.");
+                    SimpleConsole.AddLine(ConsoleHigh, $"Failed to download {cloudAnchorId}, not deleted.");
                     return;
                 }
             }
@@ -848,7 +870,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 }
                 catch (Exception e)
                 {
-                    SimpleConsole.AddLine(11, $"Tried but failed to delete {cloudAnchorId}, {e.Message}");
+                    SimpleConsole.AddLine(ConsoleHigh, $"Tried but failed to delete {cloudAnchorId}, {e.Message}");
                 }
             }
         }
@@ -962,7 +984,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// <param name="id">Name of the peg.</param>
         /// <param name="lockedPose">Pose of the peg.</param>
         /// <returns>Fully instantiated LocalPeg.</returns>
-        private LocalPeg InternalCreateLocalPeg(string id, Pose lockedPose)
+        private async Task<LocalPeg> InternalCreateLocalPeg(string id, Pose lockedPose)
         {
             LocalPeg peg = new LocalPeg();
             peg.Name = id;
@@ -970,10 +992,27 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             peg.anchorHanger = new GameObject(id);
             peg.anchorHanger.transform.SetParent(AnchorsParent, false);
 
-            var wltMgr = WorldLockingManager.GetInstance();
-            Pose anchorPose = wltMgr.AnchorManager.AnchorFromSpongy.Multiply(wltMgr.SpongyFromLocked).Multiply(lockedPose);
-            peg.anchorHanger.transform.SetGlobalPose(anchorPose);
+            if (AnchorsPrefab != null)
+            {
+                GameObject marker = GameObject.Instantiate(AnchorsPrefab, peg.anchorHanger.transform);
+                marker.transform.localPosition = Vector3.zero;
+                marker.transform.localRotation = Quaternion.identity;
+            }
+
+            var frozenPose = WorldLockingManager.GetInstance().FrozenFromLocked.Multiply(lockedPose);
+
+            peg.anchorHanger.transform.SetGlobalPose(frozenPose);
+            SimpleConsole.AddLine(ConsoleLow, $"ICLP: {id} f{Time.frameCount} p={peg.anchorHanger.transform.position.ToString("F3")} fp={frozenPose.position.ToString("F3")}");
             peg.anchorHanger.CreateNativeAnchor();
+            await Task.Yield();
+            SimpleConsole.AddLine(ConsoleMid, $"ICLP2: f{Time.frameCount} p={peg.anchorHanger.transform.position.ToString("F3")}" 
+                + $" fp={frozenPose.position.ToString("F3")}"
+                + $" ap={WorldLockingManager.GetInstance().AnchorManager.AnchorFromSpongy.Multiply(frozenPose).position.ToString("F3")}"
+                + $" pa={WorldLockingManager.GetInstance().AnchorManager.AnchorFromSpongy.Inverse().Multiply(frozenPose).position.ToString("F3")}"
+                );
+
+            // mafinc - workaround for bug in ASA NativeAnchor.
+            peg.anchorHanger.transform.SetLocalPose(Pose.identity);
 
             return peg;
         }
@@ -1041,10 +1080,16 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// </summary>
         /// <param name="record">Source record.</param>
         /// <returns>Same record, but fully filled out.</returns>
-        private AnchorRecord RecordFromCloud(AnchorRecord record)
+        private async Task<AnchorRecord> RecordFromCloud(AnchorRecord record)
         {
             Debug.Assert(record.cloudAnchor != null, $"Trying to create native resources from a null cloud anchor");
-            record.localPeg = InternalCreateLocalPeg(record.cloudAnchorId, record.cloudAnchor.GetPose());
+            var wltMgr = WorldLockingManager.GetInstance();
+            Pose spongyPose = record.cloudAnchor.GetPose();
+            var lockedPose = wltMgr.LockedFromSpongy.Multiply(spongyPose);
+
+            SimpleConsole.AddLine(ConsoleMid, $"RFC: sp={spongyPose.position.ToString("F3")} fp={lockedPose.position.ToString("F3")}");
+            record.localPeg = await InternalCreateLocalPeg(record.cloudAnchorId, lockedPose);
+            AnchorRecord.DebugLog(record, "RecordFromCloud:");
             SimpleConsole.AddLine(ConsoleMid, $"Got record={record.cloudAnchorId} with {record.cloudAnchor.AppProperties.Count} properties.");
             foreach (var prop in record.cloudAnchor.AppProperties)
             {
@@ -1069,7 +1114,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         {
 #if WLT_EXTRA_LOGGING
             UnityDispatcher.InvokeOnAppThread(() =>
-                SimpleConsole.AddLine(ConsoleHigh,
+                SimpleConsole.AddLine(ConsoleMid,
                     $"OnAnchorLocated: {args.Status}, {args.Identifier}, {args.Anchor?.Identifier}, {args.Anchor?.GetPose().ToString("F3")}"
                 ));
 #endif // WLT_EXTRA_LOGGING
@@ -1088,7 +1133,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         {
 #if WLT_EXTRA_LOGGING
             UnityDispatcher.InvokeOnAppThread(() =>
-                SimpleConsole.AddLine(ConsoleHigh,
+                SimpleConsole.AddLine(ConsoleMid,
                     $"OnAnchorLocateCompleted: {args.Watcher.Identifier} cancelled={args.Cancelled}"
                 ));
 #endif // WLT_EXTRA_LOGGING
@@ -1132,7 +1177,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
             if (!CoarseRelocationEnabled)
             {
-                SimpleConsole.AddLine(8, $"Coarse relocation is not enabled!");
+                SimpleConsole.AddLine(ConsoleHigh, $"Coarse relocation is not enabled!");
                 return null;
             }
 

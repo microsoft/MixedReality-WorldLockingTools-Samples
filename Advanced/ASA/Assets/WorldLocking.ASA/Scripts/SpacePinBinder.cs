@@ -70,6 +70,8 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// </summary>
         private IPublisher publisher = null;
 
+        private readonly int ConsoleHigh = 8;
+        private readonly int ConsoleLow = 3;
         #endregion // Internal members
 
         #region Public APIs
@@ -217,7 +219,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             int cloudIdx = FindBindingBySpacePinId(spacePin.SpacePinId);
             if (cloudIdx >= 0)
             {
-                SimpleConsole.AddLine(8, $"Publishing previously published space pin={spacePin.SpacePinId}, deleting from cloud first.");
+                SimpleConsole.AddLine(ConsoleHigh, $"Publishing previously published space pin={spacePin.SpacePinId}, deleting from cloud first.");
                 await publisher.Delete(bindings[cloudIdx].cloudAnchorId);
                 RemoveBinding(spacePin.SpacePinId);
             }
@@ -268,15 +270,11 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                     }
                 }
             }
-            // mafinc - I don't think this delay is needed.
-            int waitForAnchorsMS = 30;
-            await Task.Delay(waitForAnchorsMS);
             var wltMgr = WorldLockingManager.GetInstance();
-            Pose SpongyFromAnchor = wltMgr.AnchorManager.AnchorFromSpongy.Inverse();
-            Pose LockedFromAnchor = wltMgr.LockedFromSpongy.Multiply(SpongyFromAnchor);
             foreach (var readObj in readObjects)
             {
-                Pose lockedPose = LockedFromAnchor.Multiply(readObj.pegAndProps.localPeg.GlobalPose);
+                Pose lockedPose = wltMgr.LockedFromFrozen.Multiply(readObj.pegAndProps.localPeg.GlobalPose);
+                SimpleConsole.AddLine(ConsoleLow, $"Dwn: {lockedPose.ToString("F3")}");
                 readObj.spacePin.SetLockedPose(lockedPose);
                 readObj.spacePin.SetLocalPeg(readObj.pegAndProps.localPeg);
             }
@@ -294,8 +292,6 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             Dictionary<CloudAnchorId, LocalPegAndProperties> found = await publisher.Find(searchRadius);
 
             var wltMgr = WorldLockingManager.GetInstance();
-            Pose SpongyFromAnchor = wltMgr.AnchorManager.AnchorFromSpongy.Inverse();
-            Pose LockedFromAnchor = wltMgr.LockedFromSpongy.Multiply(SpongyFromAnchor);
 
             bool foundAny = false;
             foreach (var keyval in found)
@@ -310,20 +306,20 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                     foundAny = true;
                     SpacePinASA spacePin = spacePins[idx];
 
-                    Pose lockedPose = LockedFromAnchor.Multiply(pegAndProps.localPeg.GlobalPose);
+                    Pose lockedPose = wltMgr.LockedFromFrozen.Multiply(pegAndProps.localPeg.GlobalPose);
                     spacePin.SetLockedPose(lockedPose);
                     spacePin.SetLocalPeg(pegAndProps.localPeg);
                 }
                 else
                 {
-                    SimpleConsole.AddLine(8, $"Found anchor for unknown SpacePin={spacePinId}.");
+                    SimpleConsole.AddLine(ConsoleHigh, $"Found anchor for unknown SpacePin={spacePinId}.");
                 }
             }
             return foundAny;
         }
-        #endregion // Download from cloud
+#endregion // Download from cloud
 
-        #region Cleanup
+#region Cleanup
 
         /// <inheritdoc/>
         public async Task<bool> Purge()
@@ -344,7 +340,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             {
                 return false;
             }
-            foreach(var binding in bindings)
+            foreach (var binding in bindings)
             {
                 await publisher.Delete(binding.cloudAnchorId);
             }
@@ -362,11 +358,11 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 }
             }
         }
-        #endregion // Cleanup
+#endregion // Cleanup
 
-        #endregion // Public APIs
+#endregion // Public APIs
 
-        #region Unity
+#region Unity
         /// <summary>
         /// Establish relationship with the publisher.
         /// </summary>
@@ -378,9 +374,9 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             SetSpacePinsPublisher(publisherASA);
         }
 
-        #endregion // Unity
+#endregion // Unity
 
-        #region Internal helpers
+#region Internal helpers
 
         /// <summary>
         /// Capture the publisher we'll be using, and pass it on to all managed space pins.
@@ -407,12 +403,12 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         {
             if (spacePin == null)
             {
-                SimpleConsole.AddLine(11, $"Getting null space pin to check ready for publish.");
+                SimpleConsole.AddLine(ConsoleHigh, $"Getting null space pin to check ready for publish.");
                 return false;
             }
             if (spacePin.Publisher != publisher)
             {
-                SimpleConsole.AddLine(11, $"SpacePin={spacePin.SpacePinId} has different publisher than binder={name}.");
+                SimpleConsole.AddLine(ConsoleHigh, $"SpacePin={spacePin.SpacePinId} has different publisher than binder={name}.");
                 return false;
             }
             return spacePin.IsReadyForPublish;
@@ -513,7 +509,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             return idx;
         }
 
-        #endregion // Internal helpers
+#endregion // Internal helpers
     }
 
 }

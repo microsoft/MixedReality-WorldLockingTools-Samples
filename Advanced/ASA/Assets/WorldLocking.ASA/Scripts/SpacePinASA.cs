@@ -55,6 +55,9 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// </summary>
         public Dictionary<string, string> Properties => properties;
 
+        private readonly int ConsoleLow = 3;
+        private readonly int ConsoleHigh = 8;
+
         /// <summary>
         /// Populate the properties dictionary from the serialized list.
         /// </summary>
@@ -72,8 +75,32 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
         }
 
+        private int lastCheckFrame = 0;
         protected void DebugSpew()
         {
+        }
+
+        private void DumpObject(GameObject go, string msg)
+        {
+            string str = $"{msg}\n";
+            str = AppendObject(go.transform, str, 0);
+            SimpleConsole.AddLine(ConsoleHigh, str);
+        }
+
+        private static int indentIncrement = 2;
+        private string AppendObject(Transform subroot, string str, int indent)
+        {
+            for (int i = 0; i < indent; ++i)
+            {
+                str += " ";
+            }
+            bool hasNativeAnchor = subroot.gameObject.GetComponent<Microsoft.Azure.SpatialAnchors.Unity.ARFoundation.UnityARFoundationAnchorComponent>() != null;
+            str += $"{subroot.name} lp={subroot.localPosition.ToString("F3")} gp={subroot.position.ToString("F3")} {(hasNativeAnchor ? "HAS ANCHOR" : "")}\n";
+            for (int i = 0; i < subroot.childCount; ++i)
+            {
+                str = AppendObject(subroot.GetChild(i), str, indent + indentIncrement);
+            }
+            return str;
         }
 
         /// <summary>
@@ -97,11 +124,19 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// <param name="peg">The local peg to take.</param>
         public void SetLocalPeg(ILocalPeg peg)
         {
+            if (peg?.Name == localPeg?.Name)
+            {
+                SimpleConsole.AddLine(ConsoleHigh, $"Redundant SLP: {name} {peg.Name}");
+                return;
+            }
             if (localPeg != null)
             {
-                Publisher.ReleaseLocalPeg(peg);
+                SimpleConsole.AddLine(ConsoleHigh, $"SLP release {localPeg?.Name} take {peg?.Name}");
+                Publisher.ReleaseLocalPeg(localPeg);
             }
             localPeg = peg;
+            SimpleConsole.AddLine(ConsoleLow, $"SLP: {name} - {localPeg.GlobalPose.position.ToString("F3")}");
+            lastCheckFrame = Time.frameCount;
         }
 
         /// <summary>
@@ -114,14 +149,17 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         {
             if (Publisher == null)
             {
-                SimpleConsole.AddLine(8, $"Publisher hasn't been set on SpacePin={name}");
+                SimpleConsole.AddLine(ConsoleHigh, $"Publisher hasn't been set on SpacePin={name}");
                 return;
             }
             if (localPeg != null)
             {
+                SimpleConsole.AddLine(ConsoleHigh, $"Releasing existing peg {name}");
                 Publisher.ReleaseLocalPeg(localPeg);
             }
             localPeg = await Publisher.CreateLocalPeg($"{SpacePinId}_peg", LockedPose);
+            SimpleConsole.AddLine(ConsoleLow, $"CLP: {name} - {localPeg.GlobalPose.position.ToString("F3")}");
+            lastCheckFrame = Time.frameCount;
         }
     }
 }
