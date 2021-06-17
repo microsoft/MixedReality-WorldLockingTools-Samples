@@ -5,13 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/XampleApp/Scenes/PinTest.unity
     guid: 0f61b0a6bb908204090f80949a16d7f5
-  - enabled: 1
+  - enabled: 0
     path: Assets/XampleApp/Scenes/PinTestSofa.unity
     guid: cbb1de1abeaa6f149a3b118ab18fc463
   m_configObjects:
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: e4a1d66ff26473547abd9ac209e1b208, type: 2}
-    UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: f5a4847fa07b49d4a9f50f22baa7134f, type: 2}
+    UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 97fa16dd75206b34fb5935bf15e4c36a, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: a03d89b708202f14caca7a99ada1b166, type: 2}
