@@ -189,9 +189,9 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// <summary>
         /// Constants for logging to the SimpleConsole (higher is more likely to get posted).
         /// </summary>
-        private int ConsoleHigh = 10;
-        private int ConsoleMid = 8;
-        private int ConsoleLow = 3;
+        private static readonly int ConsoleHigh = 10;
+        private static readonly int ConsoleMid = 8;
+        private static readonly int ConsoleLow = 3;
 
         /// <summary>
         /// Non-null busy string indicates the current task busy on. Null busy string means not busy.
@@ -266,7 +266,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             public static void DebugLog(AnchorRecord record, string msg)
             {
 #if WLT_EXTRA_LOGGING
-                Debug.Log(DebugString(record, msg));
+                SimpleConsole.AddLine(ConsoleLow, DebugString(record, msg));
 #endif // WLT_EXTRA_LOGGING
             }
         };
@@ -1005,17 +1005,70 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             SimpleConsole.AddLine(ConsoleLow, $"ICLP: {id} f{Time.frameCount} p={peg.anchorHanger.transform.position.ToString("F3")} fp={frozenPose.position.ToString("F3")}");
             peg.anchorHanger.CreateNativeAnchor();
             await Task.Yield();
-            SimpleConsole.AddLine(ConsoleMid, $"ICLP2: f{Time.frameCount} p={peg.anchorHanger.transform.position.ToString("F3")}" 
+            SimpleConsole.AddLine(11, $"ICLP2: f{Time.frameCount} p={peg.anchorHanger.transform.position.ToString("F3")}"
                 + $" fp={frozenPose.position.ToString("F3")}"
                 + $" ap={WorldLockingManager.GetInstance().AnchorManager.AnchorFromSpongy.Multiply(frozenPose).position.ToString("F3")}"
                 + $" pa={WorldLockingManager.GetInstance().AnchorManager.AnchorFromSpongy.Inverse().Multiply(frozenPose).position.ToString("F3")}"
                 );
 
+#if UNITY_WSA
             // mafinc - workaround for bug in ASA NativeAnchor.
             peg.anchorHanger.transform.SetLocalPose(Pose.identity);
+#endif // UNITY_WSA
+
+#if WLT_EXTRA_LOGGING
+            // mafinc - trash
+            PrintScene();
+#endif // WLT_EXTRA_LOGGING
 
             return peg;
         }
+
+        #region TRASH
+
+#if WLT_EXTRA_LOGGING
+        private static void PrintScene()
+        {
+            int ConsolePrintScene = 2;
+            var gos = GameObject.FindObjectsOfType<GameObject>();
+            List<Transform> subroots = new List<Transform>();
+            for (int i = 0; i < gos.Length; ++i)
+            {
+                if (gos[i].transform.parent == null)
+                {
+                    subroots.Add(gos[i].transform);
+                }
+            }
+
+
+            SimpleConsole.AddLine(ConsolePrintScene, $"Frame: {Time.frameCount}");
+            for (int i = 0; i < subroots.Count; ++i)
+            {
+                SimpleConsole.AddLine(ConsolePrintScene, $"Obj {i}/{subroots.Count}:");
+                PrintSubtree(ConsolePrintScene, subroots[i], 0);
+            }
+
+
+            SimpleConsole.AddLine(ConsolePrintScene, "EndPrintScene");
+
+        }
+
+        private static void PrintSubtree(int consolePriority, Transform subroot, int indent)
+        {
+            int TabSize = 2;
+            string str = new string(' ', indent * TabSize);
+            str += $"{subroot.name} local={subroot.localPosition.ToString("F3")} global={subroot.position.ToString("F3")}";
+            SimpleConsole.AddLine(consolePriority, str);
+
+            ++indent;
+            for (int i = 0; i < subroot.childCount; ++i)
+            {
+                PrintSubtree(consolePriority, subroot.GetChild(i), indent);
+            }
+        }
+#endif // WLT_EXTRA_LOGGING
+
+        #endregion // TRASH
 
         /// <summary>
         /// If cloud anchor id is unknown, add the record, else update the record.
@@ -1084,10 +1137,15 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         {
             Debug.Assert(record.cloudAnchor != null, $"Trying to create native resources from a null cloud anchor");
             var wltMgr = WorldLockingManager.GetInstance();
+#if UNITY_WSA
             Pose spongyPose = record.cloudAnchor.GetPose();
             var lockedPose = wltMgr.LockedFromSpongy.Multiply(spongyPose);
-
-            SimpleConsole.AddLine(ConsoleMid, $"RFC: sp={spongyPose.position.ToString("F3")} fp={lockedPose.position.ToString("F3")}");
+            SimpleConsole.AddLine(ConsoleMid, $"RFC: sp={spongyPose.position.ToString("F3")} lp={lockedPose.position.ToString("F3")}");
+#else // Android/iOS
+            Pose frozenPose = record.cloudAnchor.GetPose();
+            var lockedPose = wltMgr.LockedFromFrozen.Multiply(frozenPose);
+            SimpleConsole.AddLine(ConsoleMid, $"RFC: fp={frozenPose.position.ToString("F3")} lp={lockedPose.position.ToString("F3")}");
+#endif // UNITY_WSA
             record.localPeg = await InternalCreateLocalPeg(record.cloudAnchorId, lockedPose);
             AnchorRecord.DebugLog(record, "RecordFromCloud:");
             SimpleConsole.AddLine(ConsoleMid, $"Got record={record.cloudAnchorId} with {record.cloudAnchor.AppProperties.Count} properties.");
