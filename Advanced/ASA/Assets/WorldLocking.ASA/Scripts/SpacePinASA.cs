@@ -75,32 +75,8 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
         }
 
-        private int lastCheckFrame = 0;
         protected void DebugSpew()
         {
-        }
-
-        private void DumpObject(GameObject go, string msg)
-        {
-            string str = $"{msg}\n";
-            str = AppendObject(go.transform, str, 0);
-            SimpleConsole.AddLine(ConsoleHigh, str);
-        }
-
-        private static int indentIncrement = 2;
-        private string AppendObject(Transform subroot, string str, int indent)
-        {
-            for (int i = 0; i < indent; ++i)
-            {
-                str += " ";
-            }
-            bool hasNativeAnchor = subroot.gameObject.GetComponent<Microsoft.Azure.SpatialAnchors.Unity.ARFoundation.UnityARFoundationAnchorComponent>() != null;
-            str += $"{subroot.name} lp={subroot.localPosition.ToString("F3")} gp={subroot.position.ToString("F3")} {(hasNativeAnchor ? "HAS ANCHOR" : "")}\n";
-            for (int i = 0; i < subroot.childCount; ++i)
-            {
-                str = AppendObject(subroot.GetChild(i), str, indent + indentIncrement);
-            }
-            return str;
         }
 
         /// <summary>
