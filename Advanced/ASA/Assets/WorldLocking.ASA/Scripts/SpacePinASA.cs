@@ -75,10 +75,6 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
         }
 
-        protected void DebugSpew()
-        {
-        }
-
         /// <summary>
         /// Ready to publish when we have a local peg and it is ready to publish.
         /// </summary>
@@ -112,7 +108,6 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
             localPeg = peg;
             SimpleConsole.AddLine(ConsoleLow, $"SLP: {name} - {localPeg.GlobalPose.position.ToString("F3")}");
-            lastCheckFrame = Time.frameCount;
         }
 
         /// <summary>
@@ -135,7 +130,6 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
             localPeg = await Publisher.CreateLocalPeg($"{SpacePinId}_peg", LockedPose);
             SimpleConsole.AddLine(ConsoleLow, $"CLP: {name} - {localPeg.GlobalPose.position.ToString("F3")}");
-            lastCheckFrame = Time.frameCount;
         }
     }
 }
