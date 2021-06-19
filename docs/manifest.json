@@ -1,6 +1,6 @@
 {
   "homepages": [],
-  "source_base_path": "E:/github/x",
+  "source_base_path": "C:/github/xx",
   "xrefmap": "xrefmap.yml",
   "files": [
     {
@@ -18,7 +18,7 @@
       "output": {
         ".html": {
           "relative_path": "Advanced/ASA/ASA.html",
-          "hash": "SdTvj9b6A80ZsuaMLk2T8A=="
+          "hash": "W9gVFBodiIM0uU1RtBdl3Q=="
         }
       },
       "is_incremental": false,
@@ -42,7 +42,7 @@
       "output": {
         ".html": {
           "relative_path": "Advanced/AlignSubScene/AlignSubScene.html",
-          "hash": "SKVEQmWbVBB9yqTjEE1mBg=="
+          "hash": "gURcXhu2am4AydP4gLo6FQ=="
         }
       },
       "is_incremental": false,
@@ -66,7 +66,7 @@
       "output": {
         ".html": {
           "relative_path": "Advanced/QRSpacePins/QRSpacePins.html",
-          "hash": "kq5bF2LC2tiPpEgu5DhJOg=="
+          "hash": "sKTA2C5YnfFxdEiQ5YsoGg=="
         }
       },
       "is_incremental": false,
@@ -624,7 +624,7 @@
       "output": {
         ".html": {
           "relative_path": "DocGen/SourceDoc/toc.html",
-          "hash": "FXJepDMIkyhhNLl43uavdQ=="
+          "hash": "CpoeAj1jYsT6Dl5DYBXupg=="
         }
       },
       "is_incremental": false,
@@ -768,19 +768,7 @@
       "output": {
         ".html": {
           "relative_path": "DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.ASA.SpacePinASA.html",
-          "hash": "Ep+MR8ett3AlapqsfBRijg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "DocGen/Temp/obj/api/Microsoft.MixedReality.WorldLocking.ASA.SpacePinASAManipulation.yml",
-      "output": {
-        ".html": {
-          "relative_path": "DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.ASA.SpacePinASAManipulation.html",
-          "hash": "3VKq6PZwbUbvy/bKvaiBhw=="
+          "hash": "a6fFSOjvIUibHg6Gkru3wQ=="
         }
       },
       "is_incremental": false,
@@ -828,7 +816,7 @@
       "output": {
         ".html": {
           "relative_path": "DocGen/Temp/api/Microsoft.MixedReality.WorldLocking.ASA.html",
-          "hash": "qo3OXEpN7h25BOcZ3uKGbA=="
+          "hash": "QjMidvuqe2oZX1XdfaDLDQ=="
         }
       },
       "is_incremental": false,
@@ -1100,11 +1088,11 @@
     {
       "status": {
         "can_incremental": false,
-        "details": "Disable incremental build by force rebuild option.",
+        "details": "Cannot build incrementally because last build info is missing.",
         "incrementalPhase": "build",
         "total_file_count": 0,
         "skipped_file_count": 0,
-        "full_build_reason_code": "ForceRebuild"
+        "full_build_reason_code": "NoAvailableBuildCache"
       },
       "processors": {
         "ConceptualDocumentProcessor": {
@@ -1116,7 +1104,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 31,
+          "total_file_count": 30,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {

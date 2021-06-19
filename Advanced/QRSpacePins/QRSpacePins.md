@@ -6,6 +6,8 @@ The Space Pins feature of World Locking Tools is combined with QR code scanning 
 
 ![](~/DocGen/Images/Screens/QRScanCabinet.jpg)
 
+See also the [accompanying video](https://youtu.be/OjmR2KfVUn8) for some visual clarification.
+
 ## Project source assets
 
 https://github.com/microsoft/MixedReality-WorldLockingTools-Samples/tree/master/Advanced/QRSpacePins
