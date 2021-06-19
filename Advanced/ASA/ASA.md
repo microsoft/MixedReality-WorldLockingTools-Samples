@@ -7,6 +7,8 @@ ASA + WLT
 
 World Locking Tools for Unity (WLT) provides a stable coordinate system based on local tracking. When combined with Azure Spatial Anchors (ASA), that stable coordinate system can be persisted across sessions, and shared across devices.
 
+See the [accompanying video](https://youtu.be/28lYjbQh8RA) for visual clarification.
+
 ## Project source assets
 
 https://github.com/microsoft/MixedReality-WorldLockingTools-Samples/tree/master/Advanced/ASA
