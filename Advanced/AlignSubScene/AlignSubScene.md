@@ -12,7 +12,7 @@ In its most general and powerful usage, World Locking Tools for Unity (WLT) is u
 
 There are situations in which it is preferable to pin a subset of the scene, represented by a subtree in the scene hierarchy. This subtree can be independently pinned, and will independently adjust to maintain optimal alignment at its space pins.
 
-The accompanying video tries to make the distinction between pinning the model's coordinate space at strategic points versus manipulating the model into a new position and orientation.
+The [accompanying video](https://youtu.be/S2i3JxuxFp0) tries to make the distinction between pinning the model's coordinate space at strategic points versus manipulating the model into a new position and orientation.
 
 ## Project source assets
 
