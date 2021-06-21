@@ -55,6 +55,9 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// </summary>
         public Dictionary<string, string> Properties => properties;
 
+        private readonly int ConsoleLow = 3;
+        private readonly int ConsoleHigh = 8;
+
         /// <summary>
         /// Populate the properties dictionary from the serialized list.
         /// </summary>
@@ -70,10 +73,6 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             {
                 properties[SpacePinBinder.SpacePinIdKey] = SpacePinId;
             }
-        }
-
-        protected void DebugSpew()
-        {
         }
 
         /// <summary>
@@ -97,11 +96,18 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// <param name="peg">The local peg to take.</param>
         public void SetLocalPeg(ILocalPeg peg)
         {
+            if (peg?.Name == localPeg?.Name)
+            {
+                SimpleConsole.AddLine(ConsoleHigh, $"Redundant SLP: {name} {peg.Name}");
+                return;
+            }
             if (localPeg != null)
             {
-                Publisher.ReleaseLocalPeg(peg);
+                SimpleConsole.AddLine(ConsoleHigh, $"SLP release {localPeg?.Name} take {peg?.Name}");
+                Publisher.ReleaseLocalPeg(localPeg);
             }
             localPeg = peg;
+            SimpleConsole.AddLine(ConsoleLow, $"SLP: {name} - {localPeg.GlobalPose.position.ToString("F3")}");
         }
 
         /// <summary>
@@ -114,14 +120,16 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         {
             if (Publisher == null)
             {
-                SimpleConsole.AddLine(8, $"Publisher hasn't been set on SpacePin={name}");
+                SimpleConsole.AddLine(ConsoleHigh, $"Publisher hasn't been set on SpacePin={name}");
                 return;
             }
             if (localPeg != null)
             {
+                SimpleConsole.AddLine(ConsoleHigh, $"Releasing existing peg {name}");
                 Publisher.ReleaseLocalPeg(localPeg);
             }
             localPeg = await Publisher.CreateLocalPeg($"{SpacePinId}_peg", LockedPose);
+            SimpleConsole.AddLine(ConsoleLow, $"CLP: {name} - {localPeg.GlobalPose.position.ToString("F3")}");
         }
     }
 }

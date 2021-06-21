@@ -70,7 +70,6 @@ namespace Microsoft.MixedReality.WorldLocking.Examples
         private void Update()
         {
             pinManipulator.Update();
-            DebugSpew();
         }
 
         /// <summary>
