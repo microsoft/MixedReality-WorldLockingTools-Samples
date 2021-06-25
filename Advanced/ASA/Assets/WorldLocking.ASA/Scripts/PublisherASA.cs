@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-#if UNITY_2020_3_OR_NEWER
-
 //#define WLT_EXTRA_LOGGING
 
 using System;
@@ -28,8 +26,6 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 {
     using AnchorProperties = Dictionary<string, string>;
     using CloudAnchorId = System.String;
-    using Readiness = IPublisher.Readiness;
-    using ReadinessStatus = IPublisher.ReadinessStatus;
 
     /// <summary>
     /// Implementation of IPublisher using ASA to push anchors to and retrieve them from the cloud.
@@ -186,7 +182,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// <summary>
         /// Current readiness status.
         /// </summary>
-        private Readiness readiness = Readiness.NotSetup;
+        private PublisherReadiness readiness = PublisherReadiness.NotSetup;
 
         /// <summary>
         /// Constants for logging to the SimpleConsole (higher is more likely to get posted).
@@ -908,52 +904,52 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         {
             if (asaManager == null)
             {
-                if (readiness != IPublisher.Readiness.NoManager)
+                if (readiness != PublisherReadiness.NoManager)
                 {
-                    readiness = IPublisher.Readiness.NoManager;
+                    readiness = PublisherReadiness.NoManager;
                     SimpleConsole.AddLine(ConsoleHigh, "Not ready: No ASA Manager.");
                 }
                 return WrapReadiness();
             }
             if (!asaManager.IsSessionStarted)
             {
-                if (readiness != IPublisher.Readiness.Starting)
+                if (readiness != PublisherReadiness.Starting)
                 {
-                    readiness = IPublisher.Readiness.Starting;
+                    readiness = PublisherReadiness.Starting;
                     SimpleConsole.AddLine(ConsoleHigh, "Not ready: Not started.");
                 }
                 return WrapReadiness();
             }
             if (IsBusy)
             {
-                if (readiness != Readiness.Busy)
+                if (readiness != PublisherReadiness.Busy)
                 {
-                    readiness = Readiness.Busy;
+                    readiness = PublisherReadiness.Busy;
                     SimpleConsole.AddLine(ConsoleHigh, $"Not ready: Busy on task [{busy}].");
                 }
                 return WrapReadiness();
             }
             if (CoarseRelocPublishEnabled && !IsReadyForCreate(asaManager))
             {
-                if (readiness != IPublisher.Readiness.NotReadyToCreate)
+                if (readiness != PublisherReadiness.NotReadyToCreate)
                 {
-                    readiness = IPublisher.Readiness.NotReadyToCreate;
+                    readiness = PublisherReadiness.NotReadyToCreate;
                     SimpleConsole.AddLine(ConsoleHigh, "Not ready: Not ready for create.");
                 }
                 return WrapReadiness();
             }
             if (!LocationReady(readiness))
             {
-                if (readiness != IPublisher.Readiness.NotReadyToLocate)
+                if (readiness != PublisherReadiness.NotReadyToLocate)
                 {
-                    readiness = IPublisher.Readiness.NotReadyToLocate;
+                    readiness = PublisherReadiness.NotReadyToLocate;
                     SimpleConsole.AddLine(ConsoleHigh, "Not ready: Location provider not ready.");
                 }
                 return WrapReadiness();
             }
-            if (readiness != IPublisher.Readiness.Ready)
+            if (readiness != PublisherReadiness.Ready)
             {
-                readiness = IPublisher.Readiness.Ready;
+                readiness = PublisherReadiness.Ready;
                 SimpleConsole.AddLine(ConsoleHigh, "Ready.");
             }
 
@@ -1259,7 +1255,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// </summary>
         /// <param name="status">Current readiness status.</param>
         /// <returns>True if coarse relocation is disabled, or system is ready to search and create.</returns>
-        private bool LocationReady(IPublisher.Readiness status)
+        private bool LocationReady(PublisherReadiness status)
         {
             // If locationProvider is null, we aren't using location provider, so don't need to wait on it. I.e. ready.
             if (locationProvider == null)
@@ -1268,7 +1264,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
             if (CoarseRelocUseGPS && locationProvider.GeoLocationStatus == GeoLocationStatusResult.Available)
             {
-                if (readiness == IPublisher.Readiness.NotReadyToLocate)
+                if (readiness == PublisherReadiness.NotReadyToLocate)
                 {
                     SimpleConsole.AddLine(ConsoleHigh, $"Ready: GeoLocationStatus={locationProvider.GeoLocationStatus}");
                 }
@@ -1276,7 +1272,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
             if (CoarseRelocUseWifi && locationProvider.WifiStatus == WifiStatusResult.Available)
             {
-                if (readiness == IPublisher.Readiness.NotReadyToLocate)
+                if (readiness == PublisherReadiness.NotReadyToLocate)
                 {
                     SimpleConsole.AddLine(ConsoleHigh, $"Ready: WifiStatus={locationProvider.WifiStatus}");
                 }
@@ -1284,13 +1280,13 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             }
             if (CoarseRelocUseBluetooth && locationProvider.BluetoothStatus == BluetoothStatusResult.Available)
             {
-                if (readiness == IPublisher.Readiness.NotReadyToLocate)
+                if (readiness == PublisherReadiness.NotReadyToLocate)
                 {
                     SimpleConsole.AddLine(ConsoleHigh, $"Ready: BluetoothStatus={locationProvider.BluetoothStatus}");
                 }
                 return true;
             }
-            if (readiness != IPublisher.Readiness.NotReadyToLocate)
+            if (readiness != PublisherReadiness.NotReadyToLocate)
             {
                 SimpleConsole.AddLine(ConsoleHigh, $"Not Ready: GeoLocationStatus={locationProvider.GeoLocationStatus} {CoarseRelocUseGPS}");
                 SimpleConsole.AddLine(ConsoleHigh, $"Not Ready: WifiStatus={locationProvider.WifiStatus} {CoarseRelocUseWifi}");
@@ -1424,4 +1420,3 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
     }
 }
 
-#endif // UNITY_2020_3_OR_NEWER
