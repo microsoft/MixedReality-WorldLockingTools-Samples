@@ -1,14 +1,25 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-#if UNITY_2020_3_OR_NEWER
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Microsoft.MixedReality.WorldLocking.ASA
 {
+    /// <summary>
+    /// A data blob with enough information to be saved to the cloud and 
+    /// reconstructed from the cloud in a later session or on a different device.
+    /// </summary>
+    /// <remarks>
+    /// In a better world, this construct would be hidden in the internals of the
+    /// IPublisher interface. Unfortunately, the IPublisher doesn't know when the best
+    /// time to create a local peg is, and so has to leave that to the application.
+    /// See <see cref="IPublisher.CreateLocalPeg(string, Pose)"/>.
+    /// In general, a local peg will be of better quality if it is created when
+    /// the tracker is near the local peg's location, and the area has been adequately
+    /// scanned.
+    /// </remarks>
     public interface ILocalPeg
     {
         /// <summary>
@@ -43,5 +54,3 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
     };
 
 }
-
-#endif // UNITY_2020_3_OR_NEWER

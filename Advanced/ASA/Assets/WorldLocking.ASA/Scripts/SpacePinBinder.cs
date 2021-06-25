@@ -2,8 +2,6 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-#if UNITY_2020_3_OR_NEWER
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -90,11 +88,11 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// <inheritdoc/>
         public bool IsReady
         {
-            get { return PublisherStatus.readiness == IPublisher.Readiness.Ready; }
+            get { return PublisherStatus.readiness == PublisherReadiness.Ready; }
         }
 
         /// <inheritdoc/>
-        public IPublisher.ReadinessStatus PublisherStatus { get { return publisher != null ? publisher.Status : new IPublisher.ReadinessStatus(); } }
+        public ReadinessStatus PublisherStatus { get { return publisher != null ? publisher.Status : new ReadinessStatus(); } }
 
         #region Create and maintain bindings between space pins and cloud anchors
         /// <inheritdoc/>
@@ -515,4 +513,3 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
 }
 
-#endif // UNITY_2020_3_OR_NEWER
