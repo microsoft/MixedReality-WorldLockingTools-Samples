@@ -2,11 +2,11 @@
     "name": "Microsoft.MixedReality.WorldLocking.ASA",
     "rootNamespace": "",
     "references": [
-        "GUID:33d8827e6b886c24980a9ae3153d16c9",
-        "GUID:19d8fc307d9d1c346a776d7cb7fd0ca9",
-        "GUID:94cf667e337f6534fb9b9a24c9cfbfb4",
-        "GUID:9a6ddf5d388cc2b498e8a9d44bd289f0",
-        "GUID:cea456fb85d819645899d08b84466140"
+        "AzureSpatialAnchors.SDK.Core.Runtime",
+        "Microsoft.MixedReality.WorldLocking.Core",
+        "Microsoft.MixedReality.WorldLocking.Tools",
+        "AzureSpatialAnchors.SDK.Windows.Runtime",
+        "AzureSpatialAnchors.SDK.Android.Runtime"
     ],
     "includePlatforms": [
         "Android",

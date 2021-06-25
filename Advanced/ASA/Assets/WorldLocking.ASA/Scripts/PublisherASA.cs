@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+#if UNITY_2020_3_OR_NEWER
+
 //#define WLT_EXTRA_LOGGING
 
 using System;
@@ -232,9 +234,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             {
                 Debug.Assert(localPeg != null, "Missing localPeg on AnchorRecord.");
                 Debug.Assert(cloudAnchor != null, "Missing cloudAnchor on AnchorRecord.");
-                LocalPegAndProperties pegAndProps = new LocalPegAndProperties();
-                pegAndProps.localPeg = localPeg;
-                pegAndProps.properties = cloudAnchor.AppProperties;
+                LocalPegAndProperties pegAndProps = new LocalPegAndProperties(localPeg, cloudAnchor.AppProperties);
 
                 return pegAndProps;
             }
@@ -373,7 +373,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             CheckReadiness();
             SimpleConsole.AddLine(ConsoleHigh, $"Publisher setup complete S={asaManager.IsSessionStarted} Readiness={readiness}");
 #else // WLT_ASA_INCLUDED
-            SimpleConsole.AddLine(ConsoleHigh, $"Trying to start ASA Publisher with no Azure Spatial Anchors installed!");
+            SimpleConsole.AddLine(11, $"Trying to start ASA Publisher with no Azure Spatial Anchors installed!");
 
             await Task.CompletedTask;
 
@@ -1423,3 +1423,5 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 #endif // WLT_ASA_INCLUDED
     }
 }
+
+#endif // UNITY_2020_3_OR_NEWER
