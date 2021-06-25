@@ -1,5 +1,8 @@
+
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
+
+#if UNITY_2020_3_OR_NEWER
 
 using System;
 using System.Collections;
@@ -449,9 +452,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 return null;
             }
 
-            LocalPegAndProperties ret = new LocalPegAndProperties();
-            ret.localPeg = spacePin.LocalPeg;
-            ret.properties = spacePin.Properties;
+            LocalPegAndProperties ret = new LocalPegAndProperties(spacePin.LocalPeg, spacePin.Properties);
 
             return ret;
         }
@@ -513,3 +514,5 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
     }
 
 }
+
+#endif // UNITY_2020_3_OR_NEWER

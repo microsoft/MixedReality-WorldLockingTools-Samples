@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+#if UNITY_2020_3_OR_NEWER
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -105,7 +107,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// This can be called anytime, regardless of the ReadinessStatus.
         /// See <see cref="ILocalPeg"/> for more details.
         /// </remarks>
-        public Task<ILocalPeg> CreateLocalPeg(string id, Pose lockedPose);
+        Task<ILocalPeg> CreateLocalPeg(string id, Pose lockedPose);
 
         /// <summary>
         /// Free up the resources from an ILocalPeg.
@@ -114,21 +116,21 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// <remarks>
         /// Param "peg" will be invalid after this call.
         /// </remarks>
-        public void ReleaseLocalPeg(ILocalPeg peg);
+        void ReleaseLocalPeg(ILocalPeg peg);
 
         /// <summary>
         /// Create a cloud anchor corresponding to the input local peg and its properties.
         /// </summary>
         /// <param name="pegAndProps">Peg and properties to be captured to the cloud.</param>
         /// <returns>Awaitable identifier for the cloud anchor.</returns>
-        public Task<CloudAnchorId> Create(LocalPegAndProperties pegAndProps);
+        Task<CloudAnchorId> Create(LocalPegAndProperties pegAndProps);
 
         /// <summary>
         /// Download a cloud anchor with the given identifier.
         /// </summary>
         /// <param name="cloudAnchorId">Identifier for the desired cloud anchor.</param>
         /// <returns>Awaitable local peg and its properties that were used to create the cloud anchor are reconstructed and returned.</returns>
-        public Task<LocalPegAndProperties> Read(CloudAnchorId cloudAnchorId);
+        Task<LocalPegAndProperties> Read(CloudAnchorId cloudAnchorId);
 
         /// <summary>
         /// Delete a cloud anchor, and create a new one based on input local peg and its properties.
@@ -136,28 +138,30 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// <param name="cloudAnchorId">Cloud anchor to delete.</param>
         /// <param name="pegAndProps">Local anchor and properties to create new cloud anchor from.</param>
         /// <returns>Awaitable identifier for the new cloud anchor.</returns>
-        public Task<CloudAnchorId> Modify(CloudAnchorId cloudAnchorId, LocalPegAndProperties pegAndProps);
+        Task<CloudAnchorId> Modify(CloudAnchorId cloudAnchorId, LocalPegAndProperties pegAndProps);
 
         /// <summary>
         /// Search the area around the device for cloud anchors.
         /// </summary>
         /// <param name="radiusFromDevice">Distance (roughly) from device to search.</param>
         /// <returns>Awaitable dictionary of cloud anchor ids and corresponding local peg and properties.</returns>
-        public Task<Dictionary<CloudAnchorId, LocalPegAndProperties>> Find(float radiusFromDevice);
+        Task<Dictionary<CloudAnchorId, LocalPegAndProperties>> Find(float radiusFromDevice);
 
         /// <summary>
         /// Search the area around the device, and destroy any anchors found.
         /// </summary>
         /// <param name="radius">Distance (roughly) from device to search.</param>
         /// <returns>Awaitable task.</returns>
-        public Task PurgeArea(float radius);
+        Task PurgeArea(float radius);
 
         /// <summary>
         /// Delete the indicated cloud anchor from the cloud database.
         /// </summary>
         /// <param name="cloudAnchorId">Cloud anchor to destroy.</param>
         /// <returns>Awaitable task.</returns>
-        public Task Delete(CloudAnchorId cloudAnchorId);
+        Task Delete(CloudAnchorId cloudAnchorId);
     };
 
 }
+
+#endif // UNITY_2020_3_OR_NEWER
