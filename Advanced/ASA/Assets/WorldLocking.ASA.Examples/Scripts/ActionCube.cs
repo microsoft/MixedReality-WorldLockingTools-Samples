@@ -7,8 +7,11 @@ using System.Threading.Tasks;
 
 using UnityEngine;
 
-namespace WorldLocking.XampleApp
+namespace Microsoft.MixedReality.WorldLocking.ASA.Examples
 {
+    /// <summary>
+    /// Simple object for interaction. Not to be taken seriously.
+    /// </summary>
     public class ActionCube : MonoBehaviour
     {
         private List<Material> materials = new List<Material>();
