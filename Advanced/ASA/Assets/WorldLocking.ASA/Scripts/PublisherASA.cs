@@ -468,7 +468,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
                     record.cloudAnchorId = record.cloudAnchor.Identifier;
 
-                    AddRecord(record.cloudAnchorId, record);
+                    await AddRecord(record.cloudAnchorId, record);
 
                     SimpleConsole.AddLine(ConsoleMid, $"Created {pegAndProps.localPeg.Name} - {record.cloudAnchorId} at {record.localPeg.GlobalPose.position.ToString("F3")}");
 
@@ -513,7 +513,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                             ReleaseBusy();
                             return null;
                         }
-                        AddRecord(record.cloudAnchorId, record);
+                        await AddRecord(record.cloudAnchorId, record);
                     }
                     AnchorRecord.DebugLog(record, "Read: Got record");
 
@@ -522,6 +522,34 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
                     var ret = record.GetPegWithProperties();
                     return ret;
+                }
+                catch (Exception e)
+                {
+                    SimpleConsole.AddLine(ConsoleHigh, $"Read exception: {e.Message}");
+                    throw e;
+                }
+                finally
+                {
+                    ReleaseBusy();
+                }
+            }
+            return null;
+#else // WLT_ASA_INCLUDED
+            await Task.CompletedTask;
+            throw new NotSupportedException("Trying to use PublisherASA without Azure Spatial Anchors installed.");
+#endif // WLT_ASA_INCLUDED
+        }
+
+        /// <inheritdocs />
+        public async Task<Dictionary<CloudAnchorId, LocalPegAndProperties>> Read(IReadOnlyCollection<CloudAnchorId> cloudAnchorIds)
+        {
+#if WLT_ASA_INCLUDED
+            if (AcquireBusy("Read"))
+            {
+                try
+                {
+                    var found = await DownloadList(cloudAnchorIds);
+                    return found;
                 }
                 catch (Exception e)
                 {
@@ -665,6 +693,13 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         private async Task<AnchorRecord> DownloadRecord(CloudAnchorId cloudAnchorId)
         {
             Debug.Log($"Criteria.Identifiers to [{cloudAnchorId}]");
+            var cachedRecord = GetRecord(cloudAnchorId);
+            if (cachedRecord != null)
+            {
+                SimpleConsole.AddLine(ConsoleLow, $"Found existing record for {cloudAnchorId}");
+                return cachedRecord;
+            }
+
             anchorLocateCriteria.NearAnchor = new NearAnchorCriteria();
             anchorLocateCriteria.Identifiers = new CloudAnchorId[] { cloudAnchorId };
 
@@ -734,9 +769,60 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
             Dictionary<CloudAnchorId, LocalPegAndProperties> found = new Dictionary<CloudAnchorId, LocalPegAndProperties>();
             foreach (var record in locatedRecords)
             {
-                AddRecord(record.cloudAnchorId, record);
+                await AddRecord(record.cloudAnchorId, record);
                 var obj = record.GetPegWithProperties();
                 found[record.cloudAnchorId] = obj;
+            }
+
+            return found;
+        }
+
+        /// <summary>
+        /// Retrieve a list of cloud anchors by id.
+        /// </summary>
+        /// <param name="cloudAnchorIds">List of ids to download.</param>
+        /// <returns>Awaitable dictionary of local pegs with properties by cloud anchor id</returns>
+        /// <remarks>
+        /// If any cloud anchor ids have already been downloaded, the downloaded record will be updated and returned (not downloaded again).
+        /// </remarks>
+        private async Task<Dictionary<CloudAnchorId, LocalPegAndProperties>> DownloadList(IReadOnlyCollection<CloudAnchorId> cloudAnchorIds)
+        {
+            List<CloudAnchorId> idsToDownload = new List<CloudAnchorId>();
+            Dictionary<CloudAnchorId, LocalPegAndProperties> found = new Dictionary<CloudAnchorId, LocalPegAndProperties>();
+            foreach (CloudAnchorId id in cloudAnchorIds)
+            {
+                var record = GetRecord(id);
+                if (record != null)
+                {
+                    SimpleConsole.AddLine(ConsoleLow, $"Found id={id} already loaded.");
+                    var obj = record.GetPegWithProperties();
+                    found[record.cloudAnchorId] = obj;
+                }
+                else
+                {
+                    idsToDownload.Add(id);
+                }
+            }
+
+            if (idsToDownload.Count > 0)
+            {
+                SimpleConsole.AddLine(ConsoleLow, $"Found {found.Count} cached, seeking {idsToDownload.Count} from cloud");
+                List<AnchorRecord> locatedRecords = await DownloadRecordList(idsToDownload);
+
+                if (locatedRecords != null)
+                {
+                    SimpleConsole.AddLine(ConsoleMid, $"Found {locatedRecords.Count} records.");
+                    foreach (var record in locatedRecords)
+                    {
+                        await AddRecord(record.cloudAnchorId, record);
+                        var obj = record.GetPegWithProperties();
+                        found[record.cloudAnchorId] = obj;
+                    }
+                }
+                else
+                {
+                    SimpleConsole.AddLine(ConsoleHigh, $"DownloadRecordList returned null");
+                }
             }
 
             return found;
@@ -826,14 +912,94 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 }
             }
             watcher.Stop();
-            // mafinc - this wait obsolete with wait in InternalCreateLocalPeg?
-            if (locatedRecords.Count > 0)
+            return locatedRecords;
+        }
+
+        /// <summary>
+        /// Invoke a search for cloud anchors by id, and process them as they come in.
+        /// </summary>
+        /// <param name="cloudAnchorIds">List of cloud anchor ids to try to download.</param>
+        /// <returns>Awaitable list of records, one for each cloud anchor found.</returns>
+        /// <remarks>
+        /// See notes on SearchForRecords regarding timers. Note that in this function, since we know
+        /// how many ids we are looking for, we can terminate when we have all of them, and not have
+        /// to wait in case more come in later.
+        /// </remarks>
+        private async Task<List<AnchorRecord>> DownloadRecordList(IReadOnlyCollection<CloudAnchorId> cloudAnchorIds)
+        {
+            int MaxRecordCount = 35;
+            if (cloudAnchorIds.Count > MaxRecordCount)
             {
-                int anchorWaitMS = 100;
-                SimpleConsole.AddLine(ConsoleMid, $"Waiting {anchorWaitMS}ms from frame={Time.frameCount} to give new anchors time to fix.");
-                await Task.Delay(anchorWaitMS);
-                SimpleConsole.AddLine(ConsoleMid, $"Finished waiting, frame={Time.frameCount}");
+                throw new ArgumentException($"Too many records for a single search.");
             }
+            SimpleConsole.AddLine(ConsoleMid, $"Criteria to search for {cloudAnchorIds.Count} ids");
+            anchorLocateCriteria.NearAnchor = new NearAnchorCriteria();
+
+            anchorLocateCriteria.Identifiers = ExtractIdsForCriteria(cloudAnchorIds);
+
+            SimpleConsole.AddLine(ConsoleMid, $"Crit id: len={anchorLocateCriteria.Identifiers.Length} m={(int)anchorLocateCriteria.RequestedCategories} cache={!anchorLocateCriteria.BypassCache}");
+
+            var watcher = asaManager.Session.CreateWatcher(anchorLocateCriteria);
+
+            Debug.Log($"Got watcher, start waiting");
+
+            double startTime = Time.timeAsDouble;
+            List<AnchorRecord> locatedRecords = new List<AnchorRecord>();
+            bool haveAnchors = false;
+            bool waiting = true;
+            while (waiting)
+            {
+                // If any records are found, then we give up waiting for more after waitForMoreAnchorsTimeoutMS.
+                int DownloadCheckDelayMS = 100;
+                await Task.Delay(DownloadCheckDelayMS);
+                List<AnchorLocatedEventArgs> locatedCopy = null;
+                lock (locatedAnchors)
+                {
+                    locatedCopy = new List<AnchorLocatedEventArgs>(locatedAnchors);
+                    locatedAnchors.Clear();
+                }
+                if (locatedCopy != null && locatedCopy.Count > 0)
+                {
+                    Debug.Log($"Got {locatedCopy.Count} located anchors");
+                    foreach (var located in locatedCopy)
+                    {
+                        SimpleConsole.AddLine(ConsoleMid, $"Found located anchor {located.Identifier}, status={located.Status}");
+                        if (located.Status == LocateAnchorStatus.Located)
+                        {
+                            AnchorRecord record = new AnchorRecord();
+                            record.cloudAnchor = located.Anchor;
+                            record.cloudAnchorId = located.Identifier;
+                            record = await RecordFromCloud(record);
+                            locatedRecords.Add(record);
+                        }
+                    }
+                    locatedCopy.Clear();
+                    haveAnchors = true;
+                }
+                else
+                {
+                    // We have some anchors, but didn't get any more while waiting, so give up and go with what we have.
+                    waiting = !haveAnchors;
+                }
+
+                double timeSearching = Time.timeAsDouble - startTime;
+                if (locatedRecords.Count == cloudAnchorIds.Count)
+                {
+                    // We've found all the ids we are looking for.
+                    waiting = false;
+                }
+                else if (haveAnchors)
+                {
+                    int waitForMoreAnchorsTimeoutMS = (int)(MaxWaitForMoreAnchorsSeconds * 1000.0f + 0.5f);
+                    await Task.Delay(waitForMoreAnchorsTimeoutMS);
+                }
+                else if (timeSearching > MaxSearchSeconds)
+                {
+                    SimpleConsole.AddLine(ConsoleHigh, $"Searched {timeSearching}s,found no anchors, giving up.");
+                    waiting = false;
+                }
+            }
+            watcher.Stop();
             return locatedRecords;
         }
 
@@ -875,6 +1041,28 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         #endregion // Internal implementations
 
         #region Internal helpers
+
+        /// <summary>
+        /// Convert the collection of ids to an array.
+        /// </summary>
+        /// <param name="cloudAnchorIds">Source collection of ids</param>
+        /// <returns>Same strings as in cloudAnchorIds, but in array form.</returns>
+        /// <remarks>
+        /// This just seemed too trivial to bring linq in for.
+        /// </remarks>
+        private CloudAnchorId[] ExtractIdsForCriteria(IReadOnlyCollection<CloudAnchorId> cloudAnchorIds)
+        {
+            CloudAnchorId[] anchorIdArray = new CloudAnchorId[cloudAnchorIds.Count];
+            int idx = 0;
+            foreach (var id in cloudAnchorIds)
+            {
+                SimpleConsole.AddLine(ConsoleMid, $"Copy {id} to {anchorIdArray.Length}");
+                anchorIdArray[idx++] = id;
+            }
+
+            return anchorIdArray;
+        }
+
 
         /// <summary>
         /// Package the current readiness with the current progress to creates (if applicable).
@@ -1072,7 +1260,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         /// <param name="id">Cloud anchor id.</param>
         /// <param name="record">Record to put into internal database.</param>
         /// <returns>True if id was unknown and record added, false if id was known and record updated.</returns>
-        private bool AddRecord(CloudAnchorId id, AnchorRecord record)
+        private async Task<bool> AddRecord(CloudAnchorId id, AnchorRecord record)
         {
             Debug.Assert(id == record.cloudAnchorId, $"Adding record under inconsistent id {id} vs {record.cloudAnchorId}");
             int idx = records.FindIndex(x => x.cloudAnchorId == record.cloudAnchorId);
@@ -1083,7 +1271,8 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
                 return true;
             }
             SimpleConsole.AddLine(ConsoleLow, $"Updating record ah={record.localPeg.Name} ca={id} ");
-            ReleaseLocalPeg(records[idx].localPeg);
+            ReleaseLocalPeg(record.localPeg);
+            record = await RecordFromCloud(record);
             records[idx] = record;
             return false;
         }
@@ -1244,7 +1433,6 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
             // Allow a set of known BLE beacons
             provider.Sensors.BluetoothEnabled = (crBeaconUuids.Count > 0);
-            // mafinc - todo, add api for adding list of blutooth beacon uuids.
             provider.Sensors.KnownBeaconProximityUuids = crBeaconUuids.ToArray();
 
             return provider;

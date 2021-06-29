@@ -253,22 +253,35 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
 
             bool allSuccessful = true;
             List<SpacePinPegAndProps> readObjects = new List<SpacePinPegAndProps>();
+            List<CloudAnchorId> cloudAnchorList = new List<CloudAnchorId>();
+            Dictionary<CloudAnchorId, SpacePinASA> spacePinByCloudId = new Dictionary<CloudAnchorId, SpacePinASA>();
             foreach (var spacePin in spacePins)
             {
                 int bindingIdx = FindBindingBySpacePinId(spacePin.SpacePinId);
                 if (bindingIdx >= 0)
                 {
                     string cloudAnchorId = bindings[bindingIdx].cloudAnchorId;
-                    var obj = await publisher.Read(cloudAnchorId);
-                    if (obj == null)
+                    cloudAnchorList.Add(cloudAnchorId);
+                    spacePinByCloudId[cloudAnchorId] = spacePin;
+                }
+            }
+            if (cloudAnchorList.Count > 0)
+            {
+                var found = await publisher.Read(cloudAnchorList);
+                if (found != null)
+                {
+                    foreach (var keyVal in found)
                     {
-                        allSuccessful = false;
+                        var cloudAnchorId = keyVal.Key;
+                        var spacePin = spacePinByCloudId[cloudAnchorId];
+                        var pegAndProps = keyVal.Value;
+                        Debug.Assert(pegAndProps.localPeg != null);
+                        readObjects.Add(new SpacePinPegAndProps() { spacePin = spacePin, pegAndProps = pegAndProps });
                     }
-                    else
-                    {
-                        Debug.Assert(obj.localPeg != null);
-                        readObjects.Add(new SpacePinPegAndProps() { spacePin = spacePin, pegAndProps = obj });
-                    }
+                }
+                else
+                {
+                    SimpleConsole.AddLine(ConsoleHigh, $"publisher Read returned null looking for {cloudAnchorList.Count} ids");
                 }
             }
             var wltMgr = WorldLockingManager.GetInstance();
