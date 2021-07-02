@@ -221,6 +221,7 @@ namespace Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
         private async void Start()
         {
             isSupported = QRCodeWatcher.IsSupported();
+            SimpleConsole.AddLine(log, $"QRCodeWatcher.IsSupported={isSupported}");
             bool gotPermission = await GetPermissions();
             if (gotPermission)
             {
@@ -246,6 +247,7 @@ namespace Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
                 return false;
             }
 #else // WINDOWS_UWP
+            SimpleConsole.AddLine(log, $"Not setup for WINDOWS_UWP");
             await Task.CompletedTask;
             return false;
 #endif // WINDOWS_UWP
