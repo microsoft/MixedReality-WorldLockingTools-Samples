@@ -147,6 +147,13 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Solvers
             {
                 return false;
             }
+            
+            if (!controller.IsPositionAvailable)
+            {
+                // A fully populated hand controller will have position 
+                // information available.
+                return false;
+            }
 
             bool palmFacingThresholdMet = false;
 
@@ -365,8 +372,8 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Solvers
                     break;
                 case SolverSafeZone.UlnarSide:
                 default:
-                    referenceJoint1 = TrackedHandJoint.IndexKnuckle;
-                    referenceJoint2 = TrackedHandJoint.ThumbProximalJoint;
+                    referenceJoint1 = TrackedHandJoint.PinkyKnuckle;
+                    referenceJoint2 = TrackedHandJoint.Wrist;
                     break;
             }
 
