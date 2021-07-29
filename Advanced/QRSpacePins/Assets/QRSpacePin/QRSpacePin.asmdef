@@ -1,0 +1,24 @@
+{
+    "name": "QRSpacePin",
+    "rootNamespace": "",
+    "references": [
+        "GUID:19d8fc307d9d1c346a776d7cb7fd0ca9",
+        "GUID:94cf667e337f6534fb9b9a24c9cfbfb4",
+        "GUID:3b76ab8242cc35d479edf0a949d56d59"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.microsoft.mixedreality.openxr",
+            "expression": "",
+            "define": "WLT_MICROSOFT_OPENXR_PRESENT"
+        }
+    ],
+    "noEngineReferences": false
+}
