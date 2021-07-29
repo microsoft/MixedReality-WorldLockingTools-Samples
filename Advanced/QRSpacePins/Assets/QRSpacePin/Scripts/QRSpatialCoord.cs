@@ -1,6 +1,12 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+#if UNITY_WSA && !UNITY_2020_1_OR_NEWER
+#define WLT_LEGACY_WSA
+#elif WLT_MICROSOFT_OPENXR_PRESENT
+#define WLT_SPATIAL_GRAPH_NODE
+#endif // Legacy WSA
+
 using UnityEngine;
 
 using Microsoft.MixedReality.WorldLocking.Tools;
@@ -11,9 +17,13 @@ using Microsoft.MixedReality.WorldLocking.Tools;
 /// it will attempt to bind to the latter (Microsoft.Windows) unless the former is explicitly
 /// indicated (global::Windows).
 
-#if WINDOWS_UWP
+#if WLT_LEGACY_WSA
 using global::Windows.Perception.Spatial;
-#endif // WINDOWS_UWP
+#endif // WLT_LEGACY_WSA
+
+#if WLT_MICROSOFT_OPENXR_PRESENT
+using Microsoft.MixedReality.OpenXR;
+#endif // WLT_MICROSOFT_OPENXR_PRESENT
 
 namespace Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
 {
@@ -26,7 +36,7 @@ namespace Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
     public class QRSpatialCoord
     {
 
-#if WINDOWS_UWP
+#if WLT_LEGACY_WSA
         /// <summary>
         /// Coordinate system of the QR Code.
         /// </summary>
@@ -36,7 +46,11 @@ namespace Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
         /// Root coordinate system, aka Spongy space.
         /// </summary>
         private SpatialCoordinateSystem rootCoordinateSystem = null;
-#endif // WINDOWS_UWP
+#endif // WLT_LEGACY_WSA
+
+#if WLT_SPATIAL_GRAPH_NODE
+        private SpatialGraphNode spatialGraphNode;
+#endif // WLT_SPATIAL_GRAPH_NODE
 
         /// <summary>
         /// Spatial node id for the QR code.
@@ -54,9 +68,12 @@ namespace Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
                 if (spatialNodeId != value)
                 {
                     spatialNodeId = value;
-#if WINDOWS_UWP
+#if WLT_LEGACY_WSA
                     coordinateSystem = null;
-#endif // WINDOWS_UWP
+#endif // WLT_LEGACY_WSA
+#if WLT_SPATIAL_GRAPH_NODE
+                    spatialGraphNode = null;
+#endif // WLT_SPATIAL_GRAPH_NODE
                 }
             }
         }
@@ -93,25 +110,57 @@ namespace Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
             SimpleConsole.AddLine(trace, "ComputePose");
             if (CheckActive())
             {
-                System.Numerics.Matrix4x4? newMatrix = GetNewMatrix();
-                if (newMatrix != null)
+#if WLT_LEGACY_WSA
+                if (UpdateCurrentPoseWSA())
                 {
-                    CurrentPose = AdjustNewMatrix(newMatrix.Value);
                     pose = CurrentPose;
                     return true;
                 }
+#endif // WLT_LEGACY_WSA
+#if WLT_SPATIAL_GRAPH_NODE
+                if (UpdateCurrentPoseGraphNode())
+                {
+                    pose = CurrentPose;
+                    return true;
+                }
+#endif // WLT_SPATIAL_GRAPH_NODE
             }
             pose = CurrentPose;
             return false;
         }
 
+#if WLT_LEGACY_WSA
+        private bool UpdateCurrentPoseWSA()
+        {
+            System.Numerics.Matrix4x4? newMatrix = GetNewMatrix();
+            if (newMatrix != null)
+            {
+                CurrentPose = AdjustNewMatrix(newMatrix.Value);
+                return true;
+            }
+            return false;
+        }
+#endif // WLT_LEGACY_WSA
+
+#if WLT_SPATIAL_GRAPH_NODE
+        private bool UpdateCurrentPoseGraphNode()
+        {
+            if (spatialGraphNode.TryLocate(FrameTime.OnUpdate, out Pose pose))
+            {
+                CurrentPose = pose;
+                return true;
+            }
+            return false;
+        }
+#endif // WLT_SPATIAL_GRAPH_NODE
+
+#if WLT_LEGACY_WSA
         /// <summary>
         /// Attempt to retrieve the current transform matrix.
         /// </summary>
         /// <returns>Non-null matrix on success.</returns>
         private System.Numerics.Matrix4x4? GetNewMatrix()
         {
-#if WINDOWS_UWP
             Debug.Assert(rootCoordinateSystem != null);
 
             // Get the relative transform from the unity origin
@@ -123,10 +172,6 @@ namespace Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
                 SimpleConsole.AddLine(log, "Coord: Got null newMatrix");
             }
             return newMatrix;
-
-#else // WINDOWS_UWP
-            return null;
-#endif // WINDOWS_UWP
         }
 
         /// <summary>
@@ -162,6 +207,7 @@ namespace Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
 
             return pose;
         }
+#endif // WLT_LEGACY_WSA
 
         /// <summary>
         /// Check that WorldManager is active and internal setup is cached.
@@ -169,12 +215,14 @@ namespace Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
         /// <returns></returns>
         private bool CheckActive()
         {
-#if WINDOWS_UWP
+#if WLT_LEGACY_WSA
             if (UnityEngine.XR.WSA.WorldManager.state != UnityEngine.XR.WSA.PositionalLocatorState.Active)
             {
                 return false;
             }
+#endif // !WLT_LEGACY_WSA
 
+#if WINDOWS_UWP
             if (!CheckCoordinateSystem())
             {
                 return false;
@@ -191,11 +239,12 @@ namespace Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
         /// <returns></returns>
         private bool CheckCoordinateSystem()
         {
-#if WINDOWS_UWP
+#if WLT_LEGACY_WSA
             if (coordinateSystem == null)
             {
                 SimpleConsole.AddLine(trace, $"Creating coord for {spatialNodeId}");
                 coordinateSystem = global::Windows.Perception.Spatial.Preview.SpatialGraphInteropPreview.CreateCoordinateSystemForNode(SpatialNodeId);
+                SimpleConsole.AddLine(trace, $"{spatialNodeId} create coord {(coordinateSystem == null ? "FAILED" : "success")}");
             }
 
             if (rootCoordinateSystem == null)
@@ -203,10 +252,16 @@ namespace Microsoft.MixedReality.WorldLocking.Samples.Advanced.QRSpacePins
                 rootCoordinateSystem = System.Runtime.InteropServices.Marshal.GetObjectForIUnknown(
                     UnityEngine.XR.WSA.WorldManager.GetNativeISpatialCoordinateSystemPtr()
                 ) as SpatialCoordinateSystem;
-                SimpleConsole.AddLine(trace, $"Getting root coordinate system {(rootCoordinateSystem == null ? "null" : "succeeded")}");
+                SimpleConsole.AddLine(trace, $"Getting Legacy root coordinate system {(rootCoordinateSystem == null ? "null" : "succeeded")}");
             }
 
             return coordinateSystem != null;
+#elif WLT_SPATIAL_GRAPH_NODE
+            if (spatialGraphNode == null)
+            {
+                spatialGraphNode = SpatialGraphNode.FromStaticNodeId(SpatialNodeId);
+            }
+            return spatialGraphNode != null;
 #else // WINDOWS_UWP
             return false;
 #endif // WINDOWS_UWP
