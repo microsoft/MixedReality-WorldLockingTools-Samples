@@ -1,11 +1,13 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-#if UNITY_WSA && !UNITY_2020_1_OR_NEWER
+#if WINDOWS_UWP
+#if !UNITY_2020_1_OR_NEWER
 #define WLT_LEGACY_WSA
 #elif WLT_MICROSOFT_OPENXR_PRESENT
 #define WLT_SPATIAL_GRAPH_NODE
 #endif // Legacy WSA
+#endif // WINDOWS_UWP
 
 using UnityEngine;
 
