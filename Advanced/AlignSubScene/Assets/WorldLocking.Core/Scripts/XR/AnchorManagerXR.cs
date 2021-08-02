@@ -349,8 +349,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             {
                 return true;
             }
-            //Debug.Log($"AnchorManagerXR F{Time.frameCount}: session is {(sessionSubsystem != null && sessionSubsystem.running ? "running" : "null")} and {(sessionSubsystem != null && sessionSubsystem.trackingState != TrackingState.None ? "tracking" : "not-tracking")}");
-            Debug.Log($"AMXR F{Time.frameCount} session running={sessionSubsystem.running} state={sessionSubsystem.trackingState}");
+            //Debug.Log($"AMXR F{Time.frameCount} session running={sessionSubsystem.running} state={sessionSubsystem.trackingState}");
             return sessionSubsystem != null
                 && sessionSubsystem.running
                 && sessionSubsystem.trackingState != TrackingState.None;
