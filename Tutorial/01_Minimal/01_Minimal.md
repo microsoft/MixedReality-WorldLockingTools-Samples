@@ -60,7 +60,7 @@ It can be useful to visualize the world anchor graph which the World Locking Too
 
 * Download and import the  version of Microsoft.MixedReality.Unity.WorldLockingTools.Tools which corresponds with the CoreEngine package you previously imported.
 
-* If you didn't already, you will now have a **Mixed Reality** dropdown menu. Within it, find the *World Locking Tools* section. The *Configure scene* option automates the configuration you did in the previous section. Select *Add development visualizers*.
+* If you didn't already, you will now have a **Mixed Reality** dropdown menu. Within it, find the *World Locking Tools* section. The *Configure scene* option automates the configuration you did in the previous section. Now select *Add development visualizers*.
 
 ![Automated addition of development visualizers](~/DocGen/Images/Minimal/AddVisualizers.png)
 
