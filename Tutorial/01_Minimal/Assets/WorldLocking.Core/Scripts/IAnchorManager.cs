@@ -12,6 +12,11 @@ namespace Microsoft.MixedReality.WorldLocking.Core
     public interface IAnchorManager : System.IDisposable
     {
         /// <summary>
+        /// Whether the underlying anchors can be locally persisted and reloaded.
+        /// </summary>
+        bool SupportsPersistence { get; }
+
+        /// <summary>
         /// Return the current number of spongy anchors.
         /// </summary>
         /// <remarks>
@@ -43,6 +48,23 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// or else anchors will not be connected into a graph as they are created.
         /// </remarks>
         float MaxAnchorEdgeLength { get; set; }
+
+        /// <summary>
+        /// Maximum number of local anchors in the internal anchor graph.
+        /// </summary>
+        /// <remarks>
+        /// Zero or negative means unlimited anchors.
+        /// </remarks>
+        int MaxLocalAnchors { get; set; }
+
+        /// <summary>
+        /// Get the transform from spongy space to the space anchors are located in.
+        /// </summary>
+        /// <remarks>
+        /// This varies according to the design of the underlying platform anchor subsystem.
+        /// It may also vary over time (so don't cache this).
+        /// </remarks>
+        UnityEngine.Pose AnchorFromSpongy { get; }
 
         /// <summary>
         /// Delete all spongy anchor objects and reset internal state
