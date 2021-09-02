@@ -1,9 +1,11 @@
 
 # Minimal World Locking Tools (WLT) setup for a world-locked application
 
-This Tutorial will walk you through adding the minimum required subset of the WLT to a project, in order to get world-locked behavior out of all the content in that application, without the need for application maintained WorldAnchors, or any other special behavior.
+For streamlined installation using the latest available tools, refer to [this article](https://microsoft.github.io/MixedReality-WorldLockingTools-Unity/DocGen/Documentation/HowTos/UsingWLT/JustWorldLock.html#automated-setup) in the main World Locking Tools documentation.
 
-This tutorial refers to the [01_Minimal](https://github.com/microsoft/MixedReality-WorldLockingTools-Samples/tree/master/Tutorial/01_Minimal) sample for reference, but the same steps would apply when adding to any existing project.
+This Tutorial will walk you through manually adding the minimum required subset of the WLT to a project, in order to get world-locked behavior out of all the content in that application, without the need for application maintained WorldAnchors, or any other special behavior.
+
+This tutorial refers to the [01_Minimal](https://github.com/microsoft/MixedReality-WorldLockingTools-Samples/tree/master/Tutorial/01_Minimal) sample for reference.
 
 The simple application being world-locked here is the simplest possible Unity AR application. Note that the setup is even simpler for MRTK applications. Any differences between adding to a bare versus MRTK app are noted in the steps.
 
@@ -18,11 +20,11 @@ https://github.com/microsoft/MixedReality-WorldLockingTools-Samples/tree/master/
 1. Add an Adjustment node, and attach the Main Camera object to it.
   * It should look like this:
 
-![](~/DocGen/Images/Minimal/Adjustment.png)
+![Adjustment node as camera parent](~/DocGen/Images/Minimal/Adjustment.png)
 
   * Or, if using MRTK, like this:
 
-![](~/DocGen/Images/Minimal/AdjustMRTK.png)
+![Adjustment node with MRTK Playspace](~/DocGen/Images/Minimal/AdjustMRTK.png)
  
 2. Install the FrozenWorld Engine DLL.
 
@@ -34,11 +36,11 @@ https://github.com/microsoft/MixedReality-WorldLockingTools-Samples/tree/master/
  
     * Search for FrozenWorld.Engine, and install the latest version of Microsoft.MixedReality.Unity.FrozenWorld.Engine.
  
-![](~/DocGen/Images/Minimal/NuGetFWE.png)
+![NuGet for Unity with Frozen World Engine](~/DocGen/Images/Minimal/NuGetFWE.png)
 
 3. Download and import the latest version of the Microsoft.MixedReality.Unity.WorldLockingTools.CoreEngine unity package from [releases](https://github.com/microsoft/MixedReality-WorldLockingTools-Unity/releases).
 
-![](~/DocGen/Images/Minimal/WLTReleases.png)
+![World Locking Tools releases page](~/DocGen/Images/Minimal/WLTReleases.png)
 
 4. In your Unity Project, go to 
 
@@ -46,7 +48,7 @@ https://github.com/microsoft/MixedReality-WorldLockingTools-Samples/tree/master/
 
     * Drag the WorldLockingManager prefab into your scene.
 
-![](~/DocGen/Images/Minimal/WLTPrefab.png)
+![WorldLockingManager prefab in Project Assets](~/DocGen/Images/Minimal/WLTPrefab.png)
 
 At this point your project should look a lot like `01_Minimal`. A few visual reference points (colored capsules) have been added to the MinimalScene in `01_Minimal`, just so you can see that it is working (the capsules remain fixed relative to real world features around them during the session, and even persisting across sessions).
 
@@ -58,15 +60,13 @@ It can be useful to visualize the world anchor graph which the World Locking Too
 
 * Download and import the  version of Microsoft.MixedReality.Unity.WorldLockingTools.Tools which corresponds with the CoreEngine package you previously imported.
 
-* In your Unity Project, go to
+* If you didn't already, you will now have a **Mixed Reality** dropdown menu. Within it, find the *World Locking Tools* section. The *Configure scene* option automates the configuration you did in the previous section. Select *Add development visualizers*.
 
-    `Assets > WorldLocking.Tools > Prefabs`
-
-* Drag the AnchorGraphVisual prefab into your scene. At this point it can be helpful to create a WorldLocking empty object in your scene and attach your WorldLockingManager and your AnchorGraphVisual objects to it. There is no functional impact, but it helps avoid cluttering up your scene.
+![Automated addition of development visualizers](~/DocGen/Images/Minimal/AddVisualizers.png)
 
 That's it. Now when you deploy, you will see the graph of WorldAnchor nodes created under the hood, along with some other helpful visualizations. More description is available in the [Tools documentation](https://microsoft.github.io/MixedReality-WorldLockingTools-Unity/DocGen/Documentation/HowTos/Tools.html#anchor-graph-visualization).
 
-When you decide you don't need the visualizations anymore, you can either disable the AnchorGraphVisual in the scene or delete it. 
+When you decide you don't need the visualizations anymore, you can either disable the AnchorGraphVisual in the scene, delete it, or run the *Remove development visualizers* option from the same *World Locking Tools* menu.
 
   ## Assumed HoloLens deployment background
 
@@ -76,7 +76,7 @@ In addition, here are some emphasized tips common to all HoloLens development. N
 
 * Check the camera clear color. The `Clear Flags` should be "Solid Color", and the color should be transparent black (0,0,0,0).
 
-![](~/DocGen/Images/Minimal/CameraClearColor.png)
+![Setting the camera clear color](~/DocGen/Images/Minimal/CameraClearColor.png)
 
 * Check permissions. 
   `Project Settings > Player > Publishing Settings > Capabilities`
@@ -88,13 +88,6 @@ In addition, here are some emphasized tips common to all HoloLens development. N
   * Microphone
   * GazeInput
 
-![](~/DocGen/Images/Minimal/Permissions.png)
+![Setting routine application permissions](~/DocGen/Images/Minimal/Permissions.png)
 
-* Make it a MR app. Go to 
-  `Project Settings > Player > XR Settings` (make sure you're on the UWP tab).
-  * Click `Virtual Reality Supported`
-  * Add `Windows Mixed Reality` to `Virtual Reality SDKs`
-  * Optionally set `Depth Format` to 16-bit.
-
-![](~/DocGen/Images/Minimal/XRSettings.png)
 
