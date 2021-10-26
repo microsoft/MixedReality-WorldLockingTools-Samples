@@ -98,6 +98,13 @@ namespace Microsoft.MixedReality.WorldLocking.Core
 
         #endregion Lifetime management
 
+        #region Public events
+
+        /// <inheritdocs />
+        public event EventHandler<Triangulator.ITriangulator> OnTriangulationBuilt;
+
+        #endregion
+
         #region Public methods
 
         /// <summary>
@@ -258,7 +265,6 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                     if (referencePoses[i].anchorId == anchorId)
                     {
                         poseDB.Forget(referencePoses[i].name);
-                        CheckDBSave();
                         referencePoses.RemoveAt(i);
                         found = true;
                     }
@@ -278,7 +284,6 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         public void ClearAlignmentAnchors()
         {
             poseDB.Clear();
-            CheckDBSave();
             referencePoses.Clear();
             referencePosesToSave.Clear();
         }
@@ -972,7 +977,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
 
         #endregion Internal utilities
 
-        #region Peristence synchronizations
+        #region Persistence synchronizations
 
         /// <summary>
         /// Add to queue for being saved to database next chance.
@@ -998,19 +1003,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                 {
                     poseDB.Set(referencePosesToSave[i]);
                 }
-                CheckDBSave();
                 referencePosesToSave.Clear();
-            }
-        }
-
-        /// <summary>
-        /// The database is dirty, save it if so configured to auto-save.
-        /// </summary>
-        private void CheckDBSave()
-        {
-            if (manager.AutoSave)
-            {
-                poseDB.Save();
             }
         }
 
@@ -1052,7 +1045,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             }
         }
 
-        #endregion Peristence synchronizations
+        #endregion Persistence synchronizations
 
         #region Pose transformation math
 
@@ -1187,6 +1180,8 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                 }
                 triangulator.Add(positions);
             }
+
+            OnTriangulationBuilt?.Invoke(this,triangulator);
         }
 
         private void InitTriangulator()
