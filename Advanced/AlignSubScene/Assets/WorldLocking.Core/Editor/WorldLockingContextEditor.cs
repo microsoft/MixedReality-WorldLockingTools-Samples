@@ -76,6 +76,10 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                 {
                     using (new EditorGUI.IndentLevelScope())
                     {
+                        AddProperty(mgrPath, "applyAdjustment");
+
+                        AddProperty(mgrPath, "NoPitchAndRoll");
+
                         AddProperty(mgrPath, "AdjustmentFrame");
 
                         AddProperty(mgrPath, "CameraParent");
@@ -115,6 +119,8 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                         AddProperty(mgrPath, "MaxAnchorEdgeLength");
 
                         AddProperty(mgrPath, "MaxLocalAnchors");
+
+                        AddProperty(mgrPath, "NullSubsystemInEditor");
                     }
                 }
 

@@ -54,10 +54,16 @@ namespace Microsoft.MixedReality.WorldLocking.Core
 
         protected override float TrackingStartDelayTime { get { return SpongyAnchorARF.TrackingStartDelayTime; } }
 
-        public static AnchorManagerARF TryCreate(IPlugin plugin, IHeadPoseTracker headTracker, 
+        public static async Task<AnchorManagerARF> TryCreate(IPlugin plugin, IHeadPoseTracker headTracker, 
             GameObject arSessionSource,
             GameObject arSessionOriginSource)
         {
+            bool xrRunning = await CheckXRRunning();
+            if (!xrRunning)
+            {
+                Debug.LogError($"Error checking that XR is up and running.");
+                return null;
+            }
             if (arSessionSource == null)
             {
                 Debug.LogError("Trying to create an AR Foundation anchor manager with null session source holder GameObject.");
@@ -71,7 +77,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             ARSession arSession = arSessionSource.GetComponent<ARSession>();
             if (arSession == null)
             {
-                Debug.Log($"Adding AR session to {arSessionSource.name}");
+                DebugLogSetup($"Adding AR session to {arSessionSource.name}");
                 arSession = arSessionSource.AddComponent<ARSession>();
             }
             if (arSession == null)
@@ -82,7 +88,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             ARSessionOrigin arSessionOrigin = arSessionOriginSource.GetComponent<ARSessionOrigin>();
             if (arSessionOrigin == null)
             {
-                Debug.Log($"Adding AR session origin to {arSessionOriginSource.name}");
+                DebugLogSetup($"Adding AR session origin to {arSessionOriginSource.name}");
                 arSessionOrigin = arSessionOriginSource.AddComponent<ARSessionOrigin>();
             }
             if (arSessionOrigin == null)
@@ -95,23 +101,46 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         }
 
         /// <summary>
+        /// Wait to make sure XR is up and running before proceeding. This is important when using Holographic Remoting,
+        /// during which the delay can be significant.
+        /// </summary>
+        /// <returns></returns>
+        private static async Task<bool> CheckXRRunning()
+        {
+#if WLT_XR_MANAGEMENT_PRESENT
+            DebugLogSetup($"F={Time.frameCount} checking that XR is running.");
+            // Wait for XR initialization before initializing the anchor subsystem to ensure that any pending Remoting connection has been established first.
+            while (UnityEngine.XR.Management.XRGeneralSettings.Instance == null ||
+                   UnityEngine.XR.Management.XRGeneralSettings.Instance.Manager == null ||
+                   UnityEngine.XR.Management.XRGeneralSettings.Instance.Manager.activeLoader == null)
+            {
+                DebugLogSetup($"F={Time.frameCount} waiting on XR startup.");
+                await Task.Yield();
+            }
+            DebugLogSetup($"F={Time.frameCount} XR is running.");
+#endif // WLT_XR_MANAGEMENT_PRESENT
+            return true;
+        }
+
+
+        /// <summary>
         /// Set up an anchor manager.
         /// </summary>
         /// <param name="plugin">The engine interface to update with the current anchor graph.</param>
         private AnchorManagerARF(IPlugin plugin, IHeadPoseTracker headTracker, ARSession arSession, ARSessionOrigin arSessionOrigin) 
             : base(plugin, headTracker)
         {
-            Debug.Log($"ARF: Creating AnchorManagerARF with {arSession.name} and {arSessionOrigin.name}");
+            DebugLogSetup($"ARF: Creating AnchorManagerARF with {arSession.name} and {arSessionOrigin.name}");
             this.arSession = arSession;
             this.arSessionOrigin = arSessionOrigin;
 
             this.arReferencePointManager = arSessionOrigin.gameObject.GetComponent<ARReferencePointManager>();
             if (this.arReferencePointManager == null)
             {
-                Debug.Log($"Adding AR reference point manager to {arSessionOrigin.name}");
+                DebugLogSetup($"Adding AR reference point manager to {arSessionOrigin.name}");
                 this.arReferencePointManager = arSessionOrigin.gameObject.AddComponent<ARReferencePointManager>();
             }
-            Debug.Log($"ARF: Created AnchorManager ARF");
+            DebugLogSetup($"ARF: Created AnchorManager ARF");
         }
 
         protected override bool IsTracking()
@@ -130,7 +159,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             var arAnchor = arReferencePointManager.AddReferencePoint(initialPose);
             if (arAnchor == null)
             {
-                Debug.Log($"ARReferencePoinManager failed to create ARAnchor {id}");
+                Debug.LogError($"ARReferencePoinManager failed to create ARAnchor {id}");
                 return null;                
             }
             arAnchor.gameObject.name = id.FormatStr();
