@@ -8,6 +8,11 @@
 #endif // WLT_XR_PERSISTENCE
 
 //#define WLT_EXTRA_LOGGING
+#define WLT_LOG_SETUP
+
+#if WLT_DISABLE_LOGGING
+#undef WLT_EXTRA_LOGGING
+#endif // WLT_DISABLE_LOGGING
 
 using System;
 using System.Collections.Generic;
@@ -59,8 +64,14 @@ namespace Microsoft.MixedReality.WorldLocking.Core
 
         private readonly Dictionary<TrackableId, SpongyAnchorXR> anchorsByTrackableId = new Dictionary<TrackableId, SpongyAnchorXR>();
 
-        public static AnchorManagerXR TryCreate(IPlugin plugin, IHeadPoseTracker headTracker)
+        public static async Task<AnchorManagerXR> TryCreate(IPlugin plugin, IHeadPoseTracker headTracker)
         {
+            bool xrRunning = await CheckXRRunning();
+            if (!xrRunning)
+            {
+                return null;
+            }
+
             /// Try to find an XRAnchorManager (to be XRAnchorManager) here. 
             /// If we fail that,
             ///     give up. 
@@ -78,16 +89,27 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             }
 
             var session = FindSessionSubsystem();
-            /// mafinc - Currently a problem in OpenXR obtaining the session subsystem.
-            /// Everything can function without it, it is only used for detecting loss of tracking.
-            //if (session == null)
-            //{
-            //    return null;
-            //}
 
             AnchorManagerXR anchorManager = new AnchorManagerXR(plugin, headTracker, xrAnchorManager, session);
 
             return anchorManager;
+        }
+
+        private static async Task<bool> CheckXRRunning()
+        {
+#if WLT_XR_MANAGEMENT_PRESENT
+            DebugLogSetup($"F={Time.frameCount} checking that XR is running.");
+            // Wait for XR initialization before initializing the anchor subsystem to ensure that any pending Remoting connection has been established first.
+            while (UnityEngine.XR.Management.XRGeneralSettings.Instance == null ||
+                   UnityEngine.XR.Management.XRGeneralSettings.Instance.Manager == null ||
+                   UnityEngine.XR.Management.XRGeneralSettings.Instance.Manager.activeLoader == null)
+            {
+                DebugLogSetup($"F={Time.frameCount} waiting on XR startup.");
+                await Task.Yield();
+            }
+            DebugLogSetup($"F={Time.frameCount} XR is running.");
+#endif // WLT_XR_MANAGEMENT_PRESENT
+            return true;
         }
 
         /// <summary>
@@ -108,21 +130,21 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         {
             List<XRAnchorSubsystem> anchorSubsystems = new List<XRAnchorSubsystem>();
             SubsystemManager.GetInstances(anchorSubsystems);
-            Debug.Log($"Found {anchorSubsystems.Count} anchor subsystems.");
+            DebugLogSetup($"Found {anchorSubsystems.Count} anchor subsystems.");
             XRAnchorSubsystem activeSubsystem = null;
             int numFound = 0;
             foreach (var sub in anchorSubsystems)
             {
                 if (sub.running)
                 {
-                    Debug.Log($"Found active anchor subsystem {sub.subsystemDescriptor.id}.");
+                    DebugLogSetup($"Found active anchor subsystem {sub.subsystemDescriptor.id}.");
                     activeSubsystem = sub;
                     ++numFound;
                 }
             }
             if (activeSubsystem == null)
             {
-                Debug.Log($"Found no anchor subsystem running, will try starting one.");
+                DebugLogSetup($"Found no anchor subsystem running, will try starting one.");
                 foreach (var sub in anchorSubsystems)
                 {
                     sub.Start();
@@ -130,7 +152,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                     {
                         activeSubsystem = sub;
                         ++numFound;
-                        Debug.Log($"Start changed anchor subsystem {sub.subsystemDescriptor.id} to running.");
+                        DebugLogSetup($"Start changed anchor subsystem [{sub.subsystemDescriptor.id}] to running.");
                     }
                 }
             }
@@ -150,34 +172,23 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// </remarks>
         private static XRSessionSubsystem FindSessionSubsystem()
         {
-#if WLT_XR_MANAGEMENT_PRESENT
-            /// Workaround. OpenXR is now returning a SessionSubsystem, but it is reporting 
-            /// its trackingStatus as TrackingStatus.None forever. Since the (incorrect) tracking status
-            /// is all we want the XRSessionSubsystem for, leave it as null for now.
-            bool isOpenXR = XRGeneralSettings.Instance.Manager.activeLoader.name.StartsWith("Open XR");
-            if (isOpenXR)
-            {
-                return null;
-            }
-#endif // WLT_XR_MANAGEMENT_PRESENT
-
             List<XRSessionSubsystem> sessionSubsystems = new List<XRSessionSubsystem>();
             SubsystemManager.GetInstances(sessionSubsystems);
-            Debug.Log($"Found {sessionSubsystems.Count} session subsystems");
+            DebugLogSetup($"Found {sessionSubsystems.Count} session subsystems");
             XRSessionSubsystem activeSession = null;
             int numFound = 0;
             foreach (var session in sessionSubsystems)
             {
                 if (session.running)
                 {
-                    Debug.Log($"Found active session subsystem {session.subsystemDescriptor.id}");
+                    DebugLogSetup($"Found active session subsystem {session.subsystemDescriptor.id}");
                     activeSession = session;
                     ++numFound;
                 }
             }
             if (activeSession == null)
             {
-                Debug.Log($"Found no active session subsystem, will try starting one.");
+                DebugLogSetup($"Found no active session subsystem, will try starting one.");
                 foreach (var session in sessionSubsystems)
                 {
                     session.Start();
@@ -185,7 +196,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                     {
                         activeSession = session;
                         ++numFound;
-                        Debug.Log($"Start changed session {session.subsystemDescriptor.id} to running.");
+                        DebugLogSetup($"Start changed session [{session.subsystemDescriptor.id}] to running.");
                     }
                 }
             }
@@ -205,15 +216,15 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         {
             this.xrAnchorManager = xrAnchorManager;
             this.sessionSubsystem = session;
-            Debug.Log($"XR: Created AnchorManager XR, xrMgr={(this.xrAnchorManager != null ? "good" : "null")}");
+            DebugLogSetup($"XR: Created AnchorManager XR, xrMgr={(this.xrAnchorManager != null ? "good" : "null")} session={(session != null ? "good" : "null")}");
 
-            Debug.Log($"ActiveLoader name:[{XRGeneralSettings.Instance.Manager.activeLoader.name}] type:[{XRGeneralSettings.Instance.Manager.activeLoader.GetType().FullName}]");
+            DebugLogSetup($"ActiveLoader name:[{XRGeneralSettings.Instance.Manager.activeLoader.name}] type:[{XRGeneralSettings.Instance.Manager.activeLoader.GetType().FullName}]");
 
 #if WLT_XR_MANAGEMENT_PRESENT
             wmrPersistence = XRGeneralSettings.Instance.Manager.activeLoader.name.StartsWith("Windows MR");
             openXRPersistence = XRGeneralSettings.Instance.Manager.activeLoader.name.StartsWith("Open XR");
 #endif // WLT_XR_MANAGEMENT_PRESENT
-            Debug.Log($"XRSDK Persistence: WMR={wmrPersistence} OpenXR={openXRPersistence}");
+            DebugLogSetup($"XRSDK Persistence: WMR={wmrPersistence} OpenXR={openXRPersistence}");
         }
 
         public override bool Update()
@@ -231,6 +242,16 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             {
                 return false;
             }
+#if !UNITY_ANDROID && !UNITY_IOS
+            if (sessionSubsystem != null)
+            {
+                sessionSubsystem.Update(new XRSessionUpdateParams
+                {
+                    screenOrientation = Screen.orientation,
+                    screenDimensions = new Vector2Int(Screen.width, Screen.height)
+                });
+            }
+#endif // !UNITY_ANDROID && !UNITY_IOS            
             DebugLogExtra($"UpdateTrackables {Time.frameCount} XRAnchorSubsystem is {xrAnchorManager.running}");
             TrackableChanges<XRAnchor> changes = xrAnchorManager.GetChanges(Unity.Collections.Allocator.Temp);
             if (changes.isCreated && (changes.added.Length + changes.updated.Length + changes.removed.Length > 0))
@@ -289,9 +310,9 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             return $"{label}({p.x:0.000},{p.y:0.000},{p.z:0.000})";
         }
 
+        [System.Diagnostics.Conditional("WLT_EXTRA_LOGGING")]
         private static void DebugOutExtra(string label, XRAnchor xrAnchor, SpongyAnchorXR tracker)
         {
-#if WLT_EXTRA_LOGGING
             Debug.Assert(xrAnchor.trackableId == tracker.TrackableId);
             Vector3 tP = tracker.transform.position;
             Vector3 tR = tracker.transform.rotation.eulerAngles;
@@ -299,14 +320,6 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             Vector3 rR = xrAnchor.pose.rotation.eulerAngles;
             rR = new Vector3(1.0f, 2.0f, 3.0f);
             Debug.Log($"{label}{tracker.name}-{tracker.TrackableId}/{xrAnchor.trackingState}: {DebugVector3("tP=", tP)}|{DebugEuler("tR=", tR)} <=> {DebugVector3("rP=", rP)}|{DebugEuler("rR=", rR)}");
-#endif // WLT_EXTRA_LOGGING
-        }
-
-        private static void DebugLogExtra(string msg)
-        {
-#if WLT_EXTRA_LOGGING
-            Debug.Log(msg);
-#endif // WLT_EXTRA_LOGGING
         }
 
         private static void UpdateTracker(string label, XRAnchor xrAnchor, Dictionary<TrackableId, SpongyAnchorXR> anchors)
@@ -343,16 +356,19 @@ namespace Microsoft.MixedReality.WorldLocking.Core
 
         protected override bool IsTracking()
         {
-            /// Currently a problem obtaining the sessionSubsystem in OpenXR. Until that is remediated,
-            /// we will assume that if we have no sessionSubsystem, then tracking is fine.
             if (sessionSubsystem == null)
             {
-                return true;
+                Debug.LogError($"Frame={Time.frameCount} have null sessionSubsystem.");
+                return false;
             }
-            //Debug.Log($"AMXR F{Time.frameCount} session running={sessionSubsystem.running} state={sessionSubsystem.trackingState}");
-            return sessionSubsystem != null
-                && sessionSubsystem.running
-                && sessionSubsystem.trackingState != TrackingState.None;
+            DebugLogExtra($"AMXR F{Time.frameCount} session running={sessionSubsystem.running} state={sessionSubsystem.trackingState}");
+            if (!sessionSubsystem.running)
+            {
+                // This is probably a catastrophic failure case.
+                Debug.LogError($"Frame={Time.frameCount} LostTracking: Have session subsystem but not running.");
+                return false;
+            }
+            return sessionSubsystem.notTrackingReason == NotTrackingReason.None;
         }
 
         protected override SpongyAnchor CreateAnchor(AnchorId id, Transform parent, Pose initialPose)

@@ -207,6 +207,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114794997547214612, guid: f0777d53f35d4cb42827b5c3bdf227bd,
+        type: 3}
+      propertyPath: shared.linkageSettings.AdjustmentFrame
+      value: 
+      objectReference: {fileID: 36349859}
+    - target: {fileID: 114794997547214612, guid: f0777d53f35d4cb42827b5c3bdf227bd,
+        type: 3}
+      propertyPath: shared.linkageSettings.CameraParent
+      value: 
+      objectReference: {fileID: 36349859}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f0777d53f35d4cb42827b5c3bdf227bd, type: 3}
 --- !u!1 &590821598
