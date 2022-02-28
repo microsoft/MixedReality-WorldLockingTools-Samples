@@ -246,9 +246,56 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1607754546}
+  - {fileID: 223020110}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &223020109
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 223020110}
+  - component: {fileID: 223020111}
+  m_Layer: 0
+  m_Name: AR Session
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &223020110
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 223020109}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 118694855}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &223020111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 223020109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3859a92a05d4f5d418cb6ca605290e74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AttemptUpdate: 1
+  m_MatchFrameRate: 1
+  m_TrackingMode: 2
 --- !u!1 &245479088
 GameObject:
   m_ObjectHideFlags: 0
@@ -1071,16 +1118,19 @@ MonoBehaviour:
       AutoSave: 0
     linkageSettings:
       useExisting: 0
+      applyAdjustment: 1
+      NoPitchAndRoll: 0
       AdjustmentFrame: {fileID: 118694855}
       CameraParent: {fileID: 1607754546}
     anchorSettings:
       useDefaults: 0
       anchorSubsystem: 3
-      ARSessionSource: {fileID: 1607754545}
+      ARSessionSource: {fileID: 223020109}
       ARSessionOriginSource: {fileID: 1607754545}
       MinNewAnchorDistance: 1
       MaxAnchorEdgeLength: 1.2
       MaxLocalAnchors: 0
+      NullSubsystemInEditor: 1
   diagnosticsSettings:
     settings:
       useDefaults: 1
@@ -1857,6 +1907,7 @@ GameObject:
   - component: {fileID: 963194231}
   - component: {fileID: 963194232}
   - component: {fileID: 963194230}
+  - component: {fileID: 963194233}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1881,7 +1932,7 @@ Camera:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 2
   m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -1953,20 +2004,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf98dd1206224111a38765365e98e207, type: 3}
+  m_Script: {fileID: 11500000, guid: 5a2a9c34df4095f47b9ca8f975175f5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lockCursorWhenFocusLocked: 1
-  setCursorInvisibleWhenFocusLocked: 0
-  maxGazeCollisionDistance: 10
-  raycastLayerMasks:
-  - serializedVersion: 2
-    m_Bits: 4294967291
-  stabilizer:
-    storedStabilitySamples: 60
-  gazeTransform: {fileID: 0}
-  minHeadVelocityThreshold: 0.5
-  maxHeadVelocityThreshold: 2
+  m_Device: 0
+  m_PoseSource: 2
+  m_PoseProviderComponent: {fileID: 0}
+  m_TrackingType: 0
+  m_UpdateType: 0
+  m_UseRelativeTransform: 0
 --- !u!114 &963194231
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2003,6 +2049,29 @@ MonoBehaviour:
   m_AutoFocus: 1
   m_LightEstimation: 0
   m_FacingDirection: 1
+--- !u!114 &963194233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf98dd1206224111a38765365e98e207, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lockCursorWhenFocusLocked: 1
+  setCursorInvisibleWhenFocusLocked: 0
+  maxGazeCollisionDistance: 10
+  raycastLayerMasks:
+  - serializedVersion: 2
+    m_Bits: 4294967291
+  stabilizer:
+    storedStabilitySamples: 60
+  gazeTransform: {fileID: 0}
+  minHeadVelocityThreshold: 0.5
+  maxHeadVelocityThreshold: 2
 --- !u!1 &972565595
 GameObject:
   m_ObjectHideFlags: 0
@@ -2467,6 +2536,7 @@ MonoBehaviour:
   Prefab_SpongyAnchorViz: {fileID: 1510356976864930653, guid: b5ba1fa0f254af640a17dc22e4688b87, type: 3}
   Prefab_FrozenAnchorViz: {fileID: 114965271361823434, guid: d47affea335f196479d4ec680aca4223, type: 3}
   connectingLine: {fileID: 2100000, guid: 0d9513524d19caa48a7071447d2cd84f, type: 2}
+  verticalDisplacement: -1
 --- !u!1 &1378325158
 GameObject:
   m_ObjectHideFlags: 0
@@ -3029,7 +3099,7 @@ MonoBehaviour:
   crUseGPS: 0
   crBeaconUuids: []
   anchorsParent: {fileID: 1506107964}
-  anchorsPrefab: {fileID: 3980099241396371023, guid: 345e9bf0df4b89442ac19a2d898daf38, type: 3}
+  anchorsPrefab: {fileID: 0}
   maxSearchSeconds: 45
   maxWaitForMoreAnchorsSeconds: 0.25
   minRecommendedForCreateProgress: 1
@@ -3074,7 +3144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83d9acc7968244a8886f3af591305bcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activeProfile: {fileID: 11400000, guid: b369bd81b384f994e87260826c6f2a6f, type: 2}
+  activeProfile: {fileID: 11400000, guid: 1f5c5dd4c66b6cd4bb13810b8a61fdf7, type: 2}
 --- !u!4 &1543370818
 Transform:
   m_ObjectHideFlags: 0
@@ -3143,7 +3213,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1607754546}
-  - component: {fileID: 1607754549}
   - component: {fileID: 1607754548}
   - component: {fileID: 1607754547}
   m_Layer: 0
@@ -3194,21 +3263,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Camera: {fileID: 0}
---- !u!114 &1607754549
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1607754545}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3859a92a05d4f5d418cb6ca605290e74, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AttemptUpdate: 1
-  m_MatchFrameRate: 1
-  m_TrackingMode: 2
 --- !u!1 &1785474983
 GameObject:
   m_ObjectHideFlags: 0
