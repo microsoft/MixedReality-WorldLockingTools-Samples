@@ -1,6 +1,12 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+#define WLT_LOG_SETUP
+
+#if WLT_DISABLE_LOGGING
+#undef WLT_LOG_SETUP
+#endif // WLT_DISABLE_LOGGING
+
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -29,7 +35,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// allowing quick visual verification of the version of World Locking Tools for Unity currently installed.
         /// It has no effect in code, but serves only as a label.
         /// </summary>
-        public static string Version => "1.4.2";
+        public static string Version => "1.5.8";
 
         /// <summary>
         /// The configuration settings may only be set as a block.
@@ -54,17 +60,36 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         }
 
         /// <summary>
-        /// Readonly access to linkage settings. These must be set from a context.
+        /// Access to linkage settings. 
         /// </summary>
-        public LinkageSettings LinkageSettings => shared.linkageSettings;
+        public LinkageSettings LinkageSettings
+        {
+            get { return shared.linkageSettings; }
+            set
+            {
+                shared.linkageSettings = value;
+            }
+        }
 
         /// <summary>
-        /// Readonly access to anchor management settings. These must be set from a context.
+        /// Access to anchor management settings. 
         /// </summary>
         /// <remarks>
-        /// Note that anchor manager type cannot be changed after initial startup.
+        /// Use <see cref="ResetAnchorManager"/> to change the type of the anchor manager after startup, or just rebuild it from scratch.
         /// </remarks>
-        public AnchorSettings AnchorSettings => shared.anchorSettings;
+        public AnchorSettings AnchorSettings
+        {
+            get { return shared.anchorSettings; }
+            set
+            {
+                bool changedSubsystem = shared.anchorSettings.anchorSubsystem != value.anchorSubsystem;
+                shared.anchorSettings = value;
+                if (changedSubsystem)
+                {
+                    ResetAnchorManager();
+                }
+            }
+        }
 
         /// <summary>
         /// Get a copy of the shared diagnostics configuration settings, or set the
@@ -117,6 +142,22 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// </summary>
         public bool AutoSave => shared.settings.AutoSave;
 
+        /// <summary>
+        /// Apply the computed adjustment via the AdjustmentFrame transform.
+        /// </summary>
+        /// <remarks>
+        /// If ApplyAdjustment is false, then WLT does the same computations, but it is up to the application to apply the computed transforms
+        /// correctly, either in the camera hierarchy, or elsewhere in the scene hierarchy.
+        /// </remarks>
+        public bool ApplyAdjustment => shared.linkageSettings.ApplyAdjustment;
+
+        /// <summary>
+        /// Zero out pitch and roll from FrozenWorldEngine's computed correction.
+        /// </summary>
+        /// <remarks>
+        /// This does not affect pitch and roll from the AlignmentManager (SpacePins).
+        /// </remarks>
+        public bool NoPitchAndRoll => shared.linkageSettings.NoPitchAndRoll;
 
         /// <summary>
         /// Direct interface to the plugin. It is not generally necessary or desired to 
@@ -270,6 +311,58 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// </summary>
         public Pose CameraFromSpongy { get { return SpongyFromCamera.Inverse(); } }
 
+        /// <summary>
+        /// Whether the manager is currently asynchronously loading or saving state.
+        /// </summary>
+        /// <remarks>
+        /// Any attempt to manually initiate a Save or Load while HasPendingIO is true will quietly fail.
+        /// </remarks>
+        public bool HasPendingIO { get { return hasPendingLoadTask || hasPendingSaveTask; } }
+
+        /// <summary>
+        /// Filename at which to Save subsequent FrozenWorldEngine state to, and from which to Load it.
+        /// </summary>
+        /// <remarks>
+        /// Some error checking for common mistakes is made, but some common sense should prevail.
+        /// Use valid, normal filenames.
+        /// A subpath may be introduced, but the entire path must be relative.
+        /// Some examples:
+        /// Good: 'myfile.myext', 'mypath/myfile.myext'
+        /// Bad: null, '/myfile.myext'
+        /// The actual final full path name used will be off of Application.persistentDataPath, which is platform dependent.
+        /// </remarks>
+        public string FrozenWorldFileName
+        {
+            get { return frozenWorldFile; }
+            set
+            {
+                if (Path.IsPathRooted(value))
+                {
+                    Debug.LogWarning($"Invalid FrozenWorldFileName '{value}', must be relative path (no leading '/').");
+                    value = Path.GetFileName(value);
+                    Debug.LogWarning($"Reset input FrozenWorldFileName to '{value}'");
+                }
+                if (string.IsNullOrEmpty(value))
+                {
+                    Debug.LogError("Invalid FrozenWorldFileName, null or empty not allowed, ignoring.");
+                    return;
+                }
+                // Note that changing frozenWorldFile changes stateFileNameBase.
+                frozenWorldFile = value;
+                string stateFilePath = Path.GetDirectoryName(stateFileNameBase);
+                if (!Directory.Exists(stateFilePath))
+                {
+                    Directory.CreateDirectory(stateFilePath);
+                }
+#if !WLT_DISABLE_LOGGING
+                if (AutoSave)
+                {
+                    Debug.LogWarning($"Changing FrozenWorldFileName to '{frozenWorldFile}' with AutoSave enabled is risky, consider taking manual control over Save & Load.");
+                }
+#endif // !WLT_DISABLE_LOGGING
+            }
+        }
+
         #endregion
 
         #region Private members
@@ -288,7 +381,8 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// <summary>
         /// Keep track of whether one-time initializations have been performed yet.
         /// </summary>
-        private bool hasBeenStarted = false;
+        private enum InitializationState { Uninitialized, Starting, Running };
+        private InitializationState initializationState = InitializationState.Uninitialized;
 
         /// <summary>
         /// A handle of the class offering the optional feature of periodically logging the FrozenWorld engine state to disk
@@ -355,6 +449,12 @@ namespace Microsoft.MixedReality.WorldLocking.Core
 
         #region Startup and settings refresh
 
+        [System.Diagnostics.Conditional("WLT_LOG_SETUP")]
+        private static void DebugLogSetup(string message)
+        {
+            Debug.Log(message);
+        }
+
         /// <summary>
         /// Start using shared settings from given context.
         /// </summary>
@@ -364,23 +464,29 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             shared = context.SharedSettings;
             DiagnosticRecordings.SharedSettings = context.DiagnosticsSettings;
 
-            if (!hasBeenStarted)
+            if (initializationState == InitializationState.Uninitialized)
             {
-                OneTimeStartUp();
+                ResetAnchorManager();
             }
 
             ApplyNewSettings();
 
-            Debug.Log($"Context {context.name} set, Adjustment={(AdjustmentFrame == null ? "Null" : AdjustmentFrame.name)}");
+            DebugLogSetup($"Context {context.name} set, Adjustment={(AdjustmentFrame == null ? "Null" : AdjustmentFrame.name)}");
         }
 
         /// <summary>
         /// Perform any initialization only appropriate once. This is called after
         /// giving the caller a chance to change settings.
         /// </summary>
-        private void OneTimeStartUp()
+        public async void ResetAnchorManager()
         {
-            anchorManager = SelectAnchorManager(Plugin, headPoseTracker);
+            initializationState = InitializationState.Starting;
+
+            if (anchorManager != null)
+            {
+                anchorManager.Dispose();
+            }
+            anchorManager = await SelectAnchorManager(Plugin, headPoseTracker);
 
             if (AutoLoad)
             {
@@ -391,43 +497,60 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                 Reset();
             }
 
-            hasBeenStarted = true;
+            initializationState = InitializationState.Running;
         }
 
-        private IAnchorManager SelectAnchorManager(IPlugin plugin, IHeadPoseTracker headTracker)
+        private async Task<IAnchorManager> SelectAnchorManager(IPlugin plugin, IHeadPoseTracker headTracker)
         {
-            Debug.Log($"Select {shared.anchorSettings.anchorSubsystem} anchor manager.");
+#if false
+            DebugLogSetup($"Select {shared.anchorSettings.anchorSubsystem} anchor manager.");
             if (AnchorManager != null)
             {
-                Debug.Log("Creating new anchormanager, but have old one. Reseting it before replacing.");
+                DebugLogSetup("Creating new anchor manager, but have old one. Reseting it before replacing.");
                 AnchorManager.Reset();
             }
             var anchorSettings = shared.anchorSettings;
+#else
+            if (AnchorManager != null)
+            {
+                DebugLogSetup("Creating new anchor manager, but have old one. Reseting it before replacing.");
+                AnchorManager.Reset();
+            }
+            var anchorSettings = shared.anchorSettings;
+#if UNITY_EDITOR
+            if (anchorSettings.NullSubsystemInEditor)
+            {
+                DebugLogSetup($"Switching from {anchorSettings.anchorSubsystem} to AnchorSubsystem.Null because running in editor.");
+                anchorSettings.anchorSubsystem = AnchorSettings.AnchorSubsystem.Null;
+            }
+#endif // UNITY_EDITOR
+            DebugLogSetup($"Select {anchorSettings.anchorSubsystem} anchor manager.");
+#endif
 #if WLT_ARFOUNDATION_PRESENT
             if (anchorSettings.anchorSubsystem == AnchorSettings.AnchorSubsystem.ARFoundation)
             {
-                Debug.Log($"Trying to create ARF anchor manager on {anchorSettings.ARSessionSource.name} and {anchorSettings.ARSessionOriginSource.name}");
-                AnchorManagerARF arfAnchorManager = AnchorManagerARF.TryCreate(plugin, headTracker,
+                DebugLogSetup($"Trying to create ARF anchor manager on {anchorSettings.ARSessionSource.name} and {anchorSettings.ARSessionOriginSource.name}");
+                AnchorManagerARF arfAnchorManager = await AnchorManagerARF.TryCreate(plugin, headTracker,
                     anchorSettings.ARSessionSource, anchorSettings.ARSessionOriginSource);
                 if (arfAnchorManager != null)
                 {
-                    Debug.Log("Success creating ARF anchor manager");
+                    DebugLogSetup("Success creating ARF anchor manager");
                     return arfAnchorManager;
                 }
-                Debug.Log("Failed to create requested AR Foundation anchor manager!");
+                Debug.LogError("Failed to create requested AR Foundation anchor manager!");
             }
 #endif // WLT_ARFOUNDATION_PRESENT
 #if WLT_ARSUBSYSTEMS_PRESENT
             if (anchorSettings.anchorSubsystem == AnchorSettings.AnchorSubsystem.XRSDK)
             {
-                Debug.Log($"Trying to create XR anchor manager");
-                AnchorManagerXR xrAnchorManager = AnchorManagerXR.TryCreate(plugin, headTracker);
+                DebugLogSetup($"Trying to create XR anchor manager");
+                AnchorManagerXR xrAnchorManager = await AnchorManagerXR.TryCreate(plugin, headTracker);
                 if (xrAnchorManager != null)
                 {
-                    Debug.Log("Success creating XR anchor manager");
+                    DebugLogSetup("Success creating XR anchor manager");
                     return xrAnchorManager;
                 }
-                Debug.Log("Failed to create requested XR SDK anchor manager!");
+                Debug.LogError("Failed to create requested XR SDK anchor manager!");
             }
 #endif // WLT_ARSUBSYSTEMS_PRESENT
 #if UNITY_WSA && !UNITY_2020_1_OR_NEWER
@@ -436,10 +559,10 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                 AnchorManagerWSA wsaAnchorManager = AnchorManagerWSA.TryCreate(plugin, headTracker);
                 if (wsaAnchorManager != null)
                 {
-                    Debug.Log("Success creating WSA anchor manager");
+                    DebugLogSetup("Success creating WSA anchor manager");
                     return wsaAnchorManager;
                 }
-                Debug.Log("Failed to create requested WSA anchor manager!");
+                Debug.LogError("Failed to create requested WSA anchor manager!");
             }
 #endif // UNITY_WSA
 #if WLT_ARCORE_SDK_INCLUDED
@@ -448,20 +571,22 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                 AnchorManagerARCore arCoreAnchorManager = AnchorManagerARCore.TryCreate(plugin, headTracker);
                 if (arCoreAnchorManager != null)
                 {
-                    Debug.Log("Success creating ARCore anchor manager");
+                    DebugLogSetup("Success creating ARCore anchor manager");
                     return arCoreAnchorManager;
                 }
-                Debug.Log("Failed to create requested ARCore anchor manager!");
+                Debug.LogError("Failed to create requested ARCore anchor manager!");
             }
 #endif // WLT_ARCORE_SDK_INCLUDED
             if (anchorSettings.anchorSubsystem != AnchorSettings.AnchorSubsystem.Null)
             {
-                Debug.Log("Failure creating useful anchor manager of any type. Creating null manager");
+                DebugLogSetup("Failure creating useful anchor manager of any type. Creating null manager");
                 anchorSettings.anchorSubsystem = AnchorSettings.AnchorSubsystem.Null;
                 shared.anchorSettings = anchorSettings;
             }
             AnchorManagerNull nullAnchorManager = AnchorManagerNull.TryCreate(plugin, headTracker);
             Debug.Assert(nullAnchorManager != null, "Creation of Null anchor manager should never fail.");
+            /// No-op await here to suppress warnings if no anchor manager system which requires asynchronous startup is compiled in.
+            await Task.CompletedTask;
             return nullAnchorManager;
         }
 
@@ -472,7 +597,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         {
             if (!shared.anchorSettings.IsValid)
             {
-                Debug.Log("Invalid anchor management settings detected!");
+                Debug.LogError("Invalid anchor management settings detected!");
             }
             AnchorManager.MinNewAnchorDistance = shared.anchorSettings.MinNewAnchorDistance;
             AnchorManager.MaxAnchorEdgeLength = shared.anchorSettings.MaxAnchorEdgeLength;
@@ -497,10 +622,10 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                 if (Camera.main != null)
                 {
                     string parentName = Camera.main.transform.parent != null ? Camera.main.transform.parent.name : "null";
-                    Debug.Log($"No camera parent set on WorldLockingManager, using parent {parentName} of scene's main camera.");
+                    Debug.LogWarning($"No camera parent set on WorldLockingManager, using parent {parentName} of scene's main camera.");
                     CameraParent = Camera.main.transform.parent;
                 }
-                else
+                else if (ApplyAdjustment)
                 {
                     Debug.LogError("No CameraParent set on WorldLockingManager, and no main camera to infer parent from.");
                 }
@@ -510,28 +635,31 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             {
                 if (CameraParent != null && CameraParent.parent != null)
                 {
-                    Debug.Log($"No Adjustment Frame set on WorldLockingManager, using Transform {CameraParent.parent.gameObject.name} from scene's main camera hierarchy.");
+                    Debug.LogWarning($"No Adjustment Frame set on WorldLockingManager, using Transform {CameraParent.parent.gameObject.name} from scene's main camera hierarchy.");
                     AdjustmentFrame = CameraParent.parent;
                 }
-                else if (Camera.main != null)
+                else if (CameraParent != null)
                 {
-                    Debug.Log($"No Adjustment Frame set on WorldLockingManager, using root Transform {Camera.main.transform.root.gameObject.name} from scene's main camera.");
-                    AdjustmentFrame = Camera.main.transform.root;
+                    Debug.LogWarning($"No Adjustment Frame set on WorldLockingManager, using root Transform {CameraParent.transform.root.gameObject.name} from scene's main camera.");
+                    AdjustmentFrame = CameraParent.transform.root;
                 }
-                else
+                else if (ApplyAdjustment)
                 {
                     Debug.LogError("No Adjustment Frame set and no main camera to infer node from.");
                 }
                 useDefaultFrame = true;
             }
             Debug.Assert(AdjustmentFrame != Camera.main.transform, "ERROR: AdjustmentFrame can't be camera, adjustments will be overwritten. Add parent to camera");
-            if (useDefaultFrame && CameraParent == null)
+            if (shared.linkageSettings.ApplyAdjustment)
             {
-                Debug.LogWarning($"Warning! Camera {Camera.main.gameObject.name} needs at least one parent for applying adjustments!");
-            }
-            if (AdjustmentFrame == CameraParent)
-            {
-                Debug.LogWarning($"Warning! Camera needs at least parent and grandparent for teleport and manual camera movement to work.");
+                if (useDefaultFrame && CameraParent == null)
+                {
+                    Debug.LogWarning($"Warning! Camera {Camera.main.gameObject.name} needs at least one parent for applying adjustments!");
+                }
+                if (AdjustmentFrame == CameraParent)
+                {
+                    Debug.LogWarning($"Warning! Camera needs at least parent and grandparent for teleport and manual camera movement to work.");
+                }
             }
         }
 
@@ -542,15 +670,19 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         {
             ErrorStatus = "";
 
+            if (initializationState != InitializationState.Running)
+            {
+                ErrorStatus = $"Init: F={Time.frameCount} - {initializationState}";
+                return;
+            }
             if (hasPendingLoadTask)
             {
                 ErrorStatus = "pending background load task";
                 return;
             }
-
-            if (AdjustmentFrame == null)
+            if (ApplyAdjustment && (AdjustmentFrame == null))
             {
-                Debug.Log("No WLM update because no adjustment frame set");
+                Debug.LogWarning($"F={Time.frameCount}: No WLM update because no adjustment frame set");
                 ErrorStatus = "no adjustment frame";
                 return;
             }
@@ -606,6 +738,10 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             if (Enabled)
             {
                 Pose playspaceFromLocked = Plugin.GetAlignment();
+                if (NoPitchAndRoll)
+                {
+                    playspaceFromLocked.rotation = Quaternion.Euler(0f, playspaceFromLocked.rotation.eulerAngles.y, 0f); // Zero out X and Z rotation from frozen world engine
+                }
                 LockedFromPlayspace = playspaceFromLocked.Inverse();
 
                 SpongyFromCamera = Plugin.GetSpongyHead();
@@ -621,7 +757,10 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                 /// comparison of behavior when toggling FW enabled.
             }
 
-            AdjustmentFrame.SetLocalPose(PinnedFromLocked.Multiply(LockedFromPlayspace));
+            if (AdjustmentFrame != null && ApplyAdjustment)
+            {
+                AdjustmentFrame.SetLocalPose(PinnedFromLocked.Multiply(LockedFromPlayspace));
+            }
 
 #if false && WLT_ARSUBSYSTEMS_PRESENT
             if ((AdjustmentFrame.GetGlobalPose().position != Vector3.zero) || (AdjustmentFrame.GetGlobalPose().rotation != Quaternion.identity))
@@ -750,7 +889,9 @@ namespace Microsoft.MixedReality.WorldLocking.Core
 
         #region Load and Save
 
-        private string stateFileNameBase => Application.persistentDataPath + "/frozenWorldState.hkfw";
+        private string frozenWorldFile = "frozenWorldState.hkfw";
+
+        private string stateFileNameBase => $"{Application.persistentDataPath}/{frozenWorldFile}";
 
         private float lastSavingTime = float.NegativeInfinity;
 
@@ -761,8 +902,10 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// </summary>
         private async Task saveAsync()
         {
-            if (hasPendingLoadTask || hasPendingSaveTask)
+            if (HasPendingIO)
+            {
                 return;
+            }
 
             hasPendingSaveTask = true;
 
@@ -816,8 +959,10 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// </summary>
         private async Task loadAsync()
         {
-            if (hasPendingLoadTask || hasPendingSaveTask)
+            if (HasPendingIO)
+            {
                 return;
+            }
 
             hasPendingLoadTask = true;
 

@@ -3,9 +3,9 @@
 
 #if UNITY_2020_1_OR_NEWER
 
-#if UNITY_2020_4_OR_NEWER
+#if UNITY_2020_3_OR_NEWER
 #define WLT_ADD_ANCHOR_COMPONENT
-#endif // UNITY_2020_4_OR_NEWER
+#endif // UNITY_2020_3_OR_NEWER
 
 using UnityEngine;
 #if WLT_ARFOUNDATION_PRESENT
@@ -90,10 +90,16 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         {
             get
             {
-                Pose frozenFromAnchor = transform.GetGlobalPose();
-                Pose spongyFromFrozen = WorldLockingManager.GetInstance().SpongyFromFrozen;
-                Pose spongyFromAnchor = spongyFromFrozen.Multiply(frozenFromAnchor);
-                return spongyFromAnchor;
+                if (WorldLockingManager.GetInstance().ApplyAdjustment)
+                {
+                    // Global space is frozen space. Transform into spongy space.
+                    Pose frozenFromAnchor = transform.GetGlobalPose();
+                    Pose spongyFromFrozen = WorldLockingManager.GetInstance().SpongyFromFrozen;
+                    Pose spongyFromAnchor = spongyFromFrozen.Multiply(frozenFromAnchor);
+                    return spongyFromAnchor;
+                }
+                // Global space is spongy space. Return global pose.
+                return transform.GetGlobalPose();
             }
         }
 

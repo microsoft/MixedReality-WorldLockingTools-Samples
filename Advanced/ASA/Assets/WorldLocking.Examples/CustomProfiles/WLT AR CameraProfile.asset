@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4a1c93114e9437cb75d8b3ee4e0e1ba, type: 3}
-  m_Name: AR MixedRealityCameraProfile
+  m_Name: WLT AR CameraProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 1
   settingsConfigurations:
@@ -30,7 +30,7 @@ MonoBehaviour:
     settingsProfile: {fileID: 11400000, guid: a8af4c5deb4155b479e4e2d2b0bca103, type: 2}
   nearClipPlaneOpaqueDisplay: 0.1
   farClipPlaneOpaqueDisplay: 1000
-  cameraClearFlagsOpaqueDisplay: 1
+  cameraClearFlagsOpaqueDisplay: 2
   backgroundColorOpaqueDisplay: {r: 0, g: 0, b: 0, a: 1}
   opaqueQualityLevel: 0
   nearClipPlaneTransparentDisplay: 0.1
