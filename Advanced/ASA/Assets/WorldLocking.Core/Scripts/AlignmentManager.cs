@@ -1,7 +1,13 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-//#define EXTRA_DEBUGGING
+//#define WLT_NAN_EXTRA_DEBUGGING
+//#define WLT_LOG_SAVE_LOAD
+
+#if WLT_DISABLE_LOGGING
+#undef WLT_NAN_EXTRA_DEBUGGING
+#undef WLT_LOG_SAVE_LOAD
+#endif // WLT_DISABLE_LOGGING
 
 using System;
 using System.Collections.Generic;
@@ -31,7 +37,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
     /// </remarks>
     public class AlignmentManager : IAlignmentManager
     {
-        #region Lifetime management
+#region Lifetime management
 
         /// <summary>
         /// When a level is unloaded, resend the reference poses. The unloaded scene
@@ -96,16 +102,16 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             ActivateCurrentFragment();
         }
 
-        #endregion Lifetime management
+#endregion Lifetime management
 
-        #region Public events
+#region Public events
 
         /// <inheritdocs />
         public event EventHandler<Triangulator.ITriangulator> OnTriangulationBuilt;
 
-        #endregion
+#endregion
 
-        #region Public methods
+#region Public methods
 
         /// <summary>
         /// The pose to insert into the camera's hierarchy above the WorldLocking Adjustment transform (if any).
@@ -173,20 +179,26 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             {
                 afterLoadNotifications?.Invoke();
                 SendAlignmentAnchors();
+                needSave = false;
             }
             return loaded;
         }
+
+        /// <inheritdocs />
+        public bool NeedSave { get { return needSave; } }
 
         /// <summary>
         /// Explicitly save the database.
         /// </summary>
         /// <returns>True if successfully saved.</returns>
-        /// <remarks>
-        /// The database is also implicitly saved whenever dirtied if WorldLockingManager.AutoSave is enabled.
-        /// </remarks>
         public bool Save()
         {
-            return poseDB.Save();
+            bool saved = poseDB.Save();
+            if (saved)
+            {
+                needSave = false;
+            }
+            return saved;
         }
 
         /// <summary>
@@ -220,6 +232,22 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         {
             FragmentId fragmentId = CurrentFragmentId;
             AnchorId anchorId = ClaimAnchorId();
+
+            if (IsGlobal)
+            {
+                /// Bake in current snapshot of any application imposed transform (teleport).
+                virtualPose = manager.PinnedFromFrozen.Multiply(virtualPose);
+            }
+            else
+            {
+                /// For subtree, applied adjustment transform is LockedFromPinned. Remove existing
+                /// adjustment here by premultiplying PinnedFromLocked.
+                virtualPose = PinnedFromLocked.Multiply(virtualPose);
+            }
+#if WLT_EXTRA_LOGGING
+            string label = "AddAlign1";
+            Debug.Log($"F{Time.frameCount} {label} {uniqueName} vp={virtualPose.ToString("F3")} lp={lockedPose.ToString("F3")} sp={manager.SpongyFromLocked.Multiply(lockedPose).ToString("F3")}");
+#endif // WLT_EXTRA_LOGGING
 
             ReferencePose refPose = new ReferencePose()
             {
@@ -325,16 +353,16 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             }
             return refPose.anchorId;
         }
-        #endregion Public methods
+#endregion Public methods
 
-        #region Internal data structure definitions
+#region Internal data structure definitions
 
         /// <summary>
         /// Persistent database for reference poses.
         /// </summary>
         private class ReferencePoseDB
         {
-            #region Public API
+#region Public API
 
             /// <summary>
             /// Set name of file to save to and load from. See notes in <see cref="AlignmentManager.SaveFileName"/>.
@@ -469,9 +497,9 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                 data.Clear();
             }
 
-            #endregion Public API
+#endregion Public API
 
-            #region Serialization element
+#region Serialization element
 
             /// <summary>
             /// A data element containing minimal information to reconstruct its corresponding reference point.
@@ -588,9 +616,9 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                 }
             }
 
-            #endregion Serialization element
+#endregion Serialization element
 
-            #region Internal Members
+#region Internal Members
 
             /// <summary>
             /// The current database version. 
@@ -607,9 +635,9 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             /// </summary>
             private string saveFileName = Path.Combine("Persistence", "Alignment.fwb");
 
-            #endregion Internal Members
+#endregion Internal Members
 
-            #region Internal Implementation 
+#region Internal Implementation 
 
             /// <summary>
             /// Path where to store data. 
@@ -645,9 +673,11 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             /// <returns>True if successfully saved.</returns>
             private bool Save(Stream stream)
             {
+                DebugLogSaveLoad($"Enter save {SaveFileName}");
                 bool saved = false;
                 using (BinaryWriter writer = new BinaryWriter(stream))
                 {
+                    DebugLogSaveLoad($"Saving {SaveFileName} v={version} c={data.Count}");
                     writer.Write((uint)version);
                     writer.Write((int)data.Count);
                     foreach (var keyVal in data)
@@ -671,6 +701,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             /// </remarks>
             private bool Load(Stream stream)
             {
+                DebugLogSaveLoad($"Enter load {SaveFileName}");
                 data.Clear();
                 bool loaded = false;
                 using (BinaryReader reader = new BinaryReader(stream))
@@ -679,6 +710,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                     if (v == version)
                     {
                         int count = reader.ReadInt32();
+                        DebugLogSaveLoad($"Loading {SaveFileName} v={version} c={count}");
                         for (int i = 0; i < count; ++i)
                         {
                             string name = reader.ReadString();
@@ -690,7 +722,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                 }
                 return loaded;
             }
-            #endregion Internal Implementation 
+#endregion Internal Implementation 
         }
 
         /// <summary>
@@ -704,7 +736,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// </remarks>
         private class ReferencePose
         {
-            #region Public members
+#region Public members
             /// <summary>
             /// Unique identifier.
             /// </summary>
@@ -750,9 +782,9 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                 }
             }
 
-            #endregion Public members
+#endregion Public members
 
-            #region Private members
+#region Private members
 
             private readonly WorldLockingManager manager = WorldLockingManager.GetInstance();
 
@@ -766,9 +798,9 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             /// </summary>
             private IAttachmentPoint attachmentPoint;
 
-            #endregion Private members
+#endregion Private members
 
-            #region Public APIs
+#region Public APIs
             /// <summary>
             /// Release any resources bound to this reference point.
             /// </summary>
@@ -781,9 +813,9 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                 }
             }
 
-            #endregion Public APIs
+#endregion Public APIs
 
-            #region Internal implmentations
+#region Internal implmentations
 
             /// <summary>
             /// When the reference point position is initially set, create an attachment point if there isn't one,
@@ -817,7 +849,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             {
                 /// Do any adjustment pose dependent caching here.
             }
-            #endregion Internal implmentations
+#endregion Internal implmentations
         }
 
         /// <summary>
@@ -834,9 +866,9 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         }
 
 
-        #endregion Internal data structure definitions
+#endregion Internal data structure definitions
 
-        #region Internal data declarations
+#region Internal data declarations
 
         /// <summary>
         /// The manager that owns this sub-manager.
@@ -889,6 +921,11 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         private PostAlignmentLoadedDelegate afterLoadNotifications;
 
         /// <summary>
+        /// Flag that the current state has not been saved to persistent storage.
+        /// </summary>
+        private bool needSave = false;
+
+        /// <summary>
         /// Flag that a the reference pose list needs to be updated to the active list.
         /// </summary>
         private bool needSend = false;
@@ -904,9 +941,9 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// </summary>
         private static uint nextAnchorId = (uint)AnchorId.FirstValid;
 
-        #endregion Internal data declarations
+#endregion Internal data declarations
 
-        #region Internal utilities
+#region Internal utilities
         /// <summary>
         /// Claim a unique anchor id.
         /// </summary>
@@ -947,6 +984,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
 
         private void ActivateCurrentFragment()
         {
+            DebugLogSaveLoad($"Active fragment from {ActiveFragmentId.FormatStr()} to {CurrentFragmentId.FormatStr()}");
             activePoses.Clear();
             for (int i = 0; i < sentPoses.Count; ++i)
             {
@@ -975,9 +1013,15 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             ActiveFragmentId = FragmentId.Unknown;
         }
 
-        #endregion Internal utilities
+#endregion Internal utilities
 
-        #region Persistence synchronizations
+#region Persistence synchronizations
+
+        [System.Diagnostics.Conditional("WLT_LOG_SAVE_LOAD")]
+        private static void DebugLogSaveLoad(string message)
+        {
+            Debug.Log($"F={Time.frameCount}: {message}");
+        }
 
         /// <summary>
         /// Add to queue for being saved to database next chance.
@@ -985,6 +1029,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// <param name="refPose"></param>
         private void QueueForSave(ReferencePose refPose)
         {
+            DebugLogSaveLoad($"QueueForSave {SaveFileName}");
             int idx = FindReferencePoseById(referencePosesToSave, refPose.anchorId);
             if (idx < 0)
             {
@@ -999,11 +1044,13 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         {
             if (referencePosesToSave.Count > 0)
             {
+                DebugLogSaveLoad($"{SaveFileName} has {referencePosesToSave.Count} to save");
                 for (int i = referencePosesToSave.Count - 1; i >= 0; --i)
                 {
                     poseDB.Set(referencePosesToSave[i]);
                 }
                 referencePosesToSave.Clear();
+                needSave = true;
             }
         }
 
@@ -1033,6 +1080,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                 {
                     if (!referencePoses[i].fragmentId.IsKnown())
                     {
+                        DebugLogSaveLoad($"Transfer {referencePoses[i].anchorId.FormatStr()} from frag={referencePoses[i].fragmentId.FormatStr()} to {fragmentId.FormatStr()}");
                         referencePoses[i].fragmentId = fragmentId;
                         changed = true;
                     }
@@ -1045,9 +1093,9 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             }
         }
 
-        #endregion Persistence synchronizations
+#endregion Persistence synchronizations
 
-        #region Pose transformation math
+#region Pose transformation math
 
         /// <summary>
         /// Collapse a list of weighted poses into a single equivalent pose.
@@ -1095,19 +1143,19 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                 };
             }
             float interp = rhs.weight / (lhs.weight + rhs.weight);
-#if EXTRA_DEBUGGING
+#if WLT_NAN_EXTRA_DEBUGGING
             if (float.IsNaN(interp))
             {
                 Debug.LogError("Interp NAN");
             }
-#endif // EXTRA_DEBUGGING
+#endif // WLT_NAN_EXTRA_DEBUGGING
 
             WeightedPose ret;
             ret.pose.position = lhs.pose.position + interp * (rhs.pose.position - lhs.pose.position);
             ret.pose.rotation = Quaternion.Slerp(lhs.pose.rotation, rhs.pose.rotation, interp);
             ret.pose.rotation = Quaternion.Normalize(ret.pose.rotation);
             ret.weight = lhs.weight + rhs.weight;
-#if EXTRA_DEBUGGING
+#if WLT_NAN_EXTRA_DEBUGGING
             if (float.IsNaN(ret.pose.position.x))
             {
                 Debug.LogError("Position NAN");
@@ -1116,7 +1164,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             {
                 Debug.LogError("Weight NAN");
             }
-#endif // EXTRA_DEBUGGING
+#endif // WLT_NAN_EXTRA_DEBUGGING
 
             return ret;
         }
@@ -1132,18 +1180,16 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             if (IsGlobal)
             {
                 /// Here we essentially solve for pose Z, where
-                /// refPose.virtualPose == FrozenFromPinned * Z * refPose.lockedPose.
-                Pose pinnedFromFrozen = Pose.identity;
-                if (manager.AdjustmentFrame.parent != null)
-                {
-                    pinnedFromFrozen = manager.AdjustmentFrame.parent.GetGlobalPose().Inverse();
-                }
-                Pose frozenFromObject = refPose.virtualPose;
+                /// refPose.virtualPose == Z * refPose.lockedPose.
+                /// More precisely, we solve for PfL in:
+                /// AppFromHolder * HolderFromObject = AppFromPinned * PinnedFromLocked * LockedFromObject, or
+                /// AfH * HfO = AfP * PfL * LfO
+                /// PfA * AfH * HfO * OfL = PfL
+                /// refPose.virtualPose == PfA * AfH * HfO, and refPose.LockedPose == LockedFromObject, so it reduces to the above simpler line.
+                Pose pinnedFromObject = refPose.virtualPose;
                 Pose objectFromLocked = refPose.LockedPose.Inverse();
 
-                pinnedFromLocked = pinnedFromFrozen
-                    .Multiply(frozenFromObject)
-                    .Multiply(objectFromLocked);
+                pinnedFromLocked = pinnedFromObject.Multiply(objectFromLocked);
             }
             else
             {
@@ -1161,9 +1207,9 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             return pinnedFromLocked;
         }
 
-        #endregion Pose transformation math
+#endregion Pose transformation math
 
-        #region Weight computation
+#region Weight computation
 
         private readonly Triangulator.ITriangulator triangulator = new Triangulator.SimpleTriangulator();
 
@@ -1215,6 +1261,6 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             }
             return weightedPoses;
         }
-        #endregion Weight computation
+#endregion Weight computation
     }
 }

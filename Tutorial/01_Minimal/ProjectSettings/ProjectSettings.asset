@@ -539,7 +539,7 @@ PlayerSettings:
   m_MobileRenderingPath: 1
   metroPackageName: 01Minimal
   metroPackageVersion: 1.0.0.0
-  metroCertificatePath: E:\github\x\Tutorial\01_Minimal\Assets\WSATestCertificate.pfx
+  metroCertificatePath: Assets\WSATestCertificate.pfx
   metroCertificatePassword: 
   metroCertificateSubject: World Locking Tools
   metroCertificateIssuer: World Locking Tools

@@ -38,6 +38,14 @@ This sample has been developed and tested using:
 * World Locking Tools for Unity v1.3.6
 * FrozenWorldEngine v1.1.1
 
+It has been verified from those original versions through the following:
+
+* Unity 2020.3.8f1
+* Azure Spatial Anchors (ASA) v2.12.0
+* Mixed Reality Toolkit v2.7.3
+* World Locking Tools for Unity v1.5.8
+* FrozenWorldEngine v1.1.1
+
 The following instructions assume you are starting from the Unity assets as included in the [WLT Samples github repo](https://github.com/microsoft/MixedReality-WorldLockingTools-Samples). Specifically, installing WLT and/or MRTK for this sample from the Mixed Reality Feature Tool is not supported.
 
 ### Install the Frozen World Engine DLL into the project

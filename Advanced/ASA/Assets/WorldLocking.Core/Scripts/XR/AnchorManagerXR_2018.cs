@@ -4,6 +4,11 @@
 #if !UNITY_2020_1_OR_NEWER
 
 //#define WLT_EXTRA_LOGGING
+#define WLT_LOG_SETUP
+
+#if WLT_DISABLE_LOGGING
+#undef WLT_EXTRA_LOGGING
+#endif // WLT_DISABLE_LOGGING
 
 using System;
 using System.Collections.Generic;
@@ -49,8 +54,14 @@ namespace Microsoft.MixedReality.WorldLocking.Core
 
         private readonly Dictionary<TrackableId, SpongyAnchorXR> anchorsByTrackableId = new Dictionary<TrackableId, SpongyAnchorXR>();
 
-        public static AnchorManagerXR TryCreate(IPlugin plugin, IHeadPoseTracker headTracker)
+        public static async Task<AnchorManagerXR> TryCreate(IPlugin plugin, IHeadPoseTracker headTracker)
         {
+            bool xrRunning = await CheckXRRunning();
+            if (!xrRunning)
+            {
+                return null;
+            }
+
             /// Try to find an XRReferencePointManager (to be XRAnchorManager) here. 
             /// If we fail that,
             ///     give up. 
@@ -78,6 +89,28 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             return anchorManager;
         }
 
+        private static async Task<bool> CheckXRRunning()
+        {
+#if WLT_XR_MANAGEMENT_PRESENT
+            DebugLogSetup($"F={Time.frameCount} checking that XR is running.");
+            // Wait for XR initialization before initializing the anchor subsystem to ensure that any pending Remoting connection has been established first.
+            while (UnityEngine.XR.Management.XRGeneralSettings.Instance == null ||
+                   UnityEngine.XR.Management.XRGeneralSettings.Instance.Manager == null ||
+                   UnityEngine.XR.Management.XRGeneralSettings.Instance.Manager.activeLoader == null)
+            {
+                if ((Time.frameCount / 100) * 100 == Time.frameCount)
+                {
+                    DebugLogSetup($"F={Time.frameCount} waiting on XR startup.");
+                }
+                await Task.Yield();
+            }
+            DebugLogSetup($"F={Time.frameCount} XR is running.");
+#endif // WLT_XR_MANAGEMENT_PRESENT
+            return true;
+        }
+
+
+
         /// <summary>
         /// Find the correct ReferencePointManager for this session.
         /// </summary>
@@ -96,21 +129,21 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         {
             List<XRReferencePointSubsystem> anchorSubsystems = new List<XRReferencePointSubsystem>();
             SubsystemManager.GetInstances(anchorSubsystems);
-            Debug.Log($"Found {anchorSubsystems.Count} anchor subsystems.");
+            DebugLogSetup($"Found {anchorSubsystems.Count} anchor subsystems.");
             XRReferencePointSubsystem activeSubsystem = null;
             int numFound = 0;
             foreach (var sub in anchorSubsystems)
             {
                 if (sub.running)
                 {
-                    Debug.Log($"Found active anchor subsystem.");
+                    DebugLogSetup($"Found active anchor subsystem.");
                     activeSubsystem = sub;
                     ++numFound;
                 }
             }
             if (activeSubsystem == null)
             {
-                Debug.Log($"Found no anchor subsystem running, will try starting one.");
+                DebugLogSetup($"Found no anchor subsystem running, will try starting one.");
                 foreach (var sub in anchorSubsystems)
                 {
                     sub.Start();
@@ -118,7 +151,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                     {
                         activeSubsystem = sub;
                         ++numFound;
-                        Debug.Log($"Start changed an anchor subsystem to running.");
+                        DebugLogSetup($"Start changed an anchor subsystem [{sub.SubsystemDescriptor.id}] to running.");
                     }
                 }
             }
@@ -140,21 +173,21 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         {
             List<XRSessionSubsystem> sessionSubsystems = new List<XRSessionSubsystem>();
             SubsystemManager.GetInstances(sessionSubsystems);
-            Debug.Log($"Found {sessionSubsystems.Count} session subsystems");
+            DebugLogSetup($"Found {sessionSubsystems.Count} session subsystems");
             XRSessionSubsystem activeSession = null;
             int numFound = 0;
             foreach (var session in sessionSubsystems)
             {
                 if (session.running)
                 {
-                    Debug.Log($"Found active session subsystem");
+                    DebugLogSetup($"Found active session subsystem");
                     activeSession = session;
                     ++numFound;
                 }
             }
             if (activeSession == null)
             {
-                Debug.Log($"Found no active session subsystem, will try starting one.");
+                DebugLogSetup($"Found no active session subsystem, will try starting one.");
                 foreach (var session in sessionSubsystems)
                 {
                     session.Start();
@@ -162,7 +195,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                     {
                         activeSession = session;
                         ++numFound;
-                        Debug.Log($"Start changed a session to running.");
+                        DebugLogSetup($"Start changed session [{session.SubsystemDescriptor.id}] to running.");
                     }
                 }
             }
@@ -181,7 +214,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             : base(plugin, headTracker)
         {
             this.xrReferencePointManager = xrReferencePointManager;
-            Debug.Log($"XR: Created AnchorManager XR, xrMgr={(this.xrReferencePointManager != null ? "good" : "null")}");
+            DebugLogSetup($"XR: Created AnchorManager XR, xrMgr={(this.xrReferencePointManager != null ? "good" : "null")}");
             this.sessionSubsystem = session;
         }
 
@@ -196,10 +229,20 @@ namespace Microsoft.MixedReality.WorldLocking.Core
 
         private bool UpdateTrackables()
         {
-            if (xrReferencePointManager == null)
+            if (xrReferencePointManager == null || !xrReferencePointManager.running)
             {
                 return false;
             }
+#if !UNITY_ANDROID && !UNITY_IOS
+            if (sessionSubsystem != null)
+            {
+                sessionSubsystem.Update(new XRSessionUpdateParams
+                {
+                    screenOrientation = Screen.orientation,
+                    screenDimensions = new Vector2Int(Screen.width, Screen.height)
+                });
+            }
+#endif // !UNITY_ANDROID && !UNITY_IOS            
             TrackableChanges<XRReferencePoint> changes = xrReferencePointManager.GetChanges(Unity.Collections.Allocator.Temp);
             if (changes.isCreated && (changes.added.Length + changes.updated.Length + changes.removed.Length > 0))
             {
@@ -257,24 +300,16 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             return $"{label}({p.x:0.000},{p.y:0.000},{p.z:0.000})";
         }
 
+        [System.Diagnostics.Conditional("WLT_EXTRA_LOGGING")]
         private static void DebugOutExtra(string label, XRReferencePoint referencePoint, SpongyAnchorXR tracker)
         {
-#if WLT_EXTRA_LOGGING
             Debug.Assert(referencePoint.trackableId == tracker.TrackableId);
             Vector3 tP = tracker.transform.position;
             Vector3 tR = tracker.transform.rotation.eulerAngles;
             Vector3 rP = referencePoint.pose.position;
             Vector3 rR = referencePoint.pose.rotation.eulerAngles;
             rR = new Vector3(1.0f, 2.0f, 3.0f);
-            Debug.Log($"{label}{tracker.name}-{tracker.TrackableId}/{referencePoint.trackingState}: {DebugVector3("tP=", tP)}|{DebugEuler("tR=", tR)} <=> {DebugVector3("rP=", rP)}|{DebugEuler("rR=", rR)}");
-#endif // WLT_EXTRA_LOGGING
-        }
-
-        private static void DebugLogExtra(string msg)
-        {
-#if WLT_EXTRA_LOGGING
-            Debug.Log(msg);
-#endif // WLT_EXTRA_LOGGING
+            DebugLogSetup($"{label}{tracker.name}-{tracker.TrackableId}/{referencePoint.trackingState}: {DebugVector3("tP=", tP)}|{DebugEuler("tR=", tR)} <=> {DebugVector3("rP=", rP)}|{DebugEuler("rR=", rR)}");
         }
 
         private static void UpdateTracker(string label, XRReferencePoint referencePoint, Dictionary<TrackableId, SpongyAnchorXR> anchors)

@@ -1,6 +1,12 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+//#define WLT_LOG_SAVE_LOAD
+
+#if WLT_DISABLE_LOGGING
+#undef WLT_LOG_SAVE_LOAD
+#endif // WLT_DISABLE_LOGGING
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -29,7 +35,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
     /// </remarks>
     public class AlignSubtree : MonoBehaviour
     {
-        #region Inspector fields
+#region Inspector fields
 
         [SerializeField]
         [Tooltip("Collect all SpacePins from this subtree to manage.")]
@@ -39,6 +45,27 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// Collect all SpacePins from this subtree to manage.
         /// </summary>
         public bool CollectFromTree { get { return collectFromTree; } set { collectFromTree = value; } }
+
+        [SerializeField]
+        [Tooltip("Optional orienter for implicit orientation SpacePins. If null, will search for it in subtree.")]
+        private Orienter orienter;
+
+        private IOrienter iorienter = null;
+        /// <summary>
+        /// Optional orienter for implicit orientation SpacePins. If null, will search for it in subtree.
+        /// </summary>
+        public IOrienter Orienter 
+        { 
+            get 
+            { 
+                return orienter == null ? iorienter : orienter; 
+            } 
+            set 
+            { 
+                iorienter = value;
+                orienter = null;
+            } 
+        }
 
         [SerializeField]
         [Tooltip("Explicit list of Space Pins to manage.")]
@@ -94,9 +121,9 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// </remarks>
         public Transform subTree = null;
 
-        #endregion Inspector fields
+#endregion Inspector fields
 
-        #region Internal members
+#region Internal members
 
         /// <summary>
         /// Owned independent AlignmentManager.
@@ -108,11 +135,53 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// </summary>
         public AlignmentManager AlignmentManager => alignmentManager;
 
-        private bool needLoad = false;
+        /// <summary>
+        /// Flag saying that, when ready, we want to try to load persisted spacepins.
+        /// </summary>
+        private bool needAutoLoad = false;
 
-        #endregion Internal members
+        private bool autoSave = false;
 
-        #region Public APIs
+        /// <summary>
+        /// Encapsulate all prerequisites for successful load here.
+        /// </summary>
+        private bool ReadyToAutoLoad { get { return needAutoLoad && (alignmentManager != null) && SupportsPersistence; } }
+
+        /// <summary>
+        /// Encapsulate all prerequisites for successful save here.
+        /// </summary>
+        /// <remarks>
+        /// This does not check to see if a save is actually warranted, that check is elsewhere. This
+        /// just check whether, if it would be good to save, the system is ready to.
+        /// </remarks>
+        private bool ReadyToAutoSave { get { return !needAutoLoad && autoSave && AlignmentManagerDirty && SupportsPersistence; } }
+
+        /// <summary>
+        /// Return true if the alignment manager has changed since the last time it was saved (or loaded).
+        /// </summary>
+        private bool AlignmentManagerDirty { get { return (alignmentManager != null) && alignmentManager.NeedSave; } }
+
+        /// <summary>
+        /// Check if persistence is supported, to avoid useless (and confusing) spacepin auto-save and load when anchors can't be saved and loaded.
+        /// </summary>
+        /// <remarks>
+        /// This is done on demand, because at start the final anchor manager may or may not have been created yet.
+        /// </remarks>
+        private bool SupportsPersistence
+        {
+            get
+            {
+                var wltMgr = WorldLockingManager.GetInstance();
+                if (wltMgr.AnchorManager != null && wltMgr.AnchorManager.SupportsPersistence)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+#endregion Internal members
+
+#region Public APIs
 
         /// <summary>
         /// Explicit command to save the alignment manager to store.
@@ -120,6 +189,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// <returns>True on successful save.</returns>
         public bool Save()
         {
+            DebugLogSaveLoad($"Subtree {name} Save {(alignmentManager == null ? "a=null" : "a=good")}");
             if (alignmentManager != null)
             {
                 return alignmentManager.Save();
@@ -133,6 +203,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// <returns>True on successful load.</returns>
         public bool Load()
         {
+            DebugLogSaveLoad($"Subtree {name} Load {(alignmentManager == null ? "a=null" : "a=good")}");
             if (alignmentManager != null)
             {
                 return alignmentManager.Load();
@@ -206,9 +277,18 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// </summary>
         public event EventHandler<IAlignmentManager> OnAlignManagerCreated;
 
-        #endregion Public APIs
+#endregion Public APIs
 
-        #region Internal AlignmentManager management
+#region Internal utilility
+
+        [System.Diagnostics.Conditional("WLT_LOG_SAVE_LOAD")]
+        private static void DebugLogSaveLoad(string message)
+        {
+            Debug.Log($"F={Time.frameCount} {message}");
+        }
+#endregion // Internal utility
+
+#region Internal AlignmentManager management
         /// <summary>
         /// Create the alignmentManager if needed.
         /// </summary>
@@ -231,6 +311,15 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             {
                 subTree = transform;
             }
+            if (orienter == null)
+            {
+                orienter = GetComponentInChildren<Orienter>();
+                Debug.LogWarning($"No Orienter found on {name}, implicit Orienter found in subtree is {(orienter == null ? "null" : orienter.name)}");
+            }
+            if (Orienter != null)
+            {
+                Orienter.AlignmentManager = alignmentManager;
+            }
         }
 
         /// <summary>
@@ -239,7 +328,9 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         private void Start()
         {
             CheckInternalWiring();
-            needLoad = WorldLockingManager.GetInstance().AutoLoad;
+            needAutoLoad = WorldLockingManager.GetInstance().AutoLoad;
+            autoSave = WorldLockingManager.GetInstance().AutoSave;
+            DebugLogSaveLoad($"Subtree {name} Start");
         }
 
         /// <summary>
@@ -249,7 +340,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         {
             Debug.Assert(alignmentManager != null);
 
-            CheckLoad();
+            CheckAutoLoad();
 
             var wltMgr = WorldLockingManager.GetInstance();
             Debug.Assert(alignmentManager != wltMgr.AlignmentManager);
@@ -259,14 +350,38 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             var pinnedFromLocked = alignmentManager.PinnedFromLocked;
             var lockedFromPinned = pinnedFromLocked.Inverse();
 
-            subTree.SetGlobalPose(lockedFromPinned);
+            if (wltMgr.ApplyAdjustment)
+            {
+                subTree.SetGlobalPose(lockedFromPinned);
+            }
+            else
+            {
+                var spongyFromLocked = wltMgr.SpongyFromLocked;
+                var pinnedFromFrozen = wltMgr.PinnedFromFrozen;
+
+                var spongyFromFrozen = spongyFromLocked.Multiply(lockedFromPinned).Multiply(pinnedFromFrozen);
+                subTree.SetGlobalPose(spongyFromFrozen);
+            }
+
+            CheckAutoSave();
         }
 
-        private void CheckLoad()
+        /// <summary>
+        /// See if conditions are right for performing a save.
+        /// </summary>
+        private void CheckAutoSave()
         {
-            if (needLoad)
+            if (ReadyToAutoSave)
             {
-                needLoad = false;
+                Save();
+            }
+        }
+
+        private void CheckAutoLoad()
+        {
+            if (ReadyToAutoLoad)
+            {
+                needAutoLoad = false;
                 Load();
             }
         }
@@ -279,8 +394,9 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         private void OnEnable()
         {
             ClaimPinOwnership();
+            DebugLogSaveLoad($"Subtree {name} OnEnable");
         }
 
-        #endregion Internal AlignmentManager management
+#endregion Internal AlignmentManager management
     }
 }

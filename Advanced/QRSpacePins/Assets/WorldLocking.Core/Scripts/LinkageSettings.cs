@@ -37,6 +37,25 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             }
         }
 
+        [SerializeField]
+        [Tooltip("Apply world locking adjustment to the AdjustmentFrame.")]
+        private bool applyAdjustment;
+
+        /// <summary>
+        /// Zero out pitch and roll from the FrozenWorldEngine correction.
+        /// </summary>
+        [Tooltip("Zero out pitch and roll from the FrozenWorldEngine correction.")]
+        public bool NoPitchAndRoll;
+
+        /// <summary>
+        /// Apply world locking adjustment to the AdjustmentFrame.
+        /// </summary>
+        /// <remarks>
+        /// If this is false, then it is up to the application to apply the correction.
+        /// This allows the correction to be applied selectively to subsets of the scene hierarchy.
+        /// </remarks>
+        public bool ApplyAdjustment { get { return applyAdjustment; } set { applyAdjustment = value; } }
+
         /// <summary>
         /// The transform at which to apply the camera adjustment. This can't be the camera node, as its
         /// transform is overwritten every frame with head pose data. But the camera should be an attached
@@ -58,6 +77,9 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// </summary>
         public void InitToDefaults()
         {
+            UseExisting = false;
+            NoPitchAndRoll = false;
+            ApplyAdjustment = true;
             AdjustmentFrame = null;
             CameraParent = null;
         }

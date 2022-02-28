@@ -1,6 +1,14 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+//#define WLT_LOG_SAVE_LOAD
+//#define WLT_EXTRA_LOGGING
+
+#if WLT_DISABLE_LOGGING
+#undef WLT_LOG_SAVE_LOAD
+#undef WLT_EXTRA_LOGGING
+#endif // WLT_DISABLE_LOGGING
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -91,6 +99,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             {
                 if (alignmentManager != value)
                 {
+                    DebugLogSaveLoad($"Changing {name} pin's alignmentmanager {(value == WorldLockingManager.GetInstance().AlignmentManager ? "to global" : "from global")}");
                     Reset();
                     if (alignmentManager != null)
                     {
@@ -146,16 +155,16 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         }
 
         /// <summary>
-        /// modelingPoseGLobal is the global pose of the gameObject at startup (or after explicit capture with <see cref="ResetModelingPose"/>
+        /// modelingPoseParent is the pose of the gameObject at startup (or after explicit capture with <see cref="ResetModelingPose"/> relative to its parent.
         /// </summary>
-        private Pose modelingPoseGlobal = Pose.identity;
+        private Pose modelingPoseParent = Pose.identity;
 
         /// <summary>
         /// First of the pair of poses submitted to alignment manager for alignment.
         /// </summary>
         public Pose ModelingPoseGlobal
         {
-            get { return modelingPoseGlobal; }
+            get { return GlobalFromParent.Multiply(modelingPoseParent); }
         }
 
         /// <summary>
@@ -170,6 +179,34 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             get { return lockedPose; }
             protected set { lockedPose = value; }
         }
+
+        /// <summary>
+        /// Return the Pose transforming from parent space to global space.
+        /// </summary>
+        /// <remarks>
+        /// If the SpacePin has no parent, this will be the identity Pose.
+        /// </remarks>
+        protected Pose GlobalFromParent
+        {
+            get
+            {
+                Pose globalFromParent = Pose.identity;
+                if (transform.parent != null)
+                {
+                    globalFromParent = transform.parent.GetGlobalPose();
+                }
+                return globalFromParent;
+            }
+        }
+
+        /// <summary>
+        /// Return the Pose transforming from global space to the parent's space.
+        /// </summary>
+        protected Pose ParentFromGlobal
+        {
+            get { return GlobalFromParent.Inverse(); }
+        }
+
 
         /// <summary>
         /// Attachment point to react to refit operations.
@@ -191,6 +228,18 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             }
         }
 
+        [System.Diagnostics.Conditional("WLT_LOG_SAVE_LOAD")]
+        private void DebugLogSaveLoad(string message)
+        {
+            Debug.Log($"F={Time.frameCount} {message}");
+        }
+
+        [System.Diagnostics.Conditional("WLT_EXTRA_LOGGING")]
+        private void DebugLogExtra(string message)
+        {
+            Debug.Log(message);
+        }
+
         private void CheckDependencies()
         {
             /// Cache the WorldLockingManager as a dependency.
@@ -198,6 +247,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
 
             if (AlignmentManager == null)
             {
+                DebugLogSaveLoad($"Setting {name} pin's alignment manager to global because unset.");
                 AlignmentManager = manager.AlignmentManager;
             }
         }
@@ -252,6 +302,8 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         {
             this.lockedPose = lockedPose;
 
+            DebugLogSaveLoad($"SetLockedPose {name}: mgr={(AlignmentManager == WorldLockingManager.GetInstance().AlignmentManager ? "global" : "local")}");
+
             PushAlignmentData(AlignmentManager);
 
             SendAlignmentData(AlignmentManager);
@@ -271,7 +323,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         public virtual void ResetModelingPose()
         {
             restorePoseLocal = transform.GetLocalPose();
-            modelingPoseGlobal = ExtractModelPose();
+            modelingPoseParent = ParentFromGlobal.Multiply(ExtractModelPose());
         }
 
         /// <summary>
@@ -302,19 +354,19 @@ namespace Microsoft.MixedReality.WorldLocking.Core
                 case ModelPositionSourceEnum.Transform:
                     {
                         modelPose = ExtractModelPoseFromTransform();
-                        Debug.Log($"Extracted pose from transform on {name}");
+                        DebugLogExtra($"Extracted pose from transform on {name}");
                     }
                     break;
                 case ModelPositionSourceEnum.RendererBounds:
                     {
                         modelPose = ExtractModelPoseFromRenderer();
-                        Debug.Log($"Extracted pose from renderer on {name}");
+                        DebugLogExtra($"Extracted pose from renderer on {name}");
                     }
                     break;
                 case ModelPositionSourceEnum.ColliderBounds:
                     {
                         modelPose = ExtractModelPoseFromCollider();
-                        Debug.Log($"Extracted pose from collider on {name}");
+                        DebugLogExtra($"Extracted pose from collider on {name}");
                     }
                     break;
                 default:
@@ -350,6 +402,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
             Debug.Assert(collider != null, $"Looking for Modeling pose on {name} collider, but found no collider.");
             return GetModelPoseFromGlobalPosition(collider.bounds.center);
         }
+
 #endregion Extract modelling pose
 
 #region Alignment management
@@ -428,6 +481,7 @@ namespace Microsoft.MixedReality.WorldLocking.Core
         /// <param name="mgr"></param>
         protected void PushAlignmentData(IAlignmentManager mgr)
         {
+            DebugLogExtra($"F{Time.frameCount} Push: {name}: MPG={ModelingPoseGlobal.ToString("F3")} GfP={GlobalFromParent.ToString("F3")} R={restorePoseLocal.ToString("F3")} MPP={WorldLockingManager.GetInstance().PinnedFromFrozen.Multiply(ModelingPoseGlobal)}");
             if (PinActive)
             {
                 mgr.RemoveAlignmentAnchor(AnchorId);
