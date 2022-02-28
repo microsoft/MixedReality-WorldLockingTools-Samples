@@ -4,6 +4,9 @@
 
 This sample codes directly to Google's ARCore SDK for Unity.
 
+> [!NOTE] 
+> This sample is obsolete and deprecated. It is retained for reference purposes, but is no longer maintained. It is recommended to use the more general AR Foundation platform, as shown in the [ASA example](../../ASA/ASA.md), or the basic XR SDK pattern as used everywhere else in the WLT samples.
+
 ## Dependencies:
 * Built on WLT version 1.2.1.
 * Incompatible with MRTK
