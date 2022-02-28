@@ -135,12 +135,36 @@ namespace Microsoft.MixedReality.WorldLocking.Tools
                 }
             }
 
-            transform.position = new Vector3(transform.position.x, GetFrozenHeadPosition().y + verticalOffset, transform.position.z);
+            transform.position = new Vector3(transform.position.x, GetGlobalHeadPosition().y + verticalOffset, transform.position.z);
             triangleIsDirty = true;
         }
 
+        private static Pose GetGlobalFromLocked()
+        {
+            var wltMgr = WorldLockingManager.GetInstance();
+            Pose globalFromLocked = wltMgr.ApplyAdjustment
+                ? wltMgr.FrozenFromLocked
+                : wltMgr.SpongyFromLocked;
+
+            return globalFromLocked;
+        }
+
+        private struct IndexedTriangle
+        {
+            public int index0;
+            public int index1;
+            public int index2;
+
+            public IndexedTriangle(int i0, int i1, int i2)
+            {
+                index0 = i0;
+                index1 = i1;
+                index2 = i2;
+            }
+        }
+
         /// <summary>
-        /// Generates the whole mesh inside the triangulation data, except for the boundry triangles/vertices.
+        /// Generates the whole mesh inside the triangulation data, except for the boundary triangles/vertices.
         /// </summary>
         /// <returns></returns>
         private Mesh GenerateTriangulationWireFrameMesh()
@@ -152,16 +176,14 @@ namespace Microsoft.MixedReality.WorldLocking.Tools
 
             Array.Copy(originalVertices, 4, vertices, 0, originalVertices.Length - 4);
 
-            Pose frozenFromLocked = WorldLockingManager.GetInstance().FrozenFromLocked;
             for (int i = 0; i < vertices.Length; i++)
             {
-                vertices[i] = frozenFromLocked.Multiply(vertices[i]);
                 vertices[i].y = 0.0f;
             }
 
             wholeMesh.vertices = vertices;
 
-            List<(int, int, int)> trimmedTriangles = new List<(int, int, int)>();
+            List<IndexedTriangle> trimmedTriangles = new List<IndexedTriangle>();
 
             for (int i = 0; i < triangulator.Triangles.Length; i += 3)
             {
@@ -177,7 +199,11 @@ namespace Microsoft.MixedReality.WorldLocking.Tools
                 if (currentInterpolant != null && (triangleDataSameAsClosestTriangle && !AnyWeightInTriangleZero()))
                     continue;
 
-                trimmedTriangles.Add((triangulator.Triangles[i] - 4, triangulator.Triangles[i + 1] - 4, triangulator.Triangles[i + 2] - 4));
+                trimmedTriangles.Add(new IndexedTriangle(
+                        triangulator.Triangles[i] - 4,
+                        triangulator.Triangles[i + 1] - 4,
+                        triangulator.Triangles[i + 2] - 4
+                    ));
             }
 
             int[] tris = new int[trimmedTriangles.Count * 3];
@@ -185,9 +211,9 @@ namespace Microsoft.MixedReality.WorldLocking.Tools
             int triIndex = 0;
             for (int i = 0; i < trimmedTriangles.Count; i++)
             {
-                tris[triIndex] = trimmedTriangles[i].Item1;
-                tris[triIndex + 1] = trimmedTriangles[i].Item2;
-                tris[triIndex + 2] = trimmedTriangles[i].Item3;
+                tris[triIndex] = trimmedTriangles[i].index0;
+                tris[triIndex + 1] = trimmedTriangles[i].index1;
+                tris[triIndex + 2] = trimmedTriangles[i].index2;
                 triIndex += 3;
             }
 
@@ -388,11 +414,6 @@ namespace Microsoft.MixedReality.WorldLocking.Tools
             secondPinPosition = currentBoundaryVertexIDx == 1 ? lockedHeadPosition : triangulator.Vertices[currentInterpolant.idx[1] + 4];
             thirdPinPosition = currentBoundaryVertexIDx == 2 ? lockedHeadPosition : triangulator.Vertices[currentInterpolant.idx[2] + 4];
 
-            Pose frozenFromLocked = WorldLockingManager.GetInstance().FrozenFromLocked;
-            firstPinPosition = frozenFromLocked.Multiply(firstPinPosition);
-            secondPinPosition = frozenFromLocked.Multiply(secondPinPosition);
-            thirdPinPosition = frozenFromLocked.Multiply(thirdPinPosition);
-
             //    DEBUG TRIANGLE    //
             //firstPinPosition = new Vector3(5.0f, 0.0f, 0.0f);
             //secondPinPosition = new Vector3(1.0f, 0.0f, 1.0f);
@@ -485,10 +506,15 @@ namespace Microsoft.MixedReality.WorldLocking.Tools
             return lockedHeadPose.position;
         }
 
-        private Vector3 GetFrozenHeadPosition()
+        private Vector3 GetGlobalHeadPosition()
         {
             WorldLockingManager wltMgr = WorldLockingManager.GetInstance();
-            return wltMgr.FrozenFromSpongy.Multiply(wltMgr.SpongyFromCamera).position;
+            Vector3 position = wltMgr.SpongyFromCamera.position;
+            if (wltMgr.ApplyAdjustment)
+            {
+                position = wltMgr.FrozenFromSpongy.Multiply(position);
+            }
+            return position;
         }
 
         private void FindAlignmentManager()
@@ -583,7 +609,15 @@ namespace Microsoft.MixedReality.WorldLocking.Tools
                     UpdateMaterialProperties();
                     UpdatePercentageTexts();
                 }
+                TransformFromLockedToGlobal();
             }
+        }
+
+        private void TransformFromLockedToGlobal()
+        {
+            Pose globalFromLocked = GetGlobalFromLocked();
+            globalFromLocked.position += new Vector3(0.0f, verticalOffset, 0.0f);
+            transform.SetGlobalPose(globalFromLocked);
         }
     }
 }

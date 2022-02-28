@@ -72,3 +72,8 @@ The first time running the application after initial deployment, the enumeration
 Closing the application and running a second time fixes the problem, and the 2nd run and thereafter QR codes scan fine.
 
 This is probably an issue with the permissions setup on the first run, but since it is a QR scanning issue, and not related to world-locking, it hasn't been a priority to track down. Tracked as [issue #20](https://github.com/microsoft/MixedReality-WorldLockingTools-Samples/issues/20).
+
+## See Also
+
+* [QR code tracking overview](https://docs.microsoft.com/en-us/windows/mixed-reality/develop/advanced-concepts/qr-code-tracking-overview)
+* [Unity QR code sample](https://github.com/microsoft/MixedReality-QRCode-Sample)
