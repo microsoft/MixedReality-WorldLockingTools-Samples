@@ -1,7 +1,7 @@
 
 # Minimal World Locking Tools (WLT) setup for a world-locked application
 
-For streamlined installation using the latest available tools, refer to [this article](https://microsoft.github.io/MixedReality-WorldLockingTools-Unity/DocGen/Documentation/HowTos/UsingWLT/JustWorldLock.html#automated-setup) in the main World Locking Tools documentation.
+For streamlined installation using the latest available tools, refer to [this article](https://docs.microsoft.com/mixed-reality/world-locking-tools/documentation/howtos/usingwlt/justworldlock#automated-setup) in the main World Locking Tools documentation.
 
 This Tutorial will walk you through manually adding the minimum required subset of the WLT to a project, in order to get world-locked behavior out of all the content in that application, without the need for application maintained WorldAnchors, or any other special behavior.
 
@@ -28,7 +28,7 @@ https://github.com/microsoft/MixedReality-WorldLockingTools-Samples/tree/master/
  
 2. Install the FrozenWorld Engine DLL.
 
-    a. Install [NuGet for Unity](https://github.com/GlitchEnzo/NuGetForUnity/releases). It's really a phenomenal piece of technology, you should have it anyway. If for any reason you can't use NuGet for Unity, follow the steps for [Manual FrozenWorld Engine DLL Installation](https://microsoft.github.io/MixedReality-WorldLockingTools-Unity/DocGen/Documentation/HowTos/InitialSetup.html#manual-frozen-world-engine-dll-installation), and proceed to step 3.
+    a. Install [NuGet for Unity](https://github.com/GlitchEnzo/NuGetForUnity/releases). It's really a phenomenal piece of technology, you should have it anyway. If for any reason you can't use NuGet for Unity, follow the steps for [Manual FrozenWorld Engine DLL Installation](https://docs.microsoft.com/mixed-reality/world-locking-tools/documentation/howtos/initialsetup#manual-frozen-world-engine-dll-installation), and proceed to step 3.
 
     b. With NuGet for Unity installed, in Unity, go to 
 
@@ -64,11 +64,11 @@ It can be useful to visualize the world anchor graph which the World Locking Too
 
 ![Automated addition of development visualizers](~/DocGen/Images/Minimal/AddVisualizers.png)
 
-That's it. Now when you deploy, you will see the graph of WorldAnchor nodes created under the hood, along with some other helpful visualizations. More description is available in the [Tools documentation](https://microsoft.github.io/MixedReality-WorldLockingTools-Unity/DocGen/Documentation/HowTos/Tools.html#anchor-graph-visualization).
+That's it. Now when you deploy, you will see the graph of WorldAnchor nodes created under the hood, along with some other helpful visualizations. More description is available in the [Tools documentation](https://docs.microsoft.com/mixed-reality/world-locking-tools/documentation/howtos/tools#visualizers).
 
 When you decide you don't need the visualizations anymore, you can either disable the AnchorGraphVisual in the scene, delete it, or run the *Remove development visualizers* option from the same *World Locking Tools* menu.
 
-  ## Assumed HoloLens deployment background
+## Assumed HoloLens deployment background
 
 If unfamiliar with building, deploying, and running applications on the HoloLens family of devices, a good place to start is with [HoloLens](https://docs.microsoft.com/windows/mixed-reality/holograms-100) and [HoloLens 2](https://docs.microsoft.com/windows/mixed-reality/mrlearning-base) tutorials. 
 
