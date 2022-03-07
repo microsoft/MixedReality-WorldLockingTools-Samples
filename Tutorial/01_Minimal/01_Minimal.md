@@ -70,7 +70,7 @@ When you decide you don't need the visualizations anymore, you can either disabl
 
   ## Assumed HoloLens deployment background
 
-If unfamiliar with building, deploying, and running applications on the HoloLens family of devices, a good place to start is with [HoloLens](https://docs.microsoft.com/en-us/windows/mixed-reality/holograms-100) and [HoloLens 2](https://docs.microsoft.com/en-us/windows/mixed-reality/mrlearning-base) tutorials. 
+If unfamiliar with building, deploying, and running applications on the HoloLens family of devices, a good place to start is with [HoloLens](https://docs.microsoft.com/windows/mixed-reality/holograms-100) and [HoloLens 2](https://docs.microsoft.com/windows/mixed-reality/mrlearning-base) tutorials. 
 
 In addition, here are some emphasized tips common to all HoloLens development. Note that these are handled automatically by MRTK.
 

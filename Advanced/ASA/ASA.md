@@ -56,7 +56,7 @@ The first step is to install the Frozen World Engine DLL, v1.1.1. [Instructions 
 
 #### Creating spatial anchor resources
 
-This [Quick Start Guide](https://docs.microsoft.com/en-us/azure/spatial-anchors/quickstarts/get-started-unity-hololens?tabs=azure-portal) goes through the steps to create an Azure account and the necessary spatial anchors resources. The Account Id, Account Domain, and Account Key will be necessary to run the sample. You will add them into the proper fields on the "Spatial Anchor Manager" script, on the SpacePinBinder object in the scene. Other authentication methods are supported, but the Account Id/Domain/Key is the easiest when getting started.
+This [Quick Start Guide](https://docs.microsoft.com/azure/spatial-anchors/quickstarts/get-started-unity-hololens?tabs=azure-portal) goes through the steps to create an Azure account and the necessary spatial anchors resources. The Account Id, Account Domain, and Account Key will be necessary to run the sample. You will add them into the proper fields on the "Spatial Anchor Manager" script, on the SpacePinBinder object in the scene. Other authentication methods are supported, but the Account Id/Domain/Key is the easiest when getting started.
 
 ![Credentials fields](~/DocGen/Images/ASA/InspectorAccount.jpg)
 
