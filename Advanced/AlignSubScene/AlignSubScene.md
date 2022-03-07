@@ -19,8 +19,8 @@ The [accompanying video](https://youtu.be/S2i3JxuxFp0) tries to make the distinc
 https://github.com/microsoft/MixedReality-WorldLockingTools-Samples/tree/master/Advanced/AlignSubScene
 
 ## Dependencies
-* Built on WLT version 1.3.4.
-* Built with MRTK version v2.6.1.
+* Built on WLT version 1.5.8.
+* Built with MRTK version v2.7.3.
 * Built with Unity 2019.4.2f1.
 * No further dependencies.
 

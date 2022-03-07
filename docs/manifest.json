@@ -1,6 +1,6 @@
 {
   "homepages": [],
-  "source_base_path": "E:/github/x",
+  "source_base_path": "C:/github/xx",
   "xrefmap": "xrefmap.yml",
   "files": [
     {
@@ -18,7 +18,7 @@
       "output": {
         ".html": {
           "relative_path": "Advanced/ASA/ASA.html",
-          "hash": "Fl0G8pAEpu3e9jsi5+YdXw=="
+          "hash": "sAruU3E3LdUjYMYRiEIntQ=="
         }
       },
       "is_incremental": false,
@@ -42,7 +42,7 @@
       "output": {
         ".html": {
           "relative_path": "Advanced/AlignSubScene/AlignSubScene.html",
-          "hash": "gURcXhu2am4AydP4gLo6FQ=="
+          "hash": "0ms1BCkyFNbIsbnfqKPTJg=="
         }
       },
       "is_incremental": false,
@@ -66,7 +66,7 @@
       "output": {
         ".html": {
           "relative_path": "Advanced/QRSpacePins/QRSpacePins.html",
-          "hash": "+nnSHCclqxVT461nxhVbtw=="
+          "hash": "1t7fot/dAYGt5+qDOwKpIg=="
         }
       },
       "is_incremental": false,
@@ -623,7 +623,7 @@
       "output": {
         ".html": {
           "relative_path": "DocGen/SourceDoc/SourceReference.html",
-          "hash": "Nh6YdNhy7NG8fdImZz0qhg=="
+          "hash": "rhT4wsnIMo5xW0rRiEtfHg=="
         }
       },
       "is_incremental": false,
@@ -1077,7 +1077,7 @@
       "output": {
         ".html": {
           "relative_path": "README.html",
-          "hash": "XdyA92f6oqrMSkdC2dB1kw=="
+          "hash": "L8NNwsrEHmJf51FwIlz0WA=="
         }
       },
       "is_incremental": false,
@@ -1101,7 +1101,7 @@
       "output": {
         ".html": {
           "relative_path": "Tutorial/01_Minimal/01_Minimal.html",
-          "hash": "MPYpcguV/N5ocjbkOceSnw=="
+          "hash": "NOuCpzT3ADvNa62iYi9R5w=="
         }
       },
       "is_incremental": false,
@@ -1146,25 +1146,23 @@
   "incremental_info": [
     {
       "status": {
-        "can_incremental": false,
-        "details": "Cannot build incrementally because last build info is missing.",
+        "can_incremental": true,
         "incrementalPhase": "build",
         "total_file_count": 0,
-        "skipped_file_count": 0,
-        "full_build_reason_code": "NoAvailableBuildCache"
+        "skipped_file_count": 0
       },
       "processors": {
         "ConceptualDocumentProcessor": {
-          "can_incremental": false,
+          "can_incremental": true,
           "incrementalPhase": "build",
           "total_file_count": 15,
-          "skipped_file_count": 0
+          "skipped_file_count": 12
         },
         "ManagedReferenceDocumentProcessor": {
-          "can_incremental": false,
+          "can_incremental": true,
           "incrementalPhase": "build",
           "total_file_count": 34,
-          "skipped_file_count": 0
+          "skipped_file_count": 34
         },
         "ResourceDocumentProcessor": {
           "can_incremental": false,

@@ -82,7 +82,7 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="minimal-world-locking-tools-wlt-setup-for-a-world-locked-application">Minimal World Locking Tools (WLT) setup for a world-locked application</h1>
 
-<p>For streamlined installation using the latest available tools, refer to <a href="https://microsoft.github.io/MixedReality-WorldLockingTools-Unity/DocGen/Documentation/HowTos/UsingWLT/JustWorldLock.html#automated-setup">this article</a> in the main World Locking Tools documentation.</p>
+<p>For streamlined installation using the latest available tools, refer to <a href="https://docs.microsoft.com/mixed-reality/world-locking-tools/documentation/howtos/usingwlt/justworldlock#automated-setup">this article</a> in the main World Locking Tools documentation.</p>
 <p>This Tutorial will walk you through manually adding the minimum required subset of the WLT to a project, in order to get world-locked behavior out of all the content in that application, without the need for application maintained WorldAnchors, or any other special behavior.</p>
 <p>This tutorial refers to the <a href="https://github.com/microsoft/MixedReality-WorldLockingTools-Samples/tree/master/Tutorial/01_Minimal">01_Minimal</a> sample for reference.</p>
 <p>The simple application being world-locked here is the simplest possible Unity AR application. Note that the setup is even simpler for MRTK applications. Any differences between adding to a bare versus MRTK app are noted in the steps.</p>
@@ -103,7 +103,7 @@
 <p><img src="../../DocGen/Images/Minimal/AdjustMRTK.png" alt="Adjustment node with MRTK Playspace"></p>
 <ol start="2">
 <li><p>Install the FrozenWorld Engine DLL.</p>
-<p>a. Install <a href="https://github.com/GlitchEnzo/NuGetForUnity/releases">NuGet for Unity</a>. It's really a phenomenal piece of technology, you should have it anyway. If for any reason you can't use NuGet for Unity, follow the steps for <a href="https://microsoft.github.io/MixedReality-WorldLockingTools-Unity/DocGen/Documentation/HowTos/InitialSetup.html#manual-frozen-world-engine-dll-installation">Manual FrozenWorld Engine DLL Installation</a>, and proceed to step 3.</p>
+<p>a. Install <a href="https://github.com/GlitchEnzo/NuGetForUnity/releases">NuGet for Unity</a>. It's really a phenomenal piece of technology, you should have it anyway. If for any reason you can't use NuGet for Unity, follow the steps for <a href="https://docs.microsoft.com/mixed-reality/world-locking-tools/documentation/howtos/initialsetup#manual-frozen-world-engine-dll-installation">Manual FrozenWorld Engine DLL Installation</a>, and proceed to step 3.</p>
 <p>b. With NuGet for Unity installed, in Unity, go to</p>
 <p><code>NuGet &gt; Manage NuGet Packages</code></p>
 <ul>
@@ -136,10 +136,10 @@
 </li>
 </ul>
 <p><img src="../../DocGen/Images/Minimal/AddVisualizers.png" alt="Automated addition of development visualizers"></p>
-<p>That's it. Now when you deploy, you will see the graph of WorldAnchor nodes created under the hood, along with some other helpful visualizations. More description is available in the <a href="https://microsoft.github.io/MixedReality-WorldLockingTools-Unity/DocGen/Documentation/HowTos/Tools.html#anchor-graph-visualization">Tools documentation</a>.</p>
+<p>That's it. Now when you deploy, you will see the graph of WorldAnchor nodes created under the hood, along with some other helpful visualizations. More description is available in the <a href="https://docs.microsoft.com/mixed-reality/world-locking-tools/documentation/howtos/tools#visualizers">Tools documentation</a>.</p>
 <p>When you decide you don't need the visualizations anymore, you can either disable the AnchorGraphVisual in the scene, delete it, or run the <em>Remove development visualizers</em> option from the same <em>World Locking Tools</em> menu.</p>
 <h2 id="assumed-hololens-deployment-background">Assumed HoloLens deployment background</h2>
-<p>If unfamiliar with building, deploying, and running applications on the HoloLens family of devices, a good place to start is with <a href="https://docs.microsoft.com/en-us/windows/mixed-reality/holograms-100">HoloLens</a> and <a href="https://docs.microsoft.com/en-us/windows/mixed-reality/mrlearning-base">HoloLens 2</a> tutorials.</p>
+<p>If unfamiliar with building, deploying, and running applications on the HoloLens family of devices, a good place to start is with <a href="https://docs.microsoft.com/windows/mixed-reality/holograms-100">HoloLens</a> and <a href="https://docs.microsoft.com/windows/mixed-reality/mrlearning-base">HoloLens 2</a> tutorials.</p>
 <p>In addition, here are some emphasized tips common to all HoloLens development. Note that these are handled automatically by MRTK.</p>
 <ul>
 <li>Check the camera clear color. The <code>Clear Flags</code> should be &quot;Solid Color&quot;, and the color should be transparent black (0,0,0,0).</li>
