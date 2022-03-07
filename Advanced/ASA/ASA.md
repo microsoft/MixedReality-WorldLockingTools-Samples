@@ -50,13 +50,13 @@ The following instructions assume you are starting from the Unity assets as incl
 
 ### Install the Frozen World Engine DLL into the project
 
-The first step is to install the Frozen World Engine DLL, v1.1.1. [Instructions here](https://microsoft.github.io/MixedReality-WorldLockingTools-Unity/DocGen/Documentation/HowTos/InitialSetup.html#frozenworld-engine-installation), using either NuGet for Unity, or command line nuget.exe.
+The first step is to install the Frozen World Engine DLL, v1.1.1. [Instructions here](https://docs.microsoft.com/en-us/mixed-reality/world-locking-tools/documentation/howtos/initialsetup#frozenworld-engine-installation), using either NuGet for Unity, or command line nuget.exe.
 
 ### Install ASA
 
 #### Creating spatial anchor resources
 
-This [Quick Start Guide](https://docs.microsoft.com/en-us/azure/spatial-anchors/quickstarts/get-started-unity-hololens?tabs=azure-portal) goes through the steps to create an Azure account and the necessary spatial anchors resources. The Account Id, Account Domain, and Account Key will be necessary to run the sample. You will add them into the proper fields on the "Spatial Anchor Manager" script, on the SpacePinBinder object in the scene. Other authentication methods are supported, but the Account Id/Domain/Key is the easiest when getting started.
+This [Quick Start Guide](https://docs.microsoft.com/azure/spatial-anchors/quickstarts/get-started-unity-hololens?tabs=azure-portal) goes through the steps to create an Azure account and the necessary spatial anchors resources. The Account Id, Account Domain, and Account Key will be necessary to run the sample. You will add them into the proper fields on the "Spatial Anchor Manager" script, on the SpacePinBinder object in the scene. Other authentication methods are supported, but the Account Id/Domain/Key is the easiest when getting started.
 
 ![Credentials fields](~/DocGen/Images/ASA/InspectorAccount.jpg)
 
@@ -215,4 +215,4 @@ The [SpacePinASA](xref:Microsoft.MixedReality.WorldLocking.ASA.SpacePinASA) does
 ## See also
 
 * [Azure Spatial Anchors Quick Start](https://docs.microsoft.com/azure/spatial-anchors/unity-overview)
-* [World Locking Tools for Unity](https://microsoft.github.io/MixedReality-WorldLockingTools-Unity/README.html)
+* [World Locking Tools for Unity](https://docs.microsoft.com/mixed-reality/world-locking-tools/)
