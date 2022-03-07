@@ -14,17 +14,17 @@ The **World Locking Tools - Samples** (WLT-S) repository hopes to give you isola
 
 [World Locking Tools for Unity (WLT) github repo](https://github.com/microsoft/MixedReality-WorldLockingTools-Unity).
 
-[World Locking Tools for Unity (WLT) documentation landing page](https://microsoft.github.io/MixedReality-WorldLockingTools-Unity/README.html).
+[World Locking Tools for Unity (WLT) documentation landing page](https://docs.microsoft.com/mixed-reality/world-locking-tools/).
 
 ## Prerequisites
 
 The basics of building and deploying a HoloLens application from Unity are assumed. If you aren't familiar with that, [here's a good place to start](https://docs.microsoft.com/windows/mixed-reality/holograms-101). Or if you want to go straight to HoloLens2, then [here](https://docs.microsoft.com/windows/mixed-reality/mrlearning-base).
 
-For the Advanced samples, obviously familiarity with the basic World Locking Tools for Unity is assumed. Start [here](https://microsoft.github.io/MixedReality-WorldLockingTools-Unity/DocGen/Documentation/GettingStartedWithWorldLocking.html).
+For the Advanced samples, obviously familiarity with the basic World Locking Tools for Unity is assumed. Start [here](https://docs.microsoft.com/mixed-reality/world-locking-tools/documentation/concepts).
 
 The Tutorials are most useful as auxiliary information for the documentation. Start with the documentation, and jump to the Tutorials when the documentation directs you there for illustration.
 
-## Contributing in plain language.
+## Contributing in plain language
 
 Some simple talk about [contributing to this project](CONTRIBUTING.md).
 

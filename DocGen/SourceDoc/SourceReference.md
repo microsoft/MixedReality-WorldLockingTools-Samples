@@ -2,6 +2,6 @@
 
 Find reference material generated from source code comments for the sample applications here.
 
-[Sample code reference](../Temp/obj/api/toc.yml).
+## See also
 
-[World Locking Tools source code reference](https://microsoft.github.io/MixedReality-WorldLockingTools-Unity/DocGen/api_doc/Architecture.html).
+* [World Locking Tools source code reference](https://docs.microsoft.com/dotnet/api/microsoft.mixedreality.worldlocking.core).
