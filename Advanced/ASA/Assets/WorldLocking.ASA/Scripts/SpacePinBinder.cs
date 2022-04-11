@@ -144,7 +144,7 @@ namespace Microsoft.MixedReality.WorldLocking.ASA
         {
             // mafish - make sure it's not already in there.
             int idx = FindSpacePin(spacePin);
-            if (idx <= 0)
+            if (idx < 0)
             {
                 spacePins.Add(spacePin);
                 spacePin.Publisher = publisher;
