@@ -46,6 +46,9 @@ It has been verified from those original versions through the following:
 * World Locking Tools for Unity v1.5.8
 * FrozenWorldEngine v1.1.1
 
+> [!NOTE]
+> There appears to be an issue with AR Foundation v4.0.12 and ASA v2.12.0, which causes ASA failure at creating local anchors, and generally breaking the sample. Updating to AR Foundation v4.1.9 fixes this problem.
+
 The following instructions assume you are starting from the Unity assets as included in the [WLT Samples github repo](https://github.com/microsoft/MixedReality-WorldLockingTools-Samples). Specifically, installing WLT and/or MRTK for this sample from the Mixed Reality Feature Tool is not supported.
 
 ### Install the Frozen World Engine DLL into the project
